@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="navbar-collapse">
+  <ul class="nav nav-tabs">
+     {% for cam in kameras %}
+	{% if active_tab == cam.kamera_slug %}<li role="presentation" class="active">
+	{% else %}<li role="presentation">
+	{% endif %}
+	<A HREF="/arhivs/{{ cam.kamera_slug }}/1/">{{ cam.kamera_nos }}</A></li>
+     {% endfor %}
+  </ul>
+</div>
+{% endblock %}
+

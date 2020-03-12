@@ -1,0 +1,76 @@
+{% extends 'main.html' %}
+
+{% block content %}
+{# <!-- DISKU STĀVOKLIS --> #}
+<h1 style="margin-top: 0px;">Disku stāvoklis</h1>
+
+<div class="table-responsive">
+<table class="table table-hover table-striped table-condensed">
+ <thead>
+{% for d in df_head %}
+ <td><b>{{ d }}</b></td>
+{% endfor %}
+ </thead>
+
+ <tbody>
+{% for row in df %}
+<tr>
+ {% for d in row %}
+ <td>{{ d }}</td>
+ {% endfor %}
+ </tr>
+{% endfor %}
+ </tbody>
+</table>
+
+{# <!-- LIVE VIDEO 24h --> #}
+<h1 id="weekVideoText">"Video dzīvajā" skatījumi pēdējās 24h</h1>
+
+{# <p>{{ t1|date:"d/m/Y H:i" }}</p> #}
+{# <p>{{ test|date:"d/m/Y H:i" }}</p> #}
+{# <p>{{ t2|date:"d/m/Y H:i" }}</p><br> #}
+{# <p>{{ t3|date:"d/m/Y H:i" }}</p> #}
+
+<div class="table-responsive">
+<table class="table table-hover{# table-striped#} table-condensed">
+ <thead>
+  <td><b>Lietotājs</b></td>
+  <td><b>Dators</b></td>
+  <td><b>Mobīlais</b></td>
+  <td><b>Planšete</b></td>
+  <td><b>Sākums</b></td>
+  <td><b>Beigas</b></td>
+  <td><b>Skatīšanās laiks</b></td>
+ </thead>
+ <tbody>
+{% for row in video %}
+{% if row.0 == 0 %} <tr{% else %} <tr class="week hidden"{% endif %} style="background-color: {% if row.1 == 0 %}#e5e8e1{% else %}#fff{% endif %};">
+  <td>{{ row.2.user }}</td>
+  <td>{% if row.2.mobile == False and row.2.tablet == False %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+  <td>{% if row.2.mobile %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+  <td>{% if row.2.tablet %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+  <td>{{ row.2.visit|date:"d/m/Y H:i" }}</td>
+  <td>{{ row.2.leave|date:"d/m/Y H:i" }}</td>
+  <td>{{ row.2.time|time:"H:i" }}</td>
+ </tr>
+{% endfor %}
+ </tbody>
+</table>
+</div>
+{# <!-- 24h to 7day --> #}
+<button id="weekVideoBtn" class="btn btn-danger center-block" style="margin-top: -15px;">Parādīt vairāk</button>
+<script>
+var weekBtn = false;
+$("#weekVideoBtn").on("click", function() {
+  $(".week").toggleClass("hidden"); if (weekBtn == false) {
+    $("#weekVideoText").html('"Video dzīvajā" skatījumi pēdējās 7 dienas'); $("#weekVideoBtn").html("Parādīt mazāk"); weekBtn = true; } else {
+    $("#weekVideoText").html('"Video dzīvajā" skatījumi pēdējās 24h'); $("#weekVideoBtn").html("Parādīt vairāk"); weekBtn = false; }
+});
+</script>
+{% endblock %}
+
+{% block style %}
+.table-striped > tbody > tr:nth-of-type(even) > td,
+.table-striped > tbody > tr:nth-child(even) > th { background-color: #e5e8e1; }
+.text-justify { text-align: justify; }
+{% endblock %}

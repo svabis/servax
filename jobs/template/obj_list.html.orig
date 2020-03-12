@@ -1,0 +1,98 @@
+{% extends 'main.html' %}
+
+{% block javascript %}
+<script>
+window.onload = function () { $("input.disabled_checkbox").attr("disabled", true); }
+$(document).ready(function(){
+ var hider = document.getElementsByClassName("hider")[0]; var close = document.getElementById("galery_close");
+ $("#galery_close").click(function() { hider.style.display = "none"; close.style.display = "none"; });
+ $(".obj_thumb").click(function( event ) { console.log( event.target.src ); hider.style.display = "table-cell";
+ close.style.display = "block"; hider.children[0].src = event.target.nextSibling.innerHTML; });
+});
+</script>
+{% endblock %}
+
+
+{% block style %}
+   #page_content_div { padding-left: 30px; padding-right: 30px; }
+   .obj_head { background-color: #999;
+{# padding: 5px 1px 5px 1px; #}
+ border-top-left-radius: 6px; border-top-right-radius: 6px;
+    border-top: solid #ccc 1px; border-right: solid #ccc 1px; border-left: solid #ccc 1px; }
+
+   .obj_body { background-color: #ddd; padding: 5px 0px 5px 0px; margin-bottom: 8px;
+    border-bottom-left-radius: 6px; border-bottom-right-radius: 6px;
+    border-bottom: solid #ccc 1px; border-right: solid #ccc 1px; border-left: solid #ccc 1px;
+   /* overflow:hidden; */
+    text-align: justify; text-justify: inter-word; }
+
+   .obj_thumb { display: block; max-width: 100px; max-height: 100px;
+    width: auto; height: auto; margin-left: auto; margin-right: auto;
+    float: left; border: solid #fff 1px; }
+{% endblock %}
+
+
+{% block content %}
+{#<div class="table-responsive">#}
+{# <div class="container-fluid"> #}
+
+
+{% for d in data %}
+<div class="row obj_head" id="obj_{{ d.0.id }}">
+ <div class="col-lg-2 col-md-2 text-center">{{ d.0.obj_added|date:"d/m/Y" }}</div>
+ <div class="col-lg-8 col-md-8"><b>{{ d.0.obj_title }}</b></div>
+ <div class="col-lg-2 col-md-2">{{ d.0.get_obj_zone_display }}</div>
+</div>
+
+<div class="row obj_body">
+<table>
+ <tr>
+  <td style="padding: 0px 10px 0px 20px;">
+   {% for i in d.1 %}{% if i.obj_image_small != "" %}<img class="obj_thumb" src="{{ i.obj_image_small.url }}"><span style="display: none;">{{ i.obj_image_big.url }}</span>{% endif %}{% endfor %}
+   <h2 style="margin: 5px 5x 5px 30px; color: #888;">{% for f in d.2 %}{% if f.obj_file.url != '' %}<a href="{{ f.obj_file.url }}">
+    <span style="color: #888;" class="glyphicon glyphicon-save-file" aria-hidden="true"></span></a>{% endif %}{% endfor %}
+   </h2>
+  </td>
+ </tr><tr>
+  <td valign="top" style="padding: 5px 25px 5px 25px;">
+   {{ d.0.obj_descr|safe }}{% if d.0.obj_url != None %}
+  </td>
+ </tr><tr>
+  <td style="padding: 5px 15px 5px 15px; overflow: hidden;">
+{#   <a target="_blank" href="{{ d.0.obj_url }}">{{ d.0.obj_url }}</a>{% endif %} #}
+   <a target="_blank" href="{{ d.0.obj_url }}" class="text-danger">Links</a>{% endif %}
+  </td>
+ </tr>
+</table>
+</div>
+{% endfor %}
+
+<div class="row">
+ <hr style="border-top: 1px solid red;">
+</div>
+
+{% for d in old_data %}
+<div class="row obj_head" id="obj_{{ d.0.id }}">
+ <div class="col-lg-2 col-md-2"><center>{{ d.0.obj_added|date:"d/m/Y" }}</center></div>
+ <div class="col-lg-8 col-md-8"><b>{{ d.0.obj_title }}</b></div>
+ <div class="col-lg-2 col-md-2">{{ d.0.get_obj_zone_display }}</div>
+</div>
+
+<div class="row obj_body">
+<table>
+ <tr>
+  <td style="padding: 0px 10px 0px 10px;">{% for i in d.1 %}{% if i.obj_image_small != "" %}<img class="obj_thumb" src="{{ i.obj_image_small.url }}"><span style="display: none;">{{ i.obj_image_big.url }}</span>{% endif %}{% endfor %}</td>
+  <td style="padding: 0px 10px 0px 0px;"><h2 style="margin: 5px; color: #888;">{% for f in d.2 %}{% if f.obj_file.url != '' %}<a href="{{ f.obj_file.url }}">
+   <span style="color: #888;" class="glyphicon glyphicon-save-file" aria-hidden="true"></span></a>{% endif %}{% endfor %}</h2>
+  </td>
+  <td valign="top" style="padding-right: 25px;">
+   {{ d.0.obj_descr|safe }}{% if d.0.obj_url != None %}<br>
+   <a target="_blank" href="{{ d.0.obj_url }}">{{ d.0.obj_url }}</a>{% endif %}
+  </td>
+ </tr>
+</table>
+</div>
+{% endfor %}
+
+{#</div>#}
+{% endblock %}

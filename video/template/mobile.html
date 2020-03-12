@@ -1,0 +1,181 @@
+{% extends 'main.html' %}
+
+{% block javascript %}
+{#   <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE"> #}
+<script>
+var cam_el;
+console.log( cam_el );
+var url = [ {% for cam in cameras %}"{{ cam.cam_url }}",{% endfor %} ];
+
+{# "START LEAVE TIMER" #}
+$(document).ready(function () { var idleInterval = setInterval(timerIncrement, 10000); });
+
+{# "update live_video statistic" #}
+function timerIncrement() {
+  $.ajax({ url:"../exit_video/", type: "GET",
+    data: {date: new Date()}, success:function(response){}, complete:function(){},
+    error:function (xhr, textStatus, thrownError){ console.log("error doing something"); }
+  });
+}
+
+{# "SUPERUSER START" #}
+{% if username.is_superuser %}
+local_url = [ {% for cam in cameras %}"{{ cam.cam_url_local }}",{% endfor %} ];
+
+{# "SWITCH TO LOCAL IP's FOR CAMERAS" #}
+function local() {
+  url = local_url;
+ {% for cam in cameras %}{% if cam.cam_img == False %}
+  document.getElementById("nr{{ forloop.counter }}").src = url[{{ forloop.counter0 }}];
+ {% endif %}{% endfor %}
+}
+
+{# "FORCE CAMERAS ON" #}
+function allCamOn() {
+  $.ajax({ url:"../camera_on/", type: "GET",
+    data: {date: new Date()}, success:function(response){}, complete:function(){},
+    error:function (xhr, textStatus, thrownError){ console.log("error doing something"); }
+  });
+}
+{% endif %}
+{# "SUPERUSER END" #}
+
+
+{# "DESKTOP VERSION START" #}
+{% if mobile_browser == False %}
+var c = [4, 8, 1, 10, 4, 2]; {# <!--h un w factor--> #}
+var o = [1, 1, 0, 1, 1, 1]; {# <!--zoom*--> #}
+var s = ["0.5", "0.75", "1", "1.2", "1.5", "2"]; {# <!--transform factor--> #}
+var m = ["-", "-", "", "", "", ""]; {# <!--margin--> #}
+var h, w; {# <!--height & width--> #}
+
+{# "GET AND SET ZOOM FROM COOKIES START" #}
+$(document).ready(function () {
+  var z = getZoom(); if (z == "") { document.cookie = "live_zoom=2" + "; path=/;"; z = 2; } setZoom(z);
+});
+function getZoom() {
+  var name = "live_zoom="; var decodedCookie = decodeURIComponent(document.cookie); var ca = decodedCookie.split(';');
+  for(var i = 0; ca.length>i; i++) {
+   var c = ca[i]; while (c.charAt(0) == ' ') { c = c.substring(1); } if (c.indexOf(name) == 0) { return c.substring(name.length, c.length); }}
+  return "";
+}
+{# "GET AND SET ZOOM FROM COOKIES END" #}
+
+{# "CHANGE ZOOM START" #}
+function setZoom(val) {
+  val = Number(val); for( var z = 0; 6 > z; z++ ) {
+    document.getElementById("z_btn_" + z).classList.add('btn-success');
+    document.getElementById("z_btn_" + z).classList.remove('btn-info');
+  } document.getElementById("z_btn_" + val).classList.add('btn-info');
+ {% for cam in cameras %}
+  var element = document.getElementById("nr{{ forloop.counter}}");
+  element.style.transform = "scale(" + s[val] + ")";
+  h = Number( Number({{ cam.cam_height }})*o[val] / c[val]);
+  w = Number( Number({{ cam.cam_width }})*o[val] / c[val]);
+  element.style.margin= m[val] + h + "px " + m[val] + w + "px " + m[val] + h + "px " + m[val] + w + "px";
+ {% endfor %}
+  document.cookie = "live_zoom=" + val + "; path=/;";
+}
+{# "CHANGE ZOOM END" #}
+{% endif %}
+{# "DESKTOP VERSION END" #}
+</script>
+{% endblock %}
+
+
+
+
+{% block style %}
+   iframe { float: left; border: 1px solid white; overflow: none; }
+{% endblock %}
+
+
+
+
+{% block content %}
+{# "DESKTOP ZOOM e.t.c. BUTTONS START" #}
+{% if mobile_browser == False %}
+<div class="container-fluid">
+{% if tablet_browser == False %}
+ <button id="z_btn_0" type="button" class="btn btn-success btn-sm" onclick="setZoom(0);"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 50%</button>
+ <button id="z_btn_1" type="button" class="btn btn-success btn-sm" onclick="setZoom(1);"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 75%</button>
+ <button id="z_btn_2" type="button" class="btn btn-success btn-sm" onclick="setZoom(2);"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 100%</button>
+ <button id="z_btn_3" type="button" class="btn btn-success btn-sm" onclick="setZoom(3);"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 125%</button>
+ <button id="z_btn_4" type="button" class="btn btn-success btn-sm" onclick="setZoom(4);"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 150%</button>
+ <button id="z_btn_5" type="button" class="btn btn-success btn-sm" onclick="setZoom(5);"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> 200%</button>
+{% endif %}
+
+{% if username.is_superuser %}
+ <a href="/video/camera_on/"> {# onclick="allCamOn()"> #}
+  <button type="button" class="btn btn-danger btn-sm pull-right" style="margin-left: 5px;">
+   <span class="glyphicon glyphicon glyphicon-off" aria-hidden="true"></span> FORCE ON</button>
+ </a>
+ <a href="#" onclick="local()">
+  <button type="button" class="btn btn-danger btn-sm pull-right" style="margin-left: 5px;">
+   <span class="glyphicon glyphicon glyphicon-transfer" aria-hidden="true"></span> LOCAL</button>
+ </a>
+{% endif %}
+ <a href="/video/stream/">
+  <button type="button" class="btn btn- btn-sm pull-right">
+   <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> STREAM</button>
+ </a>
+
+ <br><br>
+</div>
+{% endif %}
+{# "DESKTOP ZOOM e.t.c. BUTTONS END" #}
+
+{% if mobile_browser == False %}<div class="container-fluid" style="text-align:center;">{% endif %}
+{# <!-- ITERATE CAMERA OBJECTS START --> #}
+{% for cam in cameras %}
+
+{% if cam.cam_img %}
+{# <!-- CAMERA IMAGE START--> #}
+<script>
+jQuery(document).ready(function($) {
+ var img{{ forloop.counter }} = new Image();
+ var imgObj{{ forloop.counter }};
+ function preload{{ forloop.counter }}() { img{{ forloop.counter }}.src = url[{{ forloop.counter0 }}] + "?" + new Date(); }
+ function changesrc{{ forloop.counter }}() { imgObj{{ forloop.counter }}.src = img{{ forloop.counter}}.src; preload{{ forloop.counter }}();
+  setTimeout(changesrc{{ forloop.counter}},3500); }
+ function update{{ forloop.counter }}() { imgObj{{ forloop.counter }} = document.getElementById("nr{{ forloop.counter}}");
+  imgObj{{ forloop.counter }}.src = img{{ forloop.counter }}.src; img{{ forloop.counter }}.src = url[{{ forloop.counter0 }}] + "?" + (new Date()).getTime(); }
+ function takeError{{ forloop.counter }}() { img{{ forloop.counter }}.src = url[{{ forloop.counter0 }}] + "?" + (new Date()).getTime(); }
+ function startonload{{ forloop.counter }}() { img{{ forloop.counter }}.src = url[{{ forloop.counter0 }}] + "?" + (new Date()).getTime();
+  img{{ forloop.counter }}.onerror=takeError{{ forloop.counter}}; img{{ forloop.counter}}.onload=update{{ forloop.counter }}; }
+ function load{{ forloop.counter }}() { if (navigator.appName.indexOf("Microsoft IE Mobile") != -1) { preload{{ forloop.counter }}();
+  changesrc{{ forloop.counter }}(); return; } startonload{{ forloop.counter }}(); }
+ load{{ forloop.counter }}();
+});
+</script>
+ <img src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}"{% if mobile_browser == False %} width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;"{% else %}width="100%" height="100%"{% endif %} onerror="this.src='{% static 'images/back4.jpg' %}'" style="float: left; border: solid white 1px;">
+<script>cam_el = $("#nr{{ forloop.counter}}");</script>
+{% else %}
+{# <!-- CAMERA IFRAME START--> #}
+ <iframe src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}" width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;" marginheight="0" marginwidth="0" scrolling="no"></iframe>
+
+{# "RESCALE CAMERA IMAGES FOR MOBILE START" #}
+{% if mobile_browser or tablet_browser %}
+<script>
+{% if tablet_browser %}
+
+{% endif %}
+function resizeIframe{{ forloop.counter }}() {
+  var element = document.getElementById("nr{{ forloop.counter}}");
+  element.style.transform = "scale(" + (cam_el.width()+2)/640 + ")";
+  element.style.margin= "-" + (480-480*((cam_el.width()+2)/640))/2 + "px -" + (640-640*((cam_el.width()+2)/640))/2 + "px -" + (480-480*((cam_el.width()+2)/640))/2 + "px -" + (640-640*((cam_el.width()+2)/640))/2 + "px";
+}
+$(document).ready(function(){ resizeIframe{{ forloop.counter }}(); });
+$(window).resize(function(){ resizeIframe{{ forloop.counter }}(); });
+</script>
+{% endif %}
+{# "RESCALE CAMERA IMAGES FOR MOBILE END" #}
+
+{% endif %}
+{% endfor %}
+{# <!-- ITERATE CAMERA OBJECT END --> #}
+
+
+{% if mobile_browser == False %}</div>{% endif %}
+<div class="row" style="margin-top: 30px;"></div>
+{% endblock %}

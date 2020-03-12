@@ -1,0 +1,30 @@
+from django.conf.urls import patterns, include, url
+
+from django.contrib import admin
+admin.autodiscover()
+
+urlpatterns = patterns('',
+    # Examples:
+    # url(r'^$', 'main.views.home', name='home'),
+    # url(r'^blog/', include('blog.urls')),
+
+# ADMIN
+    url(r'^admin/', include(admin.site.urls)),
+
+# LOGINSYS
+    url(r'^login/$', 'login.views.login'),
+    url(r'^logout/$', 'login.views.logout'),
+
+# JOBS
+    url(r'^jobs/', include('jobs.urls')),
+
+# LIVE VIDEO
+    url(r'^live/$', 'main.views.live'),
+
+# ARHIVS
+    url(r'^arhivs/', include('arhivs.urls')),
+
+# MAIN
+    url(r'^', 'main.views.home'),
+
+)

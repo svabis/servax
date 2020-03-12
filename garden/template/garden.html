@@ -1,0 +1,125 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+/* Rotation - NOT IN USE */
+#rotate {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+/* div's colors - iteration needed */
+#d0, #d1, #d2, #d3, #d4, #d5, #d6, #d7, #d8, #d9, #d10 { 
+// background: rgba(0, 205, 0, 1);
+// opacity:0.75;
+ background-color: #66ff33;
+}
+
+/* Style */
+select option[value="1"] { background-color: #f00; }
+select option[value="2"] { background-color: #0f0; }
+select option[value="3"] { background-color: #00f; }
+</style>
+
+<div class="row">
+<div class="col-xs-12 col-sm-6 col-lg-5 col-md-5">
+<div class="container-fluid" style="margin-bottom:10px;">
+<!-- Garden layout -->
+
+<div style="width:302px; background-color: white;"> 
+  <div id="d1" style="border:solid black 1px; height:25px; width:302px; text-align: center;">D1</div>
+
+ <div style="height:375px; width:302px;">
+  <div id="d2" style="border:solid black 1px; height:375px; width:25px; float:left; text-align: center;">D2</div>
+
+  <div id="d0" style="border:solid black 1px; height:78px; width:77px; float:left; text-align: center;">S</div>
+  <div style="height:78px; width:200px; float:right">
+    <div id="d6" style="border:solid black 1px; height:39px; width:200px; text-align: center;">D6</div>
+    <div id="d7" style="border:solid black 1px; height:39px; width:200px; text-align: center;">D7</div>
+  </div>
+ 
+   <div id="d3" style="border:solid black 1px; height:297px; width:25px; float:left; text-align: center;">D3</div>
+   <div id="d4" style="border:solid black 1px; height:297px; width:25px; float:left; text-align: center;">D4</div>
+
+     <div style="height:215px; width:227px; float:right;">
+       <div id="d5" style="border:solid black 1px; height:215px; width:27px; float:left; text-align: center;">D5</div>
+
+       <div style="height:215px; width:200px; float:right;">
+         <div id="d8" style="border:solid black 1px; height:50px; width:200px; text-align: center;">D8</div>
+         <div id="d9" style="border:solid black 1px; height:100px; width:200px; text-align: center;">D9</div>
+         <div id="d10" style="border:solid black 1px; height:20px; width:200px; text-align: center;">D10</div>
+         <div id="d11" style="border:solid black 1px; height:20px; width:200px; text-align: center;">D11</div>
+         <div id="d12" style="border:solid black 1px; height:25px; width:200px; text-align: center;">D12</div>
+       </div>
+
+       <div id="d13" style="border:solid black 1px; height:18px; width:227px; margin-top:215px; text-align: center;">D13</div>
+       <div id="d14" style="border:solid black 1px; height:20px; width:227px; text-align: center;">D14</div>
+       <div id="d15" style="border:solid black 1px; height:20px; width:227px; text-align: center;">D15</div>
+       <div id="d16" style="border:solid black 1px; height:24px; width:227px; text-align: center;">D16</div>
+     </div>
+ </div>
+
+  <div style="height:26px; width:302px;">
+    <div id="d17" style="border:solid black 1px; height:26px; width:75px; float:left; text-align: center;">D17</div>
+    <div id="d18" style="border:solid black 1px; height:26px; width:227px; float:right; text-align: center;">D18</div>
+  </div>
+
+  <div id="d19" style="border:solid black 1px; height:26px; width:302px; text-align: center;">D19</div>
+  <div id="d20" style="border:solid black 1px; height:20px; width:302px; text-align: center;">D20</div>
+  <div id="d21" style="border:solid black 1px; height:27px; width:302px; text-align: center;">D21</div>
+
+</div>
+</div>
+
+</div><div class="col-xs-12 col-sm-6 col-lg-7 col-md-7">
+<!-- Garden table -->
+
+<div class="container-fluid">
+ <table class="table table-hover table-striped table-condensed">
+  <thead>
+   <tr>
+    <th style="width:40px;">Pozīcija</th>
+    <th>Kas aug?</th>
+    <th style="width:50px;">Krāsa</th>
+   </tr>
+  </thead>
+{% for d in data %}
+  <tbody>
+    <tr onmouseover="mark( {{ forloop.counter0 }} );" onmouseleave="unmark( {{ forloop.counter0 }} );">
+     <td>{{ d.title }}</td>
+     <td>
+      <input type="text" value="{{ d.content }}" style="width:100%" maxlength="50" onchange="info()">
+     </td>
+     <td>{{ d.color }}
+      <select>    
+       <option value="1">Red</option>
+       <option value="2">Green</option>
+       <option value="3">Blue</option>
+      </select>
+     </td>
+    </tr>
+    </tbody>{% endfor %}
+  </table>
+</div>
+
+</div>
+</div>
+
+<script>
+function mark(val) {
+    document.getElementById('d'+val).style.opacity = 0.5;
+}
+
+function unmark(val) {
+    document.getElementById('d'+val).style.opacity = 1;
+}
+
+function info() {
+     alert("izmaiņas");
+}
+</script>
+{% endblock %}
+

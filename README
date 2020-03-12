@@ -1,0 +1,16 @@
+galery_thumbnail	gallery		create thumbnails for galery images
+
+extend_marked		jobs		extend marked jobs
+obj_thumbnail		jobs		create thumbnails for job obj images
+unmark_job		jobs		unmarking old jobs
+
+remove_cam_img		login		remove ftp folders for processed images
+tasks			login		original size video creation (using Desktop)
+tasks_r			login		rescale videos to 640x480 (using Desktop)
+
+add_arhivs		video		add Server_Task for "yesterday" video creation
+camera_chk		video		check Camera online status & create Camera_online object
+rescale			video		create "rescale" Server_Task objects
+video_chk		video		check video integrity (TESTS)
+
+count_comments		garden		count blog entries

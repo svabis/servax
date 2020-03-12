@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /media/
+Disallow: /video/
+Disallow: /pine64/

@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1 style="margin-top: 0px;">Laipni lūgti projektā <strong>Svabwilla</strong></h1>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Projekta mērķis laika gaitā ir mainījies un izkristalizējies visā savā krāšņumā.</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Uz doto momentu šī lapa ir kā poligons kurā autors veic savu izaugsmi gan kā ideju ģenerātors,
+ gan kā WEB un Python izstrādātājs/koderis.
+</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Projektam ir vairāki novirzieni.
+ Viens no virzieniem ir video novērošana, bet zem šī jēdziena tiek apskatīts ne tikai tīrs filmēt un atskaņot.
+ Šeit ir gan eksperimenti ar dažādiem formātiem, veidiem kā translēt bildi/video, kā arī video atskaņotāju testi.
+ Nākotnē ir paredzēts iekļaut šinī sadaļā kaut kāda veida video uz info transformāciju.
+ Nākotne var atnest gan seju atpazīšanu, gan automašīnu nummuru atpazīšanu, reāllaika objektu izvietošanu uz kartes u.c.
+ Atliek tikai izdomāt un atrast laiku realizācijai.
+</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Vēl viens projekta mērķis ir atvieglot un automatizēt dzīvi.
+ Te ir gan darāmo darbu plānotājs, gan informācijas krātuve ar nosaukumu "lietu parametri".
+ Un vēl protams pie šī pieskaitās arī jēdziens Gudrā Māja jeb SmartHouse.
+ Uz doto brīdi realizēts ir apgaismojums lapenei - LED, kura vadība un kontrole ir pieejama visiem kam ir dotas tiesības.
+ Projektā ir gudrās atslēgas, ūdensvads kurš pats sevi iztukšo pie mīnus temperatūrām.
+</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Mūsdienās cilvēki mājas jēdzienā ietver arvien vairāk, tai skaitā inovatīvus risinājumus kas atvieglo dzīvi,
+ padarot ērtākus vairākus ikdienas darbus. Šeit kā piemēru var salīdzināt akmens laikmeta “māju”,
+ jeb alu un pagājušā gadsimta “māju” kā atsevišķu celtni ar dalījumu telpās un ar apkuri kas tiek risināta krāsns,
+ jeb kamīna salīdzinājumā ar alas ugunskuru.
+</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Mūsdienās mājas plānojumam ir tikpat liela nozīme, piemēram, interneta pieslēguma risinājumam,
+ vai arī iespējai atvērt un aizvērt vārtus, kā arī garāžu no pults.
+ Jāmin ir arī tas ka mūsdienās cilvēks cenšas jau projektēšanas stadijā iestrādāt energotaupīgus risinājumus, piemēram, siltinājums, apkure, apgaismojums.
+</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Gudrā māja ir dzīvokļa vai mājas automatizācijas virziens,
+ ar kura palīdzību ir iespējams attālināti vadīt siltumapgādes sistēmu,
+ elektrosistēmu vai atsevišķus elementus (garāžas vārti, dārza laistīšanas sistēma, ventilācijas vadība).
+ Katrs no virzieniem ietver kopumu ar ierīcēm vai programmām, kas palīdz attālināti plānot vai regulēt kādu no mājas elementiem.
+ Jaunākās tehnoloģijas gudrās mājas ir iespējams vadīt ar viedtālruņu vai interneta mākoņrisinājumu palīdzību.
+</p>
+
+{% if not username.username %}<center><h4 class="text-danger"><strong>Lai piekļūtu citām projekta sadaļām ir nepieciešama autorizācija</strong></h4>
+<h4 class="text-danger"><strong>Bez autorizācijas ir pieejami publiskie attēli sadaļā '<a href="/galery/">Galerija</a>'</strong></h4></center>{% endif %}
+
+{% endblock %}
+
+{% block style %}
+.text-justify { text-align: justify; }
+{% endblock %}

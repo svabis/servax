@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>{% load static %}{% load tz %}
+<head>
+  <title>{{ title }}</title>
+{# <!-- <base href="http://svabwilla.svabis.eu/" /> #}{#  <link rel="canonical" href="http://svabwilla.svabis.eu/" />--> #}
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta charset="UTF-8" />
+  <meta name="description" content="Projekts dzīves kvalitātes uzlabošanai, izmantojot inovatīvus risinājumus ar kuru palīdzību ir iespējams attālināti vadīt atsevišķus elementus: vārti, laistīšanas sistēma, ventilācija u.c." />
+  <meta name="keywords" content="Svabwilla,SmartHouse,Video surveillance,Home tasks" />
+  <meta name="author" content="Svabis" />
+  <meta name="robots" content="index, follow" />
+
+  <meta property="og:title" content="Svabwilla" />
+  <meta property="og:description" content="Projekts dzīves kvalitātes uzlabošanai, izmantojot inovatīvus risinājumus ar kuru palīdzību ir iespējams attālināti vadīt atsevišķus elementus: vārti, laistīšanas sistēma, ventilācija u.c." />
+  <meta property="og:site_name" content="svabwilla" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="http://svabwilla.svabis.eu{% static 'images/back4.jpg' %}" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="http://svabwilla.svabis.eu/" />
+
+  <link rel="shortcut icon" type="image/png" href="{% static favicon %}" />
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+{# <!-- <link href="{% static 'bootstrap-3.3.7-dist/css/font-awesome.min.css' %}" rel="stylesheet" /> --> #}
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/side-menu.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}" />
+
+{# <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> --> #}
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+
+  <script src="{% static 'bootstrap-3.3.7-dist/js/jquery.min.js' %}"></script>
+  <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+
+  <script>
+   var navCookies = [];
+   $(document).ready(function () {
+{# <!--DISABLE DRAG EVENTS--> #}
+     $("#topNavbar").on('dragstart', function() { return false; }); $("#topNavbar").on('selectstart', function() { return false; }); $("#topNavbar").on('mousedown', function() { return false; });
+     $("#UserModal").on('dragstart', function() { return false; }); $("#UserModal").on('selectstart', function() { return false; }); $("#UserModal").on('mousedown', function() { return false; });
+     $("#side-menu").on('dragstart', function() { return false; }); $("#side-menu").on('selectstart', function() { return false; }); $("#side-menu").on('mousedown', function() { return false; });
+
+     $("#JobModal").on('dragstart', function() { return false; }); $("#JobModal").on('selectstart', function() { return false; }); $("#JobModal").on('mousedown', function() { return false; });
+     $("#FinModal").on('dragstart', function() { return false; }); $("#FinModal").on('selectstart', function() { return false; }); $("#FinModal").on('mousedown', function() { return false; });
+     $("#CancelModal").on('dragstart', function() { return false; }); $("#CancelModal").on('selectstart', function() { return false; }); $("#CancelModal").on('mousedown', function() { return false; });
+{# <!--LOAD MENU COOKIES AND SET MENU NAVS OPEN/CLOSE--> #}
+     navCookies = getNavs().split(","); navCookies.remove(""); navCookies.forEach( iterArray );
+{# <!--MENU Arrows--> #}
+     $("#video_list").click(function() {
+      var el = $("#video_list").children().last(); if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); } });
+     $("#smarthouse_list").click(function() {
+      var el = $("#smarthouse_list").children().last(); if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); } });
+     $("#jobsection_list").click(function() {
+      var el = $("#jobsection_list").children().last(); if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); } });
+   });
+   Array.prototype.remove = function() { var what, a = arguments, L = a.length, ax; while (L && this.length) { what = a[--L]; while ((ax = this.indexOf(what)) !== -1) { this.splice(ax, 1); }} return this; };
+   function iterArray(item) { if (item != "") { $("#"+item+"_list").attr("aria-expanded","true"); $("#"+item+"_list").removeClass( "collapsed" ); $("#"+item).attr("aria-expanded","true"); $("#"+item).addClass( "in" ); } }
+   function getNavs() { var name = "menu_navs="; var decodedCookie = decodeURIComponent(document.cookie); var ca = decodedCookie.split(';'); for(var i = 0; ca.length>i; i++) { var c = ca[i]; while (c.charAt(0) == ' ') { c = c.substring(1); } if (c.indexOf(name) == 0) { return c.substring(name.length, c.length); }} return ""; }
+   function saveNavs(el) { if (el.className == "collapsed") { if ( navCookies.indexOf( el.dataset.target.substr(1) ) === -1 ) { navCookies.push( el.dataset.target.substr(1) ); } else { navCookies.remove( el.dataset.target.substr(1) ); }} else { navCookies.remove( el.dataset.target.substr(1) ); } document.cookie = "menu_navs=" + navCookies + "; path=/;"; }
+  </script>
+{% block javascript %}{% endblock %}
+  <style>
+   #container {
+    display: flex;  display: -webkit-flex; /* Safari 8 */
+    flex-wrap: wrap;  -webkit-flex-wrap: wrap; /* Safari 8 */
+    justify-content: center;  -webkit-justify-content: center; /* Safari 8 */
+   }
+   h5 { margin-bottom: 5px; margin-top: 5px; }
+   body { padding-top: 70px; margin: 0; background-color: #ddd;
+{# <!--MOBILE BROWSER REMOVE BACKGROUND IMAGE--> #}
+ {% if mobile_browser == False and tablet_browser == False %}
+   background: url( {% static background %} ); background-size: cover; background-repeat:no-repeat; background-size: 100vw 100vh; background-attachment: fixed;
+ {% endif %}
+   }
+
+   .btn { border: solid #555 1px; }
+   #meteo { width: 850px; height: 50px; border: solid #eee 1px; background-image: linear-gradient(to bottom right, #eee, #00ffcc); cursor: pointer; }
+   yr { position: absolute; width: 850px; height: 340px; z-index: 0; background-image: url( {% static 'images\empty.png' %} ); }
+   o { text-decoration: line-through; }
+   #galery_close { position: fixed; top: 60px; right: 10px; width: 30px; height: 30px; border: solid red 2px; border-radius: 4px; z-index: 1010; cursor: pointer; display: none; }
+   .hider { position: fixed; top: 50px; left: 0px; right: 0px; bottom: 0px; width: 100%; height: 100%; margin-top: -50px; padding-top: 70px;
+     background: #000; opacity: 1; z-index: 1000; display: none; text-align: center; vertical-align: middle; margin-top: auto; margin-bottom: auto; }
+   .hider > img { max-width: 100%; max-height: 90%; vertical-align: middle; }
+   .empty_row { background-color: rgba(240,240,240, 0.2) !important; }
+{% block style %}{% endblock %}
+  </style>
+</head>
+<body>
+
+<div class="progress-container"><div class="progress-bar" id="myBar"></div></div>
+
+{# <!--GALERY CLOSE ICON START--> #}
+<div class="hider"><img src=""><br><h4></h4></div>
+<div id="galery_close">
+ <svg height="30" width="30">
+  <line x1="3" y1="3" x2="23" y2="23" style="stroke:rgb(255,0,0);stroke-width:4" />
+  <line x1="23" y1="3" x2="3" y2="23" style="stroke:rgb(255,0,0);stroke-width:4" />
+ </svg>
+</div>
+{# <!--GALERY CLOSE ICON END--> #}
+
+
+
+{# <!--NAV BAR COLALAPSE FIXED TOP START --> #}
+<nav class="navbar-xs navbar-inverse navbar-fixed-top" id="topNavbar">
+ <div class="container-fluid">
+  <div class="navbar-header">
+   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+   </button>
+   <a class="navbar-brand" href="/">Svabwilla{% if heading %} | {{ heading }}{% endif %}</a>
+  </div>
+  <div class="collapse navbar-collapse" id="myNavbar">
+   <ul class="nav navbar-nav navbar-right">
+{% if username.username %}
+{% if username.is_superuser %}
+    <li><a target="_blank" href="/adminlucy/"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;&nbsp;Django</a></li>
+{% endif %}
+    <li><a href="#" data-toggle="modal" data-target="#UserModal"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;{{ username.username }}</a></li>
+    <li><a href="/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Iziet</a></li>
+{% else %} 
+    <li><a href="/login/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Autorizēties</a></li>
+{% endif %}
+   </ul>
+  </div>
+ </div>
+</nav>
+{# <!--NAV BAR FIXED TOP END--> #}
+
+
+
+{# <!--USER MODAL START--> #}
+{% if username.username %}
+<div class="modal fade" id="UserModal" tabindex="-1" role="dialog" aria-labelledby="UserModal" aria-hidden="true">
+<div class="modal-dialog"><div class="modal-content"><div class="modal-header" style="padding-bottom: 0px;">
+ <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+ <h2 style="margin-top:0px;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{ username.username }}</h2>
+</div><div class="modal-body" style="padding-top: 0px; padding-bottom: 0px;">
+ <h4 style="margin-bottom: 0px;"><strong>Reģistrēts:</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ username.date_joined|localtime|date:"d/m/Y H:i" }}</strong></h5>
+ <h4 style="margin-bottom: 0px;"><strong>Pēdējā autorizācija:</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ username.last_login|localtime|date:"d/m/Y H:i" }}</strong></h5>
+ <h4 style="margin-bottom: 0px;"><strong>Pēdējā aktivitāte:</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ username.u.user_last_visit|localtime|date:"d/m/Y H:i" }}</strong></h5>
+
+<hr style="margin-top:5px; margin-bottom:5px;">
+ <h4 style="margin-bottom: 0px;"><strong>Video sadaļas tiesības</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vērot video dzīvajā:</strong>
+ {% if username.u.video_live %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skatīt video arhīvu:</strong>
+ {% if username.u.video_archive %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+
+<hr style="margin-top:5px; margin-bottom:5px;">
+ <h4 style="margin-bottom: 0px;"><strong>Galerijas sadaļas tiesības:</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skatīt privātos attēlus:</strong>
+ {% if username.u.galery %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pievienot attēlus:</strong>
+ {% if username.u.galery_add %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+
+<hr style="margin-top:5px; margin-bottom:5px;">
+ <h4 style="margin-bottom: 0px;"><strong>Smart House sadaļas tiesības:</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pieeja elektro patēriņu sadaļai:</strong>
+ {% if username.u.sm_electr %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pieeja temperatūru sadaļai:</strong>
+ {% if username.u.sm_termo %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pieeja apgaismojuma sadaļai:</strong>
+ {% if username.u.sm_led %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+
+<hr style="margin-top:5px; margin-bottom:5px;">
+ <h4 style="margin-bottom: 0px;"><strong>Darbu saraksta sadaļas tiesības</strong></h4>
+ {% if username.u.job_list %}
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pievienot darbu:</strong>
+  {% if username.u.job_add %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;izcelt darbu:</strong>
+  {% if username.u.job_mark %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;uzsākt darbu:</strong>
+  {% if username.u.job_start %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pabeigt darbu:</strong>
+  {% if username.u.job_fin %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;atcelt darbu:</strong>
+  {% if username.u.job_cancel %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;atsākt darbu:</strong>
+  {% if username.u.job_restart %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ {% else %}<h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;piekļuve darbu sarakstam:</strong><strong class="text-danger">Nē</strong>{% endif %}</h5>
+
+ {% if username.u.obj_list %}
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lietu parametos ievietot:</strong>
+  {% if username.u.obj_list_add %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rediģēt lietu parametrus:</strong>
+  {% if username.u.obj_list_edit %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ {% else %}<h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;piekļuve lietu parametriem:</strong><strong class="text-danger">Nē</strong>{% endif %}</h5>
+
+<hr style="margin-top:5px; margin-bottom:5px;">
+ <h4 style="margin-bottom: 0px;"><strong>Sadaļas "Dārzs" tiesības</strong></h4>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skatīt sadaļu:</strong>
+ {% if username.u.garden %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pievienoties diskusijām:</strong>
+ {% if username.u.garden_add %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+
+</div><div class="modal-footer" style="padding-top: 5px;"> <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button></div></div></div></div>{% endif %}
+{# <!--USER MODAL END--> #}
+
+
+<div class="container-fluid">
+  <div class="row">
+
+
+{# <!--LEFT MENU BAR START--> #}
+<div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="side-menu">
+ <div class="nav-side-menu">
+ <div style="height: 50px; width:100%;"></div>
+  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content">{# <!--te virsrakts laikam--> #}</i>
+  <div class="menu-list">
+   <ul id="menu-content" class="menu-content collapse out">
+
+    <a href="/"><li><i></i> <span class="glyphicon glyphicon-home"></span> &nbsp; Par projektu</li></a>
+
+    <li id="video_list" data-toggle="collapse" data-target="#video" class="collapsed" onclick="saveNavs(this);">
+     <i></i> <span class="glyphicon glyphicon-film" aria-hidden="true"></span> &nbsp; Video <span class="arrow"></span>
+    </li>
+    <ul id="video" class="sub-menu collapse">
+ {% if mobile_browser %}
+     <a href="/video/live/"><li><i></i>
+ {% else %}
+     <a href="/video/stream/"><li><i></i>
+ {% endif %}
+      <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Video dzīvajā</li></a>
+     <a href="/video/archive/"><li><i></i>
+      <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Video arhīvs</li></a>
+    </ul>
+
+    <a href="/galery/"><li><i></i> <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> &nbsp; Galerija</li></a>
+
+    <li id="smarthouse_list" data-toggle="collapse" data-target="#smarthouse" class="collapsed" onclick="saveNavs(this);">
+     <i></i> <span class="glyphicon glyphicon-home" aria-hidden="true"></span> &nbsp; Gudrā Māja<span class="arrow"></span>
+    </li>
+    <ul id="smarthouse" class="sub-menu collapse">
+     <a href="/sm_house/electro/"><li><i></i>
+      <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> &nbsp; Elektro Patēriņš</li></a>
+     <a href="/sm_house/termo/"><li><i></i>
+      <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras</li></a>
+     <a href="/sm_house/led/"><li><i></i>
+      &nbsp;<span class="fa fa-lightbulb-o" aria-hidden="true"></span> &nbsp;&nbsp; Apgaismojums</li></a>
+    </ul>
+
+    <li id="jobsection_list" data-toggle="collapse" data-target="#jobsection" class="collapsed" onclick="saveNavs(this);">
+     <i></i> <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> &nbsp; Darbu sadaļa<span class="arrow"></span>
+    </li>
+    <ul id="jobsection" class="sub-menu collapse">
+     <a href="/jobs/"><li><i></i>
+      <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> &nbsp; Darbu sarakts</li></a>
+     <a href="/jobs/objects/"><li><i></i>
+      <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span> &nbsp; Lietu parametri</li></a>
+    </ul>
+
+    <a href="/garden/"><li><i></i> <span class="glyphicon glyphicon-grain" aria-hidden="true"></span> &nbsp; Dārzs</li></a>
+{% if location %}
+    <a href="/weather/"><li><i></i><img src="https://www.yr.no/assets/images/logo-yr-50.png" height="16px;" width="16px;"> &nbsp; Laika Prognoze</li></a>
+    <a href="/location/"><li><i></i> <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> &nbsp; Atrašanās vieta</li></a>
+{% endif %}
+{# <!--{% if username.is_superuser %}--> #}
+{% for g in username.groups.all %}
+  {% ifequal g.name "stats" %}
+{#    <a target="_blank" href="/adminlucy/login/live_video/"><li><i></i> <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> &nbsp; Video statistika</li></a> #}
+    <a href="/stats/"><li><i></i> <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> &nbsp; Statistika</li></a>
+  {% endifequal %}
+{% endfor %}
+{# <!--{% endif %}--> #}
+
+   </ul>
+  </div>
+ </div>
+</div>
+{# <!--LEFT MENU BAR END--> #}
+
+
+{# <!--PAGE CONTENT START--> #}
+<div class="col-xs-12 col-sm-9 col-md-9 col-lg-10" id="page_content_div">
+{% block content %}{% endblock %}
+</div>
+{# <!--PAGE CONTENT END--> #}
+
+</div>
+</div>
+
+</body>
+</html>
+
+

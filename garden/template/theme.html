@@ -1,0 +1,27 @@
+{% extends 'theme_paginator.html' %}
+
+{% block theme_data %}
+
+{% for t in temas %}
+<a href="/garden/{{ t.relate_to_super.slug }}/{{ t.slug }}/">
+ <div class="row comments_theme" {% if t.comment == False %}style="background-color: #aaa;"{% endif %}>
+  <div class="col-sm-12 col-md-12 col-lg-12 tema_head"></div>
+  <div class="col-sm-4 col-md-4 col-lg-4 user_theme">
+   <h5><b>{{ t.relate_to_super.title }}</b></h5>
+   <h5><b>Izveidoja:</b> {{ t.created_by }}&nbsp;&nbsp;{{ t.created_date|date:"d/m/Y H:i" }}</h5>
+  </div>
+  <div class="col-sm-6 col-md-6 col-lg-6 tema_body">
+   <h5><b>{% if t.comment %}Diskusija{% else %}Temats{% endif %}</b></h5>
+   <h4>{{ t.title }}&nbsp;&nbsp;<span class="badge"> {{ t.entry_count }}</span></h4>
+  </div>
+  <div class="col-sm-2 col-md-2 col-lg-2">
+   <center>
+    <h5><b>Pēdējais ieraksts</b></h5>
+    <h5>{{ t.last_entry|date:"d/m/Y H:i" }}</h5>
+   </center>
+  </div>
+ </div>
+</a>
+{% endfor %}
+
+{% endblock %}

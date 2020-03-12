@@ -1,0 +1,86 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+{% if mobile_browser == False %}
+<script>
+$(document).ready(function(){
+{# {% if active_tab != 5 %} scrollControl(); {% endif %} #}
+
+//  var cook = document.cookie; cook = cook.replace(/\s/g, ""); cook = cook.split(";"); cook.forEach(iterateCookie);
+
+  if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").show(); }
+  $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
+  $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
+})
+
+//function iterateCookie(value, index, array) { if (value.match("jobs_scroll")) { value = value.split("="); var position = parseInt(value[1]); window.scrollTo(0, position); }}
+//function scrollControl() { setInterval(function(){ document.cookie = "jobs_scroll=" + window.pageYOffset + "; path=/";} , 3000); }
+</script>
+{% endif %}
+
+{% if mobile_browser %}
+<div class="col-xs-12 col-sm-12" id="jobs-menu">
+ <div class="nav-side-menu">
+  <div style="height: 50px; width:100%;"></div>
+  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#jobs-content"></i>
+  <div class="jobs-list">
+   <ul id="jobs-content" class="menu-content collapse out">
+{% else %}
+<div class="container-fluid">
+ <div class="navbar-collapse">
+  <ul class="nav nav-tabs">
+{% endif %}
+
+   <li class="active"><a data-toggle="tab" href="#ktc">Ķesterciems</a></li>
+   <li><a data-toggle="tab" href="#rpz">Ropaži</a></li>
+  </ul>
+ </div>
+</div>
+
+<div class="tab-content">
+  <div id="ktc" class="tab-pane fade in active">
+    <h3>Ķesterciems</h3>
+    <p>Te būs dati...</p>
+  </div>
+  <div id="rpz" class="tab-pane fade">
+    <h3>Ropaži</h3>
+    <p>Termometri ir lapenē pie sienas un virtuvē plauktā - interesē cik rāda, ej apskaties :)</p>
+  </div>
+</div>
+
+{% if mobile_browser %}</div>{% endif %}
+
+<div class="container" style="margin-top:10px;"></div>
+
+<div id="footer" class="container-fluid"></div>
+ <button id="back_to_top" type="button" class="btn btn-warning">
+  <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
+ <button id="go_to_bottom" type="button" class="btn btn-warning">
+  <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
+{% endblock %}
+
+
+
+{% block style %}
+   textarea { resize: none; }
+
+  .table td.fit, .table th.fit { width: 1%; text-align:center; }
+
+   #back_to_top { color: #222; border-color: #555; display: none; bottom: 47px; right: 30px; position: fixed; min-width: 160px; }
+   #go_to_bottom { color: #222; border-color: #555; display: none; bottom: 10px; right: 30px; position: fixed; min-width: 160px; }
+   #footer { display:none; height: 72px;}
+
+   .table-hover tbody tr:hover td, .table-hover tbody tr:hover th { background-color: #9b9da0; }
+   .table.table > thead > tr > th { vertical-align:top }
+
+   a { color: #000; }
+
+   .nav-tabs > li > a{ color: #000; background-color: #ffffb3; }
+   .nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; }
+
+{# NOT SURE ABOUT NEXT ONE #}
+/*   .tab-content{ background-color:#303136; color:#fff; padding:5px } */
+{% endblock %}
+

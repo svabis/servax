@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block javascript %}
+ <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/garden.css' %}" />
+{% endblock %}
+
+
+
+{% block content %}
+{% if mobile_browser == False %}
+<script>
+$(document).ready(function(){
+  if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").show(); }
+  $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
+  $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
+});
+</script>
+{% endif %}
+
+<div class="navbar-collapse">
+ <div class="tabbable">
+  <ul class="nav nav-tabs">
+{% if active_tab == "visas" %}<li class="active">{% else %}<li>{% endif %}
+<a href="/garden/">Visas Diskusijas</a></li>
+
+{% for s in super %}
+{% if active_tab == s.slug %}<li class="active">{% else %}<li>{% endif %}<a href="/garden/{{ s.slug }}/">{{ s.title }}</a></li>
+{% endfor%}
+
+  </ul>
+ </div>
+</div>
+
+{% block garden_content %}{% endblock %}
+
+<div id="footer" class="container-fluid"></div>
+ <button id="back_to_top" type="button" class="btn btn-warning">
+  <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
+ <button id="go_to_bottom" type="button" class="btn btn-warning">
+  <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
+
+{% endblock %}

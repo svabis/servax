@@ -1,0 +1,190 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block style %}
+  .pagination { margin-top: 10px; margin-bottom: 5px; }
+  .pagination > li > a { background-color: #ffffb3; }
+  .pagination > li > span { background-color: #ffffb3; }
+
+  ul.pagination li a:hover:not(.active) { background-color: #ddd; }
+
+  .grid_img_out{ position: relative; width: 202px; height: 170px; padding-top: 1px; padding-left: 1px; background-color: #bbb; margin: 1px 2px 2px 1px; float:left; z-index: 1; }
+  .grid_img { width: 200px; height: 150px; display: table-cell; text-align: center; vertical-align: middle; z-index: 2; }
+  .grid_img > img { max-width: 200px; max-height: 150px; border: solid #ddd 2px; }
+  .date { position: absolute; bottom: 0px; left: 0px; right: 0px; text-align: center; z-index: 2; }
+
+  #tag_block { border: solid #ccc 1px; padding: 10px 30px 10px 30px; background: #ddd; margin:10px 0px 10px 0px; }
+
+  #addBtn { margin-top:10px; }
+{% endblock %}
+
+
+
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'datepicker.css' %}"/>
+<script>
+{% if u_galery_add %}
+{# <!-- IMAGE ADD BUTTON --> #}
+$(document).ready(function($) {
+  $("#galery_img").click(function(){
+    $(this).parent().find("input").click();
+  });
+});
+
+{# <!-- IMAGE PREVIEW --> #}
+function readURL(input, display) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $("#" + display)
+        .attr("src", e.target.result)
+        .width(196)
+        .height(146);
+      };
+    $("#" + display).css("display", "block");
+    reader.readAsDataURL(input.files[0]);
+  }
+};
+{% endif %}
+
+{# <!-- Slugify galery tags --> #}
+function slugify(str) {
+  var from = "ēūīāšģķļžčņ"; var to = "euiasgklzcn";
+  for (var i=0, l=from.length ; i<l ; i++) { str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i)); }
+  return str;
+}
+
+var tags;
+$(document).ready(function(){
+ var hider = document.getElementsByClassName("hider")[0]; var close = document.getElementById("galery_close");
+ $("#galery_close").click(function() { hider.style.display = "none"; close.style.display = "none"; hider.children[0].src = ""; });
+
+ $(".image").click(function( event ) { hider.style.display = "table-cell"; close.style.display = "block";
+  hider.children[0].src = event.target.parentElement.children[0].innerHTML; var temp = event.target.parentElement.children[1].innerHTML.split(",");
+  temp.remove(""); tags = ""; temp.forEach( iterTags ); hider.children[2].innerHTML = tags; });
+});
+
+function iterTags (item) { tags += "<a href='/galery/tag=" + slugify(item) + "/'>#" + item + "</a> "; }
+</script>
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+{# <!-- Galery Add modal --> #}
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <form id="galAddForm" action="/galery/add/" method=POST enctype="multipart/form-data">{% csrf_token %}
+   <div class="modal-dialog">
+    <div class="modal-content"><div class="modal-header">
+     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+     <h3 class="modal-title" id="myModalLabel">Pievienot attēlu</h3></div>
+    <div class="modal-body">
+     <div class="row">
+
+     <div class="col-lg-6 col-md-6 col-sm-6">
+
+     <div class="grid_img_out">
+      <div class="grid_img">
+        <img id="galery_img" src="#" style="width: 200px; height: 150px; border: solid #ddd 2px;"/>
+        <input id="id_galery_img" type="file" name="galery_img" style="display: none" onchange="readURL(this, 'galery_img');"/>
+      </div>
+     </div>
+
+     </div>
+     <div class="col-lg-6 col-md-6 col-sm-6">
+       <div class="form-group">
+        {{ form.galery_date }}
+        {{ form.galery_public }}
+        {{ form.galery_tags }}
+
+<script>
+$(document).ready(function(){ var date_input=$('input[name="galery_date"]');
+ var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ var options={ format: 'yyyy mm dd', startView: 2, daysOfWeekHighlighted: "0,6", container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
+ date_input.datepicker(options); })
+</script>
+       </div>
+
+     </div>
+
+     </div>
+    </div>
+    <div class="modal-footer">
+     <a href="" id="modalOkBtn"><button type="submit" class="btn btn-primary">Pievienot attēlu</button></a>
+     <button type="button" class="btn btn-default" data-dismiss="modal">Atcelt</button>
+    </div>
+   </div>
+  </div>
+ </form>
+</div>
+{# <!-- modal end --> #}
+
+
+<div class="row">
+
+{% if u_galery_add %}
+ <div class="col-lg-2 col-md-2 col-sm-2" style="margin-bottom: 5px;">
+  <a href="#addModal"  data-toggle="modal" id="addBtn" class="btn btn-success"><i class="fa fa-upload"></i>&nbsp; Pievienot Attēlu</a>
+ </div>
+ <div class="col-lg-8 col-md-8 col-sm-8">
+{% endif %}
+
+
+{% if paginator.visible %}
+<center><ul class="pagination">
+{% if paginator.big %}{% if paginator.active_page == 1 %}
+<li class="disabled"><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page }}/#">&laquo;&laquo;</a></li>{% else %}<li><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}1/">&laquo;&laquo;</a></li>{% endif %}{% endif %}
+{% if paginator.active_page == 1 %}<li class="disabled"><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page }}/#">&laquo;</a></li>{% else %}
+<li><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page|add:"-1" }}/">&laquo;</a></li>{% endif %}
+ {% for page in paginator.pages %}
+ {% if page == 0 %}<li class="disabled"><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page }}/#">...</a></li>
+ {% elif paginator.active_page == page %}<li class="active"><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page }}/#">{{ page }}</a></li>
+ {% else %}<li><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ page }}/">{{ page }}</a></li>{% endif %}{% endfor %}
+{% if paginator.active_page == paginator.pagecount %}<li class="disabled"><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page }}/#">&raquo;</a></li>{% else %}
+<li><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page|add:"1" }}/">&raquo;</a></li>{% endif %}
+{% if paginator.big %}{% if paginator.active_page == paginator.pagecount %}<li class="disabled"><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.active_page }}/#">&raquo;&raquo;</a></li>{% else %}
+<li><a href="/galery/{% if tag %}tag={{ tag }}/{% endif %}{{ paginator.pagecount }}/">&raquo;&raquo;</a></li>{% endif %}{% endif %}
+</ul></center>
+{% endif %}
+
+{% if u_galery_add %}
+ </div>
+{% endif %}
+</div>
+
+<div id="container" class="row center-block">
+{% for img in images %}
+ <div class="grid_img_out" {% if img.galery_public == True %}style="background-color: #94d195;"{% endif %}>
+  <div class="grid_img">
+   <span style="display: none;">{{ img.galery_img.url }}</span>
+   <span style="display: none;">{{ img.galery_tags }}</span>
+   <img class="image" src="{{ img.galery_thumb.url }}">
+  </div>
+  <strong class="date">{{ img.galery_date|date:"Y m" }}</strong>
+ </div>
+{% endfor %}
+</div>
+
+<div class="row">
+ <div class="col-lg-1 col-md-1 col-sm-1"></div>
+ <div class="col-lg-10 col-md-10 col-sm-10">
+  <div id="tag_block">
+  <h4>
+   <a href="/galery/" style="text-decoration: underline;">{% if tag %}Visas bildes{% else %}<b class="text-danger">Visas bildes</b>{% endif %}</a>
+    {% for t in tag_list %}
+    &nbsp; <a href="/galery/tag={{ t.0 }}/" style="text-decoration: underline;">
+    {% if t.0 == tag %}
+    <b class="text-danger">#{{ t.1 }}</b>
+    {% else %}#{{ t.1 }}{% endif %}</a>&nbsp;
+    {% endfor %}
+  </h4>
+  </div>
+ </div>
+</div>
+
+{% endblock %}

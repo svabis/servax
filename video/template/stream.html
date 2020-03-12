@@ -1,0 +1,109 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block javascript %}
+{# "videojs player" #}
+<link href="//vjs.zencdn.net/7.2/video-js.min.css" rel="stylesheet">
+<script src="//vjs.zencdn.net/7.2/video.min.js"></script>
+{# <script src="{% static 'p5.js' %}"></script> #}
+<script>
+{# "START LEAVE TIMER" #}
+$(document).ready(function () { var idleInterval = setInterval(timerIncrement, 10000); });
+
+{# "update live_video statistic" #}
+function timerIncrement() {
+  $.ajax({ url:"../exit_video/", type: "GET",
+    data: {date: new Date()}, success:function(response){}, complete:function(){},
+    error:function (xhr, textStatus, thrownError){ console.log("error doing something"); }
+  });
+}
+</script>
+{% endblock %}
+
+
+{% block style %}
+   iframe { float: left; border: 1px solid white; overflow: none; }
+
+   .vjs-default-skin .vjs-volume-control { display: none; }
+   .video-js .vjs-volume-menu-button { display:none; }
+   .video-js.vjs-fullscreen .vjs-volume-menu-button { display:block; }
+
+div.framediv {
+  width:642px; height:482px;
+  position:relative; float: left;
+}
+span.togglebutton {
+  position:absolute; left:2px; top:24px; background-color:black; color:magenta; cursor: pointer;
+}
+div.maximized {
+  position:fixed !important;
+  z-index:9999;
+/*  -webkit-transform: scale(1.5); */
+  -webkit-transform-origin: 0 0;
+}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-fluid">
+ <a href="/video/live/"><button type="button" class="btn btn-DANGER btn-sm pull-right"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span> MOBILE</button></a>
+ <br><br>
+</div>
+
+{% if mobile_browser == False %}<div class="container-fluid" style="text-align:center;">{% endif %}
+
+{% for cam in cameras %}
+{% if cam.cam_stream %}
+<div style="float: left; border: 1px solid white; margin: 0px;">
+ <video muted autoplay id="stream_{{ forloop.counter }}" class="video-js vjs-default-skin" controls preload="auto" data-setup='{}'> {# width="1280" height="720"> #}
+  <source src="{{ cam.cam_url_stream }}" type="application/x-mpegURL">
+ </video>
+</div>
+
+
+{% else %}
+ <div class="framediv">
+   <iframe src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}" width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;" marginheight="0" marginwidth="0" scrolling="no"></iframe>
+ </div>
+
+{% endif %}
+{% endfor %}
+
+<script src="{% static 'videojs-contrib-hls.min.js' %}"></script>
+
+<script>
+$(".framediv").each(function () {
+  $(this).append('<span class="togglebutton">ZOOM</span>');
+});
+
+var zoom = false;
+$("span.togglebutton").click(function () {
+  var winw = $( window ).width();
+  var winh = $( window ).height();
+//  console.log( winw + " x " + winh );
+
+//  var res = Math.floor(winh/480)
+  var res = (winh/480) -0.1
+  var tspan = (winh-(480*res))/2
+  var lspan = (winw-(640*res))/2
+
+  if (zoom == false) {
+    $(this).closest("div").css('-webkit-transform', "scale("+res+")");
+    $(this).closest("div").css('top', tspan+"px");
+    $(this).closest("div").css('left', lspan+"px");
+    zoom = true;
+  } else {
+    $(this).closest("div").css('-webkit-transform', "scale(1)");
+    $(this).closest("div").css('top', "0px");
+    $(this).closest("div").css('left', "0px");
+    zoom = false;
+  }
+  $(this).closest("div").toggleClass("maximized");
+});
+</script>
+{% if mobile_browser == False %}</div>{% endif %}
+
+<div class="row" style="margin-top: 30px;"></div>
+{% endblock %}
+

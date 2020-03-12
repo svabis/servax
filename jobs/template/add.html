@@ -1,0 +1,103 @@
+{% extends 'jobs_head.html' %}
+
+{% block jobs_add %}
+{% if job_add_denied %}
+ <div class="col-md-7 col-md-offset-2">
+  <div class="alert alert-danger" role="alert" style="margin-bottom:5px;">
+    <center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span><strong>&nbsp;&nbsp;Šī darbība jums nav atļauta!</strong></center>
+  </div>
+ </div>
+
+{% else %}
+<style>
+input[type=checkbox] { -moz-transform: scale(1.2); }
+#hiddenLabel, #hiddenInput { display: none; }
+</style>
+
+ <form action="/jobs/add/" method="post">{% csrf_token %}
+  <div class="col-md-7 col-md-offset-2">
+
+{# <!-- MESSAGE IF ADDED WITH COOKIE --> #}
+  <div id="addMsg" class="alert alert-success" {#role="alert"#} style="margin-bottom:5px; display:none;">
+   <center><span class="glyphicon glyphicon-ok" aria-hidden="true"></span><strong>&nbsp;&nbsp;Darbs Pievienots !</strong></center>
+  </div>
+<script>
+function getCookie(name) { var value = "; " + document.cookie; var parts = value.split("; " + name + "="); if (parts.length == 2) return parts.pop().split(";").shift(); }
+if ( getCookie('job_added') == "true" ) { $("#addMsg").show(); setTimeout( function(){ $("#addMsg").fadeOut(); }, 6000); }
+</script>
+{# <!-- MESSAGE IF ADDED WITH COOKIE --> #}
+
+<script>
+{# on page leave if textarea contains something ask "are you sure you want to leave?" #}
+var sub = false;
+$(window).bind('beforeunload', function(){
+  if ( $("#id_jobs_descr").val() != "" ) {
+    if ( sub == false ) {
+      return 'Vai tiešām pamest šo lapu?';
+    }
+  }
+});
+</script>
+
+{# <!-- "Darbs" --> #}
+ <div class="col-md-12">
+  <div class="form-group">
+   <label for="{{ form.jobs_descr.id_for_label }}">Darba uzdevums:</label>
+    {{ form.jobs_descr.errors }}
+    {{ form.jobs_descr }}
+  </div>
+ </div>
+{# <!-- "Darbs" --> #}
+
+{# <!-- Izcelt darbu rinda --> #}
+ <div class="col-md-10">
+  <div class="form-group">
+   <label for="{{ form.marked.id_for_label }}">Izcelt darbu?</label>
+   {{ form.marked.errors }} 
+  </div>
+ </div>
+
+ <div class="col-md-2">
+   <div class="checkbox" style="margin-top: 0px;">
+    {{ form.marked }}
+   </div>
+ </div>
+
+ <div class="col-md-10" id="hiddenLabel" style="margin-top:15 px;">
+  <div class="form-group">
+   <label>Uz cik dienām izcelt darbu?</label>
+  </div>
+ </div>
+ <div class="col-md-2" id="hiddenInput">
+  <div class="form-group">
+   <input class="form-control" type="number" name="time" min="1" max="90" style="margin-top: 4px;">
+  </div>
+ </div>
+{# <!-- Izcelt darbu rinda --> #}
+
+<script>
+{# day counter visual only when clicked on checkbox #}
+$("#id_marked").click(function() {
+ $("#hiddenLabel").show(); $("#hiddenInput").show();
+});
+</script>
+
+{# <!-- Darbu zona/veids un submit poga --> #}
+ <div class="col-md-12">
+  <div class="form-group">
+   <label for="{{ form.jobs_zone.id_for_label }}">Darba zona:</label>
+    {{ form.jobs_zone.errors }}
+    {{ form.jobs_zone }}
+   <label for="{{ form.jobs_type.id_for_label }}">Darba veids/svarīgums:</label>
+    {{ form.jobs_type.errors }}
+    {{ form.jobs_type }}
+ </div>
+
+ <div class="form-group">
+  <center><input class="btn btn-primary" type="submit" value="Pievienot darbu" onclick="sub = true;"></center>
+ </div>
+</div>
+</form>
+{% endif %}
+{% endblock %}
+
