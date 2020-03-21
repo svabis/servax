@@ -108,6 +108,11 @@ def temas(request, s_id, t_id, pageid=1):
                 t.save()
                 t = t.parent
 
+            if t.parent == None:
+                t.last_entry = new_coment.date
+                t.entry_count += 1
+                t.save()
+
             response = redirect( '/garden/' + str(s_id) + '/' + str(t_id) + '/#new_comment' )
             response.set_cookie( key='page_loc', value='/garden/' + str(s_id) + '/' + str(t_id) + '/#new_comment' )
             return response

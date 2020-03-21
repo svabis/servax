@@ -5,7 +5,7 @@
 {# "videojs player" #}
 <link href="//vjs.zencdn.net/7.2/video-js.min.css" rel="stylesheet">
 <script src="//vjs.zencdn.net/7.2/video.min.js"></script>
-{# <script src="{% static 'p5.js' %}"></script> #}
+
 <script>
 {# "START LEAVE TIMER" #}
 $(document).ready(function () { var idleInterval = setInterval(timerIncrement, 10000); });
@@ -23,24 +23,13 @@ function timerIncrement() {
 
 {% block style %}
    iframe { float: left; border: 1px solid white; overflow: none; }
+   div.framediv { width:642px; height:482px; position:relative; float: left; }
+   span.togglebutton { position:absolute; left:1px; top:24px; background-color:black; color:magenta; cursor: pointer; }
+   div.maximized { position:fixed !important; z-index:9999; -webkit-transform-origin: 0 0; }
 
    .vjs-default-skin .vjs-volume-control { display: none; }
    .video-js .vjs-volume-menu-button { display:none; }
    .video-js.vjs-fullscreen .vjs-volume-menu-button { display:block; }
-
-div.framediv {
-  width:642px; height:482px;
-  position:relative; float: left;
-}
-span.togglebutton {
-  position:absolute; left:2px; top:24px; background-color:black; color:magenta; cursor: pointer;
-}
-div.maximized {
-  position:fixed !important;
-  z-index:9999;
-/*  -webkit-transform: scale(1.5); */
-  -webkit-transform-origin: 0 0;
-}
 {% endblock %}
 
 
@@ -51,7 +40,7 @@ div.maximized {
  <br><br>
 </div>
 
-{% if mobile_browser == False %}<div class="container-fluid" style="text-align:center;">{% endif %}
+<div class="container-fluid" style="text-align:center;">
 
 {% for cam in cameras %}
 {% if cam.cam_stream %}
@@ -60,13 +49,10 @@ div.maximized {
   <source src="{{ cam.cam_url_stream }}" type="application/x-mpegURL">
  </video>
 </div>
-
-
 {% else %}
  <div class="framediv">
    <iframe src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}" width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;" marginheight="0" marginwidth="0" scrolling="no"></iframe>
  </div>
-
 {% endif %}
 {% endfor %}
 
@@ -81,9 +67,7 @@ var zoom = false;
 $("span.togglebutton").click(function () {
   var winw = $( window ).width();
   var winh = $( window ).height();
-//  console.log( winw + " x " + winh );
 
-//  var res = Math.floor(winh/480)
   var res = (winh/480) -0.1
   var tspan = (winh-(480*res))/2
   var lspan = (winw-(640*res))/2
@@ -102,7 +86,7 @@ $("span.togglebutton").click(function () {
   $(this).closest("div").toggleClass("maximized");
 });
 </script>
-{% if mobile_browser == False %}</div>{% endif %}
+</div>
 
 <div class="row" style="margin-top: 30px;"></div>
 {% endblock %}

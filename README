@@ -14,3 +14,7 @@ rescale			video		create "rescale" Server_Task objects
 video_chk		video		check video integrity (TESTS)
 
 count_comments		garden		count blog entries
+
+termo_ktc		sm_house	read /var/log/remotehost.... ķesterciems temperature & humidity
+termo_ktc_temp		sm_house	imports 3 faili, visas rindas (BEZ DUBLIKĀTIEM)
+termo_ktc_misc		sm_house	DELETE ALL TermoReadings

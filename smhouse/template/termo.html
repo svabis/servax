@@ -33,21 +33,21 @@ $(document).ready(function(){
   <ul class="nav nav-tabs">
 {% endif %}
 
-   <li class="active"><a data-toggle="tab" href="#ktc">Ķesterciems</a></li>
-   <li><a data-toggle="tab" href="#rpz">Ropaži</a></li>
+{% for a in adress %}
+   <li{% if a.order == 1 %} class="active"{% endif %}><a data-toggle="tab" href="#{{ a.slug }}">{{ a.adress }}</a></li>
+{% endfor %}
   </ul>
  </div>
 </div>
 
 <div class="tab-content">
-  <div id="ktc" class="tab-pane fade in active">
-    <h3>Ķesterciems</h3>
+{% for a in adress %}
+  <div id="{{ a.slug }}" class="tab-pane fade{% if a.order == 1 %} in active{% endif %}">
+    <h3>{{ a.adress }}</h3>
+{% if a.order == 1 %}<a target="_blank" href="https://svabis.eu/adminlucy/smhouse/termoreading/"><h1>TE IR TAVA TABULIŅA (PAGAIDĀM "VIRTUVĒ")</h1></a>{% endif %}
     <p>Te būs dati...</p>
   </div>
-  <div id="rpz" class="tab-pane fade">
-    <h3>Ropaži</h3>
-    <p>Termometri ir lapenē pie sienas un virtuvē plauktā - interesē cik rāda, ej apskaties :)</p>
-  </div>
+{% endfor %}
 </div>
 
 {% if mobile_browser %}</div>{% endif %}

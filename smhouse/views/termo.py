@@ -2,14 +2,14 @@
 from django.http import HttpResponse # Response for Ajax POST
 from django.shortcuts import render, redirect # response to template, redirect to another view
 
-#from django.core.context_processors import csrf
+from smhouse.models import TermoAdress, TermoPlace, TermoReading
 
 from login.models import User_data # Access data
 
 from main.args import create_args
 
-import socket
-import json
+#import socket
+#import json
 
 # !!!!! LED VIEW !!!!!
 def smhouse_termo(request):
@@ -28,6 +28,8 @@ def smhouse_termo(request):
 # !!!!!!!!!!!!!!!!!!
 # !!! Termo data !!!
 # !!!!!!!!!!!!!!!!!!
+    args['adress'] = TermoAdress.objects.all().order_by('order')
+
 
 # ACCESS GRANTED
     response = render( request, 'termo.html', args )

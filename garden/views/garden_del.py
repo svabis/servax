@@ -23,9 +23,16 @@ def del_post(request, p_id):
         t = Theme.objects.get(id = p.relate_to.id)
        # delete post
         p.delete()
-       # update Theme entry count
-        t.entry_count -= 1
-        t.save()
+
+       # update Theme entry count in cascade up to parent...parent e.t.c.
+        while t.parent != None:
+            t.entry_count -= 1
+            t.save()
+            t = t.parent
+
+        if t.parent == None:
+            t.entry_count -= 1
+            t.save()
 
     if 'page_loc' in request.COOKIES:
         ret_loc = str(request.COOKIES.get('page_loc'))

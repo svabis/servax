@@ -23,7 +23,7 @@ function chk_one(el) {
 {% if disable_back %}{% else %}
 <div class="container" style="margin-bottom: 5px;">
  <div class="row">
-  <div class="col-lg-12 col-md-12 col-sm-12">
+{#  <div class="col-lg-12 col-md-12 col-sm-12"> #}
 {% if parent %}
   <a href="/garden/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn garden_back">
    <span class="glyphicon glyphicon-backward" aria-hidden="true"> </span></button></a>
@@ -31,7 +31,7 @@ function chk_one(el) {
   <a href="/garden/{{ s_id }}/"><button type="button" class="btn garden_back">
    <span class="glyphicon glyphicon-backward" aria-hidden="true"> </span></button></a>
 {% endif %}
-  </div>
+{#  </div> #}
  </div>
 </div>
 {% endif %}

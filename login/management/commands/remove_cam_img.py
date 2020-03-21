@@ -28,6 +28,6 @@ class Command(BaseCommand):
         try:
           temp = folder + t.task_input.split("/")[0] + "/" + t.task_input.split("/")[1]
           shutil.rmtree( temp )
-#          print( temp )
+          print( temp )
         except:
           pass

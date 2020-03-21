@@ -24,7 +24,9 @@
 
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/side-menu.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}" />
+
+{#  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}" /> #
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-4.4.1-dist/css/bootstrap.css' %}" />
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
@@ -111,15 +113,15 @@
    <a class="navbar-brand" href="/">Svabwilla{% if heading %} | {{ heading }}{% endif %}</a>
   </div>
   <div class="collapse navbar-collapse" id="myNavbar">
-   <ul class="nav navbar-nav navbar-right mr-auto">
+   <ul class="nav navbar-nav navbar-right">
 {% if username.username %}
 {% if username.is_superuser %}
-    <li class="nav-link"><a target="_blank" href="/adminlucy/"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;&nbsp;Django</a></li>
+    <li><a target="_blank" href="/adminlucy/"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;&nbsp;Django</a></li>
 {% endif %}
-    <li class="nav-link"><a href="#" data-toggle="modal" data-target="#UserModal"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;{{ username.username }}</a></li>
-    <li class="nav-link"><a href="/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Iziet</a></li>
+    <li><a href="#" data-toggle="modal" data-target="#UserModal"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;{{ username.username }}</a></li>
+    <li><a href="/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Iziet</a></li>
 {% else %} 
-    <li class="nav-link"><a href="/login/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Autorizēties</a></li>
+    <li><a href="/login/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Autorizēties</a></li>
 {% endif %}
    </ul>
   </div>

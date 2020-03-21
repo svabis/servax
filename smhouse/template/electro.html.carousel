@@ -1,0 +1,161 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'datepicker.css' %}"/>
+{% endblock %}
+
+
+{% block content %}
+<div class="container" style="margin-bottom: 10px;"></div>
+
+<div id="myCarousel" class="carousel slide" data-wrap="false" data-interval="false">
+ <div class="carousel-inner">
+
+{# <!-- "TABULAS DAĻA" --> #}
+  <div class="item active">
+
+{% if mobile_browser == True %}<div class="table-responsive">{% else %}<div>{% endif %}
+<div class="container" style="max-width:80%; left:10%; right:10%;">
+ <table class="table table-hover table-striped table-condensed">
+  <thead>
+   <tr style="background: #aaa;">
+    <th style="vertical-align: top;">Datums</th>
+    <th style="vertical-align: top;">Dienas</th>
+    <th style="vertical-align: top;">Skaitītāja rādījums</th>
+    <th style="vertical-align: top;">Patērēts laika periodā</th>
+    <th style="vertical-align: top;">Patēriņš dienā</th>
+   </tr>
+  </thead>
+
+  <tbody>
+   <tr style="border: solid red 2px;">
+    <form action="/sm_house/electro/input_data/" method=POST>{% csrf_token %}
+     <td style="border-top: solid red 2px;" colspan=2>
+      <input class="form-control" id="datums" name="date" size="10" type="text" value="{{ input_date|date:"Y/m/d" }}">
+     </td>
+
+<script>
+$(document).ready(function(){ var date_input=$('input[name="date"]');
+ var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ var options={ format: 'yyyy/mm/dd', container: container, todayHighlight: true, autoclose: true, weekStart: 1, endDate: '{{ input_date|date:"Y/m/d" }}' };
+ date_input.datepicker(options); })
+</script>
+
+     <td colspan=2 style="border-top: solid red 2px;">
+      <div class="input-group">
+       <input class="form-control" id="read" name="read" size="20" type="text" placeholder="{{ input_read.read }}">
+       <span class="input-group-btn">
+        <button class="btn btn-warning" type="submit">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+       </span>
+      </div>
+     </td>
+     <td></td>
+    </form>
+   </tr>
+{% for d in data reversed %}
+   <tr>
+    <td>{{ d.date|date:"Y/m/d" }}</td>
+    <td>{{ d.days }}</td>
+    <td>{{ d.read }}</td>
+    <td>{{ d.cons }}</td>
+    <td>{{ d.cons_days }}</td>
+   </tr>
+{% endfor %}
+  </tbody>
+ </table>
+</div>
+</div>
+
+    </div>
+{# <!-- "GRAFIKA DAĻA" --> #}
+    <div class="item">
+
+{% if data and graf != False %}
+<script type="text/javascript" src="{% static 'grafiks.js' %}"></script>
+<script>
+$( document ).ready(function() {
+  function ajax_pieprasijums() {
+    var obj = { "Radijumi": [ {% for d in data %} { "Datums": "{{ d.date|date:"m/d/Y" }}", "Paterins": {{ d.read }} }, {% endfor %} ] };
+    var ajax_obj = JSON.stringify(obj);
+
+    document.getElementById("loadings").style.display = "none";
+    grafiks(ajax_obj);
+  }
+
+  ajax_pieprasijums();
+
+  svg_el = document.getElementById("pat_graf"); svg_el.style.height = "447px";
+
+  function parvietot() {
+    var count = 0; partA();
+    function partA() { right(); count++; window.setTimeout(partB,3); }
+    function partB() { right(); if (count > 1500) { return; } window.setTimeout(partA,3); }
+  };
+
+setTimeout( parvietot, 3000 );
+});
+</script>
+
+
+<div class="container-fluid">
+ <div id="loadings">
+  <img src="{% static 'images/graf_loading.gif' %}" style="width:100%; height:auto" />
+ </div>
+
+ <div id="Grafiks">
+  <h1 style="margin-top: 35px; margin-bottom: 10px;">Elektrības patēriņa grafiks</h1>
+   <div id="kreisais"></div>
+   <div id="labais"></div>
+ </div>
+</div>
+{% else %}
+<div class="container-fluid">
+ <center><h3>Nav datu vai arī datu ir pārāk maz priekš grafika izveidošanas!</h3></center>
+</div>
+{% endif %}
+
+    </div>
+  </div>
+
+{# <!-- Left and right controls --> #}
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-th-list" style="margin-top: 20px;"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-signal" style="margin-top: 20px;"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+{% endblock %}
+
+
+
+
+
+
+{% block style %}
+.carousel-control { width:10%; height:70px; top:0; border: solid black 2px; }
+p { padding: 0; margin: 0; }
+
+#Grafiks { position:relative; max-width:90%; height: 600px; left:5%; right:5%; top:0px; border-radius:1.5%; padding:0; margin:0; }
+#kreisais { position:relative; width:8%; height:30px; top:190px; cursor:pointer; background-image:url( {% static 'graf_arrow.png' %} );
+ background-size:contain; background-repeat:no-repeat; background-position:center; padding:0; margin:0; }
+#labais { position:relative; width:8%; height:30px; top:158px; float:right; background-image:url( {% static 'graf_right-arrow.png' %} );
+ background-size:contain; background-repeat:no-repeat; background-position:center; cursor:pointer; }
+#Grafiks h1 { text-align:center; font-size:24px; font-family: 'Oswald', sans-serif; padding:0px; margin:0px; }
+#loadings { position:absolute; width:5.875%; height:5.875%; left:49%; top:49%; background-color:none; z-index:9999; }
+svg { position:relative; max-width:85.8%; top:0%; left:7.1%; right:7.1%; margin: auto; padding-bottom:47px; padding-left:5.875%; background: #FFF;
+    background: -webkit-linear-gradient(#bad4ff, white); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#bad4ff, white); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#bad4ff, white); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#bad4ff, white); /* Standard syntax */
+}
+text { font-size:0.9em; padding:0; margin:0; }
+circle{ z-index:7000; }
+path{ z-index:8000; }
+#Grafiks p{ font-family: 'Raleway', sans-serif; }
+{% endblock %}

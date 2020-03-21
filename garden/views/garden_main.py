@@ -10,13 +10,13 @@ from django.contrib import auth # autorisation library
 from garden.paginator import Paginator # import paginator
 
 from garden.models import SuperTheme, Theme, Post
-from garden.forms import PostForm, ThemeForm
+from garden.forms import ThemeForm
 
-import unicodedata
-import slugify
+#import unicodedata
+#import slugify
 import math
-import random
-import string
+#import random
+#import string
 
 # ================================================================================
 # MAIN SKATS --> Visas Temas

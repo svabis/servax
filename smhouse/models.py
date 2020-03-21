@@ -38,3 +38,41 @@ class LedTimer(models.Model):
 
 #    def __unicode__(self):
 #        return self.time
+
+
+#=========================== =========================== TERMO ======================================================
+# !!!!! TERMO ADRESS !!!!!
+class TermoAdress(models.Model):
+    class Meta():
+        db_table = "sm_termo_adress"
+
+    order = models.IntegerField( null=True, blank=True )
+    adress = models.CharField( max_length = 30, null=True, blank=True )
+    slug = models.SlugField( default = 'ktc' )
+
+    def __str__(self):
+        return self.adress
+
+
+# !!!!! TERMO ADRESS !!!!!
+class TermoPlace(models.Model):
+    class Meta():
+        db_table = "sm_termo_place"
+
+    order = models.IntegerField( null=True, blank=True )
+    where = models.ForeignKey( TermoAdress, on_delete=models.CASCADE )
+    place = models.CharField( max_length = 30, null=True, blank=True )
+
+    def __str__(self):
+        return str(self.where) + " - " + str(self.place)
+
+
+# !!!!! TERMO ADRESS !!!!!
+class TermoReading(models.Model):
+    class Meta():
+        db_table = "sm_termo_reading"
+
+    place = models.ForeignKey( TermoPlace, on_delete=models.CASCADE )
+    date = models.DateTimeField( default = timezone.now )
+    temp = models.DecimalField( max_digits = 5, decimal_places = 2, null=True, blank=True )
+    humy = models.DecimalField( max_digits = 5, decimal_places = 2, null=True, blank=True )

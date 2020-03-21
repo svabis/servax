@@ -15,6 +15,7 @@ def handler500(request, *args, **argv):
 
 # ========================== VIEWS ==========================
 from login.models import User_data, Live_video
+from video.models import Camera_online
 from main.args import create_args
 
 
@@ -84,7 +85,7 @@ def stats(request):
 
    # DISK USAGE
     import os
-    head = os.popen("df -h | grep Filesystem").read().replace("\n", "").split(" ")[:-1]
+    head = os.popen("df -h | grep Filesystem").read().rstrip().split(" ")[:-1]
     while '' in head:
       head.remove('')
     args['df_head'] = head
@@ -92,9 +93,11 @@ def stats(request):
     rez = []
     temp = os.popen("df -h | grep /dev/sd").read().split("\n")
     for t in temp:
-        rez.append( t.split(" ") )
+        if t != "":
+            rez.append( t.split(" ") )
 
-    rez.append( os.popen("df -h | grep /var/www/").read().replace("\n", "").split(" ") )
+    rez.append( os.popen("df -h | grep /var/www/").read().replace("\n","").split(" ") )
+    rez.append( os.popen("df -h | grep /home/").read().replace("\n","").split(" ") )
     for r in rez:
       while '' in r:
         r.remove('')
@@ -130,6 +133,11 @@ def stats(request):
             vid.append([1, day, v])
 
     args['video'] = vid
+
+   # Cam_online
+    temp = Camera_online.objects.all().order_by('-date')[:5]
+#    args['cam_online'] = reversed( temp )
+    args['cam_online'] = temp
 
     response = render(request, 'stat.html', args)
     response.set_cookie( key='page_loc', value='/stat/', path='/' )

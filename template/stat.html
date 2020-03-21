@@ -1,76 +1,124 @@
 {% extends 'main.html' %}
 
+
 {% block content %}
+{% if mobile_browser == False %}
+<script>
+$(document).ready(function(){ scrollControl(); })
+function scrollControl() {
+  if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); }
+  $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
+  $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
+}
+</script>
+{% endif %}
+
+
 {# <!-- DISKU STĀVOKLIS --> #}
 <h1 style="margin-top: 0px;">Disku stāvoklis</h1>
 
 <div class="table-responsive">
-<table class="table table-hover table-striped table-condensed">
- <thead>
+ <table class="table table-hover table-striped table-condensed">
+  <thead>
 {% for d in df_head %}
- <td><b>{{ d }}</b></td>
+   <td><b>{{ d }}</b></td>
 {% endfor %}
- </thead>
-
- <tbody>
+  </thead>
+  <tbody>
 {% for row in df %}
-<tr>
+   <tr>
  {% for d in row %}
- <td>{{ d }}</td>
+    <td>{{ d }}</td>
  {% endfor %}
- </tr>
+   </tr>
 {% endfor %}
- </tbody>
-</table>
+  </tbody>
+ </table>
+</div>
 
 {# <!-- LIVE VIDEO 24h --> #}
-<h1 id="weekVideoText">"Video dzīvajā" skatījumi pēdējās 24h</h1>
-
-{# <p>{{ t1|date:"d/m/Y H:i" }}</p> #}
-{# <p>{{ test|date:"d/m/Y H:i" }}</p> #}
-{# <p>{{ t2|date:"d/m/Y H:i" }}</p><br> #}
-{# <p>{{ t3|date:"d/m/Y H:i" }}</p> #}
+<h1 style="margin-top: 0px;" id="weekVideoText">"Video dzīvajā" skatījumi pēdējās 24h</h1>
 
 <div class="table-responsive">
-<table class="table table-hover{# table-striped#} table-condensed">
- <thead>
-  <td><b>Lietotājs</b></td>
-  <td><b>Dators</b></td>
-  <td><b>Mobīlais</b></td>
-  <td><b>Planšete</b></td>
-  <td><b>Sākums</b></td>
-  <td><b>Beigas</b></td>
-  <td><b>Skatīšanās laiks</b></td>
- </thead>
- <tbody>
+ <table class="table table-hover{# table-striped#} table-condensed">
+  <thead>
+   <td><b>Lietotājs</b><br></td>
+   <td><b>Dators</b><br></td>
+   <td><b>Mobīlais</b><br></td>
+   <td><b>Planšete</b><br></td>
+   <td><b>Sākums</b><br></td>
+   <td><b>Beigas</b><br></td>
+   <td><b>Skatīšanās laiks<br>(stundas:minūtes)</b></td>
+  </thead>
+  <tbody>
 {% for row in video %}
-{% if row.0 == 0 %} <tr{% else %} <tr class="week hidden"{% endif %} style="background-color: {% if row.1 == 0 %}#e5e8e1{% else %}#fff{% endif %};">
-  <td>{{ row.2.user }}</td>
-  <td>{% if row.2.mobile == False and row.2.tablet == False %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
-  <td>{% if row.2.mobile %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
-  <td>{% if row.2.tablet %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
-  <td>{{ row.2.visit|date:"d/m/Y H:i" }}</td>
-  <td>{{ row.2.leave|date:"d/m/Y H:i" }}</td>
-  <td>{{ row.2.time|time:"H:i" }}</td>
- </tr>
+{% if row.0 == 0 %}   <tr{% else %} <tr class="week hidden"{% endif %} style="background-color: {% if row.1 == 0 %}#e5e8e1{% else %}#fff{% endif %};">
+    <td>{{ row.2.user }}</td>
+    <td>{% if row.2.mobile == False and row.2.tablet == False %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{% if row.2.mobile %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{% if row.2.tablet %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{{ row.2.visit|date:"d/m/Y H:i" }}</td>
+    <td>{{ row.2.leave|date:"d/m/Y H:i" }}</td>
+    <td>{{ row.2.time|time:"H:i" }}</td>
+   </tr>
 {% endfor %}
- </tbody>
-</table>
+  </tbody>
+ </table>
 </div>
 {# <!-- 24h to 7day --> #}
 <button id="weekVideoBtn" class="btn btn-danger center-block" style="margin-top: -15px;">Parādīt vairāk</button>
+
 <script>
 var weekBtn = false;
 $("#weekVideoBtn").on("click", function() {
   $(".week").toggleClass("hidden"); if (weekBtn == false) {
+{% if mobile_browser == False %} scrollControl(); {% endif %}
     $("#weekVideoText").html('"Video dzīvajā" skatījumi pēdējās 7 dienas'); $("#weekVideoBtn").html("Parādīt mazāk"); weekBtn = true; } else {
     $("#weekVideoText").html('"Video dzīvajā" skatījumi pēdējās 24h'); $("#weekVideoBtn").html("Parādīt vairāk"); weekBtn = false; }
 });
 </script>
+
+
+{# <!-- ONLINE CAMERAS --> #}
+<h1 style="margin-top: 0px;">Kameru online stāvoklis</h1>
+
+<div class="table-responsive">
+ <table class="table table-hover table-striped table-condensed">
+  <thead>
+   <td><b>Laiks</b></td>
+   <td><b>CAM 1</b></td>
+   <td><b>CAM 2</b></td>
+   <td><b>CAM 3</b></td>
+   <td><b>CAM 4</b></td>
+  </thead>
+  <tbody>
+{% for c in cam_online %}
+   <tr>
+    <td>{{ c.date|date:"d/m/Y H:i" }}</td>
+    <td>{% if c.cam_01 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{% if c.cam_02 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{% if c.cam_03 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{% if c.cam_04 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+   </tr>
+{% endfor %}
+  </tbody>
+ </table>
+</div>
+
+<div id="footer" class="container-fluid"></div>
+<button id="back_to_top" type="button" class="btn btn-warning">
+ <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
+<button id="go_to_bottom" type="button" class="btn btn-warning">
+ <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
 {% endblock %}
 
+
 {% block style %}
-.table-striped > tbody > tr:nth-of-type(even) > td,
-.table-striped > tbody > tr:nth-child(even) > th { background-color: #e5e8e1; }
-.text-justify { text-align: justify; }
+   .table-striped > tbody > tr:nth-of-type(even) > td,
+   .table-striped > tbody > tr:nth-child(even) > th { background-color: #e5e8e1; }
+   .text-justify { text-align: justify; }
+
+   #back_to_top { color: #222; border-color: #555; display: none; bottom: 47px; right: 30px; position: fixed; min-width: 160px; }
+   #go_to_bottom { color: #222; border-color: #555; display: none; bottom: 10px; right: 30px; position: fixed; min-width: 160px; }
+   #footer { height: 72px;}
 {% endblock %}

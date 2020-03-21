@@ -35,13 +35,13 @@ class Command(BaseCommand):
 #          print( v.video_file )
 
           t_obj = v.video_name
-#          print( t_obj )
+          print( t_obj )
 
           t_output = str(v.video_file).split('/')[-1]
 #          print( t_output )
 
          # Create New Task
-          new_task = Server_Task( task_type="rescale", task_object=t_obj, task_input=v.video_file, task_output=t_output )
-          new_task.save()
+#          new_task = Server_Task( task_type="rescale", task_object=t_obj, task_input=v.video_file, task_output=t_output )
+#          new_task.save()
 
     print( count )
