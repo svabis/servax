@@ -5,17 +5,14 @@ from datetime import datetime
 from django.conf import settings
 from django.utils.timezone import make_aware
 
-#from django.utils import timezone
-#import pytz
-#tz = timezone.now()
-
 from django.core.management.base import BaseCommand, CommandError
 from smhouse.models import TermoAdress, TermoPlace, TermoReading
 
 import re
 import os
 
-path = '/var/log/remotelogs/172.16.20.250/'
+#path = '/var/log/remotelogs/172.16.20.250/'
+path = '/home/alex/termo_dati_ktc'
 
 # command
 class Command(BaseCommand):
@@ -25,14 +22,19 @@ class Command(BaseCommand):
          ktc = TermoAdress.objects.get(slug='ktc')
          termo_obj = TermoPlace.objects.filter(where=ktc)
 
-        # iterate TermoPlace objects in ktc
-         for t in termo_obj:
+         for filename in os.listdir(path):
+           print(filename)
+
+          # iterate TermoPlace objects in ktc
+           for t in termo_obj:
 #             print( t )
              try:
               # Read log file
-                 with open(path + t.filename, 'r') as f:
-                     lines = f.read().splitlines()
-                     last_line = lines[-1]
+               with open(path + filename, 'r') as f:
+                   lines = f.read().splitlines()
+#                   last_line = lines[-1]
+
+               for last_line in lines:
 
                 # get datetime from string
                  dtime = make_aware( datetime.strptime(last_line[0:16], '%Y-%m-%dT%H:%M') )

@@ -17,8 +17,8 @@ class TermoAdressAdmin(admin.ModelAdmin):
     list_display = [ 'adress', 'order', 'slug' ]
 
 class TermoPlaceAdmin(admin.ModelAdmin):
-    list_display = [ 'place', 'order', 'where' ]
-    list_filter = [ 'where' ]
+    list_display = [ 'place', 'order', 'where', 'ambient', 'color', 'filename', 'regex' ]
+    list_filter = [ 'where', 'ambient' ]
 
 class TermoReadingAdmin(admin.ModelAdmin):
     list_display = [ 'date', 'temp', 'humy', 'place' ]
