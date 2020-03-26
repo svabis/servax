@@ -5,20 +5,15 @@
 {% if mobile_browser == False %}
 <script>
 $(document).ready(function(){
-{% if active_tab != 5 %} scrollControl(); {% endif %}
-
+{% if active_tab != 5 %} jobScrollControl(); {% endif %}
   var cook = document.cookie; cook = cook.replace(/\s/g, ""); cook = cook.split(";"); cook.forEach(iterateCookie);
-
-  if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").show(); }
-  $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
-  $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
 })
 
 function iterateCookie(value, index, array) {
   if (value.match("jobs_scroll")) { value = value.split("="); var position = parseInt(value[1]); window.scrollTo(0, position); }
 }
 
-function scrollControl() { setInterval(function(){ document.cookie = "jobs_scroll=" + window.pageYOffset + "; path=/";} , 3000); }
+function jobScrollControl() { setInterval(function(){ document.cookie = "jobs_scroll=" + window.pageYOffset + "; path=/";} , 3000); }
 </script>
 {% endif %}
 
@@ -87,13 +82,6 @@ function scrollControl() { setInterval(function(){ document.cookie = "jobs_scrol
 {% block jobs_done %}{% endblock %}
 {% block jobs_add %}{% endblock %}
 
-{% if active_tab != 4 %}
-<div id="footer" class="container-fluid"></div>
- <button id="back_to_top" type="button" class="btn btn-warning">
-  <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
- <button id="go_to_bottom" type="button" class="btn btn-warning">
-  <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
-{% endif%}
 {% endblock %}
 
 

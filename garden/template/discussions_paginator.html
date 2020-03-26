@@ -1,5 +1,6 @@
 {% extends 'head.html' %}
 {% load static %}
+
 {% block garden_content %}
 
 <script>
@@ -80,31 +81,3 @@ function readURL(input, display) {
 </div>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-<div class="col-lg-12 col-md-12 col-sm-12">
-
-{% if paginator.visible %}
-<center><ul class="pagination">
-{% if paginator.big %}{% if paginator.active_page == 1 %}
-<li class="disabled"><a href="#">&laquo;&laquo;</a></li>{% else %}<li><a href="/tema/{{ tema_nr }}/1/">&laquo;&laquo;</a></li>{% endif %}{% endif %}
-{% if paginator.active_page == 1 %}<li class="disabled"><a href="#">&laquo;</a></li>{% else %}
-<li><a href="/tema/{{ tema_nr }}/{{ paginator.active_page|add:"-1" }}/">&laquo;</a></li>{% endif %}
- {% for page in paginator.pages %}
- {% if page == 0 %}<li class="disabled"><a href="#">...</a></li>
- {% elif paginator.active_page == page %}<li class="active"><a href="#">{{ page }}</a></li>
- {% else %}<li><a href="/tema/{{ tema_nr }}/{{ page }}/">{{ page }}</a></li>{% endif %}{% endfor %}
-{% if paginator.active_page == paginator.pagecount %}<li class="disabled"><a href="#">&raquo;</a></li>{% else %}
-<li><a href="/tema/{{ tema_nr }}/{{ paginator.active_page|add:"1" }}/">&raquo;</a></li>{% endif %}
-{% if paginator.big %}{% if paginator.active_page == paginator.pagecount %}<li class="disabled"><a href="#">&raquo;&raquo;</a></li>{% else %}
-<li><a href="/tema/{{ tema_nr }}/{{ paginator.pagecount }}/">&raquo;&raquo;</a></li>{% endif %}{% endif %}
-</ul></center>
-{% endif %}
-
-</div>

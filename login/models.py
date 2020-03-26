@@ -64,7 +64,7 @@ class Live_video(models.Model):
     cookie_uuid = models.CharField( max_length = 60, default='' )
 
     def __str__(self):
-        return self.user + " " + self.visit.strftime( "%Y/%m/%d %H:%M" )
+        return str(self.user.username) + " " + self.visit.strftime( "%Y/%m/%d %H:%M" )
 
 
 # !!!!! OUTSORCE SERVER TASKS !!!!!

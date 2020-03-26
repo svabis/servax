@@ -7,6 +7,7 @@ unmark_job		jobs		unmarking old jobs
 remove_cam_img		login		remove ftp folders for processed images
 tasks			login		original size video creation (using Desktop)
 tasks_r			login		rescale videos to 640x480 (using Desktop)
+live_video_view		login		Generate json output for live video Notification scripts
 
 add_arhivs		video		add Server_Task for "yesterday" video creation
 camera_chk		video		check Camera online status & create Camera_online object
@@ -15,6 +16,7 @@ video_chk		video		check video integrity (TESTS)
 
 count_comments		garden		count blog entries
 
-termo_ktc		sm_house	read /var/log/remotehost.... ķesterciems temperature & humidity
-termo_ktc_temp		sm_house	imports 3 faili, visas rindas (BEZ DUBLIKĀTIEM)
-termo_ktc_misc		sm_house	DELETE ALL TermoReadings
+termo_ktc		smhouse		read /var/log/remotehost.... ktc temperature & humidity last line
+termo_ktc_temp		smhouse		imports 3 file, all lines (NO DUPLICATES)
+termo_ktc_misc		smhouse		DELETE ALL TermoReadings
+termo_ktc_import	smhouse		ktc old data import from log's

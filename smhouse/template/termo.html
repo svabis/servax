@@ -3,23 +3,6 @@
 
 {% block content %}
 
-{% if mobile_browser == False %}
-<script>
-$(document).ready(function(){
-{# {% if active_tab != 5 %} scrollControl(); {% endif %} #}
-
-//  var cook = document.cookie; cook = cook.replace(/\s/g, ""); cook = cook.split(";"); cook.forEach(iterateCookie);
-
-  if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").show(); }
-  $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
-  $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
-})
-
-//function iterateCookie(value, index, array) { if (value.match("jobs_scroll")) { value = value.split("="); var position = parseInt(value[1]); window.scrollTo(0, position); }}
-//function scrollControl() { setInterval(function(){ document.cookie = "jobs_scroll=" + window.pageYOffset + "; path=/";} , 3000); }
-</script>
-{% endif %}
-
 {% if mobile_browser %}
 <div class="col-xs-12 col-sm-12" id="jobs-menu">
  <div class="nav-side-menu">
@@ -44,8 +27,42 @@ $(document).ready(function(){
 {% for a in adress %}
   <div id="{{ a.slug }}" class="tab-pane fade{% if a.order == 1 %} in active{% endif %}">
     <h3>{{ a.adress }}</h3>
-{% if a.order == 1 %}<a target="_blank" href="https://svabis.eu/adminlucy/smhouse/termoreading/"><h1>TE IR TAVA TABULIŅA (PAGAIDĀM "VIRTUVĒ")</h1></a>{% endif %}
-    <p>Te būs dati...</p>
+{% if a.order == 1 %}
+{# <!-- "KTC DATI START" --> #}
+    <h4>{{ termo_day.0|date:"d/m/Y H:i" }} - {{ termo_day.1|date:"d/m/Y H:i" }}</h4>
+
+<div class="termo_btn_box">
+{% for img in ktc %}
+ <button class="btn btn-sm" style="background-color:{{ img.color }};" id="btn_day_temp{{ img.order }}">{{ img.place }}</button>
+{% endfor %}
+</div>
+
+{# <!-- "DAY OUTSIDE" --> #}
+ <div class="termo_parent" id="ktc_a">
+   <img id="ktc_a_img" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_back_True.png">
+{% for img in ktc_day_ambient %}
+   <img id="ktc_day_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "DAY INSIDE" --> #}
+ <div class="termo_parent" id="ktc_d">
+   <img id="ktc_d_img" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_back_False.png">
+{% for img in ktc_day_data %}
+   <img id="ktc_day_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "DAY HUMIDITY" --> #}
+ <div class="termo_parent" id="ktc_h">
+   <img id="ktc_h_img" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_back_Humy.png">
+{% for img in ktc_day_data %}
+   <img id="ktc_day_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_humy_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "KTC DATI END" --> #}
+{% endif %}
   </div>
 {% endfor %}
 </div>
@@ -59,18 +76,36 @@ $(document).ready(function(){
   <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
  <button id="go_to_bottom" type="button" class="btn btn-warning">
   <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
+
+<script>
+$(document).ready(function(){
+  var h1 = $("#ktc_a_img").height(); $("#ktc_a").height( h1 + 15 );
+  var h2 = $("#ktc_d_img").height(); $("#ktc_d").height( h2 + 15 );
+
+{% for img in ktc_day_ambient %}
+  $("#btn_day_temp{{ img.order }}").click(function(){ $("#ktc_day_temp_{{ img.order }}").toggle(); });
+{% endfor %}
+{% for img in ktc_day_data %}
+  $("#btn_day_temp{{ img.order }}").click(function(){ $("#ktc_day_temp_{{ img.order }}").toggle(); });
+{% endfor %}
+})
+</script>
 {% endblock %}
 
 
 
 {% block style %}
+   body { overflow-x: hidden; }
+
+   .termo_btn_box { bottom: 12px; right: 200px; position: fixed; z-index: 200; }
+
+   .termo_parent { position: relative; width: 100%; height: 100%; }
+   .termo_img   { width: 100%; border: solid #ddd 1px; }
+   .termo_layer { position: absolute; top: 0; left: 0; }
+
    textarea { resize: none; }
 
-  .table td.fit, .table th.fit { width: 1%; text-align:center; }
-
-   #back_to_top { color: #222; border-color: #555; display: none; bottom: 47px; right: 30px; position: fixed; min-width: 160px; }
-   #go_to_bottom { color: #222; border-color: #555; display: none; bottom: 10px; right: 30px; position: fixed; min-width: 160px; }
-   #footer { display:none; height: 72px;}
+   .table td.fit, .table th.fit { width: 1%; text-align:center; }
 
    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th { background-color: #9b9da0; }
    .table.table > thead > tr > th { vertical-align:top }

@@ -2,17 +2,6 @@
 
 
 {% block content %}
-{% if mobile_browser == False %}
-<script>
-$(document).ready(function(){ scrollControl(); })
-function scrollControl() {
-  if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); }
-  $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
-  $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
-}
-</script>
-{% endif %}
-
 
 {# <!-- DISKU STĀVOKLIS --> #}
 <h1 style="margin-top: 0px;">Disku stāvoklis</h1>
@@ -104,12 +93,6 @@ $("#weekVideoBtn").on("click", function() {
   </tbody>
  </table>
 </div>
-
-<div id="footer" class="container-fluid"></div>
-<button id="back_to_top" type="button" class="btn btn-warning">
- <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
-<button id="go_to_bottom" type="button" class="btn btn-warning">
- <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
 {% endblock %}
 
 
@@ -117,8 +100,4 @@ $("#weekVideoBtn").on("click", function() {
    .table-striped > tbody > tr:nth-of-type(even) > td,
    .table-striped > tbody > tr:nth-child(even) > th { background-color: #e5e8e1; }
    .text-justify { text-align: justify; }
-
-   #back_to_top { color: #222; border-color: #555; display: none; bottom: 47px; right: 30px; position: fixed; min-width: 160px; }
-   #go_to_bottom { color: #222; border-color: #555; display: none; bottom: 10px; right: 30px; position: fixed; min-width: 160px; }
-   #footer { height: 72px;}
 {% endblock %}

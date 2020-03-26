@@ -33,6 +33,16 @@
   <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
 
   <script>
+{% if mobile_browser == False %}
+   $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 500);
+})
+     function scrollControl() {
+       if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").toggle() }
+       $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
+       $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
+   }
+{% endif %}
+
    var navCookies = [];
    $(document).ready(function () {
 {# <!--DISABLE DRAG EVENTS--> #}
@@ -59,18 +69,24 @@
    function saveNavs(el) { if (el.className == "collapsed") { if ( navCookies.indexOf( el.dataset.target.substr(1) ) === -1 ) { navCookies.push( el.dataset.target.substr(1) ); } else { navCookies.remove( el.dataset.target.substr(1) ); }} else { navCookies.remove( el.dataset.target.substr(1) ); } document.cookie = "menu_navs=" + navCookies + "; path=/;"; }
   </script>
 {% block javascript %}{% endblock %}
+
   <style>
+   #back_to_top { color: #222; border-color: #555; display: none; bottom: 47px; right: 30px; position: fixed; min-width: 160px; z-index:100; }
+   #go_to_bottom { color: #222; border-color: #555; display: none; bottom: 10px; right: 30px; position: fixed; min-width: 160px; z-index:100; }
+   #footer { display:none; height: 76px;}
+
    #container {
     display: flex;  display: -webkit-flex; /* Safari 8 */
     flex-wrap: wrap;  -webkit-flex-wrap: wrap; /* Safari 8 */
     justify-content: center;  -webkit-justify-content: center; /* Safari 8 */
    }
+
    h5 { margin-bottom: 5px; margin-top: 5px; }
    body { padding-top: 70px; margin: 0; background-color: #ddd;
 {# <!--MOBILE BROWSER REMOVE BACKGROUND IMAGE--> #}
- {% if mobile_browser == False and tablet_browser == False %}
+{% if mobile_browser == False and tablet_browser == False %}
    background: url( {% static background %} ); background-size: cover; background-repeat:no-repeat; background-size: 100vw 100vh; background-attachment: fixed;
- {% endif %}
+{% endif %}
    }
 
    .btn { border: solid #555 1px; }
@@ -83,6 +99,7 @@
    .hider > img { max-width: 100%; max-height: 90%; vertical-align: middle; }
    .empty_row { background-color: rgba(240,240,240, 0.2) !important; }
 {% block style %}{% endblock %}
+
   </style>
 </head>
 <body>
@@ -277,6 +294,15 @@
 {# <!--PAGE CONTENT START--> #}
 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-10" id="page_content_div">
 {% block content %}{% endblock %}
+
+{# <!-- FOOTER AND VERTICAL NAV BUTTONS START --> #}
+<div id="footer" class="container-fluid"></div>
+<button id="back_to_top" type="button" class="btn btn-warning">
+ <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> Uz lapas augšu</button>
+<button id="go_to_bottom" type="button" class="btn btn-warning">
+ <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
+{# <!-- FOOTER AND VERTICAL NAV BUTTONS END --> #}
+
 </div>
 {# <!--PAGE CONTENT END--> #}
 

@@ -132,9 +132,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 #STATICFILES_DIRS = [ os.path.join(BASE_DIR, "static"), '/var/www/svabis.eu/static/', ]
-STATIC_ROOT = '/var/www/svabis.eu/static/'
+#STATIC_ROOT = '/var/www/svabis.eu/static/'
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+        '/var/www/svabis.eu/static/',
+    ]
 
 MEDIA_ROOT = '/var/www/svabis.eu/media/'
 MEDIA_URL = '/media/'
