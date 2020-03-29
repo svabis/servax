@@ -34,7 +34,7 @@
 
   <script>
 {% if mobile_browser == False %}
-   $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 500);
+   $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 1000);
 })
      function scrollControl() {
        if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").toggle() }

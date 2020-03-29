@@ -26,38 +26,124 @@
 <div class="tab-content">
 {% for a in adress %}
   <div id="{{ a.slug }}" class="tab-pane fade{% if a.order == 1 %} in active{% endif %}">
-    <h3>{{ a.adress }}</h3>
 {% if a.order == 1 %}
 {# <!-- "KTC DATI START" --> #}
-    <h4>{{ termo_day.0|date:"d/m/Y H:i" }} - {{ termo_day.1|date:"d/m/Y H:i" }}</h4>
+    <h4><b>DIENNAKTS</b> {{ termo_day.0|date:"d/m/Y H:i" }} - {{ termo_day.1|date:"d/m/Y H:i" }}</h4>
 
 <div class="termo_btn_box">
 {% for img in ktc %}
- <button class="btn btn-sm" style="background-color:{{ img.color }};" id="btn_day_temp{{ img.order }}">{{ img.place }}</button>
+ <button class="btn btn-sm" style="background-color:{{ img.color }};" id="btn_{{ a.slug }}_{{ img.order }}">{{ img.place }}</button>
 {% endfor %}
 </div>
 
 {# <!-- "DAY OUTSIDE" --> #}
- <div class="termo_parent" id="ktc_a">
-   <img id="ktc_a_img" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_back_True.png">
-{% for img in ktc_day_ambient %}
-   <img id="ktc_day_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_temp_{{ img.order }}.png">
+ <div class="termo_parent" id="ktc_a_24_p">
+   <img id="ktc_a_24" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_24_back_True.png">
+{% for img in ktc_ambient %}
+   <img id="ktc_24_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_24_temp_{{ img.order }}.png">
 {% endfor %}
  </div>
 
 {# <!-- "DAY INSIDE" --> #}
- <div class="termo_parent" id="ktc_d">
-   <img id="ktc_d_img" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_back_False.png">
-{% for img in ktc_day_data %}
-   <img id="ktc_day_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_temp_{{ img.order }}.png">
+ <div class="termo_parent" id="ktc_d_24_p">
+   <img id="ktc_d_24" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_24_back_False.png">
+{% for img in ktc_data %}
+   <img id="ktc_24_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_24_temp_{{ img.order }}.png">
 {% endfor %}
  </div>
 
 {# <!-- "DAY HUMIDITY" --> #}
- <div class="termo_parent" id="ktc_h">
-   <img id="ktc_h_img" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_back_Humy.png">
-{% for img in ktc_day_data %}
-   <img id="ktc_day_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_day_humy_{{ img.order }}.png">
+ <div class="termo_parent" id="ktc_h_24_p">
+   <img id="ktc_h_24" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_24_back_None.png">
+{% for img in ktc_humy %}
+   <img id="ktc_24_humy_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_24_humy_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+
+    <hr>
+    <h4><b>7 DIENAS</b> {{ termo_week.0|date:"d/m/Y H:i" }} - {{ termo_week.1|date:"d/m/Y H:i" }}</h4>
+
+
+{# <!-- "WEEK OUTSIDE" --> #}
+ <div class="termo_parent" id="ktc_a_168_p">
+   <img id="ktc_a_168" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_168_back_True.png">
+{% for img in ktc_ambient %}
+   <img id="ktc_168_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_168_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "WEEK INSIDE" --> #}
+ <div class="termo_parent" id="ktc_d_168_p">
+   <img id="ktc_d_168" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_168_back_False.png">
+{% for img in ktc_data %}
+   <img id="ktc_168_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_168_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "WEEK HUMIDITY" --> #}
+ <div class="termo_parent" id="ktc_h_168_p">
+   <img id="ktc_h_168" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_168_back_None.png">
+{% for img in ktc_humy %}
+   <img id="ktc_168_humy_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_168_humy_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+
+    <hr>
+    <h4><b>MĒNESIS</b> {{ termo_month.0|date:"d/m/Y H:i" }} - {{ termo_month.1|date:"d/m/Y H:i" }}</h4>
+
+
+{# <!-- "MONTH OUTSIDE" --> #}
+ <div class="termo_parent" id="ktc_a_720_p">
+   <img id="ktc_a_720" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_720_back_True.png">
+{% for img in ktc_ambient %}
+   <img id="ktc_720_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_720_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "MONTH INSIDE" --> #}
+ <div class="termo_parent" id="ktc_d_720_p">
+   <img id="ktc_d_720" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_720_back_False.png">
+{% for img in ktc_data %}
+   <img id="ktc_720_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_720_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "MONTH HUMIDITY" --> #}
+ <div class="termo_parent" id="ktc_h_720_p">
+   <img id="ktc_h_720" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_720_back_None.png">
+{% for img in ktc_humy %}
+   <img id="ktc_720_humy_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_720_humy_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+
+    <hr>
+    <h4><b>GADS</b> {{ termo_year.0|date:"d/m/Y H:i" }} - {{ termo_year.1|date:"d/m/Y H:i" }}</h4>
+
+
+{# <!-- "YEAR OUTSIDE" --> #}
+ <div class="termo_parent" id="ktc_a_8760_p">
+   <img id="ktc_a_8760" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_8760_back_True.png">
+{% for img in ktc_ambient %}
+   <img id="ktc_8760_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_8760_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "YEAR INSIDE" --> #}
+ <div class="termo_parent" id="ktc_d_8760_p">
+   <img id="ktc_d_8760" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_8760_back_False.png">
+{% for img in ktc_data %}
+   <img id="ktc_8760_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_8760_temp_{{ img.order }}.png">
+{% endfor %}
+ </div>
+
+{# <!-- "YEAR HUMIDITY" --> #}
+ <div class="termo_parent" id="ktc_h_8760_p">
+   <img id="ktc_h_8760" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_8760_back_None.png">
+{% for img in ktc_humy %}
+   <img id="ktc_8760_humy_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ a.slug }}_8760_humy_{{ img.order }}.png">
 {% endfor %}
  </div>
 
@@ -78,16 +164,49 @@
   <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> Uz lapas leju</button>
 
 <script>
-$(document).ready(function(){
-  var h1 = $("#ktc_a_img").height(); $("#ktc_a").height( h1 + 15 );
-  var h2 = $("#ktc_d_img").height(); $("#ktc_d").height( h2 + 15 );
+function resizeImages4() {
+  var h;
+  h = $("#ktc_a_8760").height(); $("#ktc_a_8760_p").height( h + 15 );
+  h = $("#ktc_d_8760").height(); $("#ktc_d_8760_p").height( h + 15 );
+  h = $("#ktc_h_8760").height(); $("#ktc_h_8760_p").height( h + 15 );
+}
 
-{% for img in ktc_day_ambient %}
-  $("#btn_day_temp{{ img.order }}").click(function(){ $("#ktc_day_temp_{{ img.order }}").toggle(); });
+function resizeImages3() {
+  var h;
+  h = $("#ktc_a_720").height(); $("#ktc_a_720_p").height( h + 15 );
+  h = $("#ktc_d_720").height(); $("#ktc_d_720_p").height( h + 15 );
+  h = $("#ktc_h_720").height(); $("#ktc_h_720_p").height( h + 15 );
+  setTimeout( function(){ resizeImages4(); }, 250);
+}
+
+function resizeImages2() {
+  var h;
+  h = $("#ktc_a_168").height(); $("#ktc_a_168_p").height( h + 15 );
+  h = $("#ktc_d_168").height(); $("#ktc_d_168_p").height( h + 15 );
+  h = $("#ktc_h_168").height(); $("#ktc_h_168_p").height( h + 15 );
+  setTimeout( function(){ resizeImages3(); }, 250);
+}
+
+function resizeImages1() {
+  var h;
+  h = $("#ktc_a_24").height();  $("#ktc_a_24_p").height( h + 15 );
+  h = $("#ktc_d_24").height();  $("#ktc_d_24_p").height( h + 15 );
+  h = $("#ktc_h_24").height();  $("#ktc_h_24_p").height( h + 15 );
+  setTimeout( function(){ resizeImages2(); }, 250);
+}
+
+$(document).ready(function(){
+  setTimeout( function(){ resizeImages1(); }, 250);  
+
+{% for img in ktc %}
+  $("#btn_ktc_{{ img.order }}").click(function(){
+    $("#ktc_24_temp_{{ img.order }}").toggle();  $("#ktc_24_humy_{{ img.order }}").toggle();
+    $("#ktc_168_temp_{{ img.order }}").toggle(); $("#ktc_168_humy_{{ img.order }}").toggle();
+    $("#ktc_720_temp_{{ img.order }}").toggle(); $("#ktc_720_humy_{{ img.order }}").toggle();
+    $("#ktc_8760_temp_{{ img.order }}").toggle(); $("#ktc_8760_humy_{{ img.order }}").toggle();
+  });
 {% endfor %}
-{% for img in ktc_day_data %}
-  $("#btn_day_temp{{ img.order }}").click(function(){ $("#ktc_day_temp_{{ img.order }}").toggle(); });
-{% endfor %}
+
 })
 </script>
 {% endblock %}

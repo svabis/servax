@@ -20,3 +20,4 @@ termo_ktc		smhouse		read /var/log/remotehost.... ktc temperature & humidity last
 termo_ktc_temp		smhouse		imports 3 file, all lines (NO DUPLICATES)
 termo_ktc_misc		smhouse		DELETE ALL TermoReadings
 termo_ktc_import	smhouse		ktc old data import from log's
+termo_draw_graph	smhouse		draw termo graphs at 00 & 12

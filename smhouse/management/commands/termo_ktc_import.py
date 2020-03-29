@@ -8,11 +8,14 @@ from django.utils.timezone import make_aware
 from django.core.management.base import BaseCommand, CommandError
 from smhouse.models import TermoAdress, TermoPlace, TermoReading
 
+#import tarfile
 import re
 import os
 
+
+
 #path = '/var/log/remotelogs/172.16.20.250/'
-path = '/home/alex/termo_dati_ktc'
+path = '/home/alex/termo_dati_ktc/'
 
 # command
 class Command(BaseCommand):
@@ -20,49 +23,64 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Get KTC Termo Places relative to log files
          ktc = TermoAdress.objects.get(slug='ktc')
-         termo_obj = TermoPlace.objects.filter(where=ktc)
+         termo_obj = TermoPlace.objects.filter(where=ktc).order_by('-order')
 
          for filename in os.listdir(path):
-           print(filename)
 
           # iterate TermoPlace objects in ktc
            for t in termo_obj:
-#             print( t )
-             try:
-              # Read log file
+
+# -----------------------------------------------------------
+            # READ LOG
+#             if filename.endswith("log"):
                with open(path + filename, 'r') as f:
                    lines = f.read().splitlines()
-#                   last_line = lines[-1]
+
+# -----------------------------------------------------------
+            # READ .gz file
+#             if filename.endswith(".gz"):
+#              tar = tarfile.open(path + filename, "r:gz")
+#              for member in tar.getmembers():
+#               f = tar.extractfile(member)
+#               if f is not None:
+#                 lines = f.read()
+
+               print( filename )
+               print( t.regex )
+               print()
 
                for last_line in lines:
-
-                # get datetime from string
-                 dtime = make_aware( datetime.strptime(last_line[0:16], '%Y-%m-%dT%H:%M') )
-                # get temerature & humidity
-                 rez = re.search(t.regex, last_line)
-
-                 temp_rez = rez.group(1).split(":")
-                # temperature
-                 temp = temp_rez[0]
-                 if "." not in temp:
-                     temp = temp[:-1] + "." + temp[-1:]
-                # humidity
                  try:
+
+                  # get datetime from string                              2020-03-15T03:28
+                   dtime = make_aware( datetime.strptime(last_line[0:16], '%Y-%m-%dT%H:%M') )
+                  # get temerature & humidity
+                   rez = re.search(t.regex, last_line)
+                   temp_rez = rez.group(1).split(":")
+
+                  # temperature
+                   temp = temp_rez[0]
+                   if "." not in temp:
+                     temp = temp[:-1] + "." + temp[-1:]
+
+                  # humidity
+                   try:
                      data = [dtime, float(temp), float( temp_rez[1] )]
-                 except:
+                   except:
                      data = [dtime, float(temp), None]
 
-#                 print( data )
+#                   print( data )
 
-                # Try to create new reading
-                 try:
+                  # Try to create new reading
+                   try:
                      temp = TermoReading.objects.get( place = t, date = data[0] )
-                 except:
+                   except:
                      temp = TermoReading( place = t, date = data[0], temp = data[1], humy = data[2] )
+                     print( temp )
                      temp.save()
 
             # SKIP object
-             except:
-                 pass
+                 except:
+                   pass
 
 #             print()
