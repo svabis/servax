@@ -40,9 +40,8 @@ class LedTimer(models.Model):
 #        return self.time
 
 
-#=========================== =========================== TERMO ======================================================
-# !!!!! TERMO ADRESS !!!!!
-class TermoAdress(models.Model):
+# !!!!! Location !!!!!
+class Location(models.Model):
     class Meta():
         db_table = "sm_termo_adress"
 
@@ -54,16 +53,17 @@ class TermoAdress(models.Model):
         return self.adress
 
 
+#=========================== =========================== TERMO ======================================================
 # !!!!! TERMO ADRESS !!!!!
 class TermoPlace(models.Model):
     class Meta():
         db_table = "sm_termo_place"
 
     order = models.IntegerField( null=True, blank=True )
-    where = models.ForeignKey( TermoAdress, on_delete=models.CASCADE )
+    where = models.ForeignKey( Location, on_delete=models.CASCADE )
     place = models.CharField( max_length = 30, null=True, blank=True )
 
-    filename = models.CharField( max_length = 30, null=True, blank=True )
+    filename = models.CharField( max_length = 200, null=True, blank=True )
     regex = models.TextField( max_length = 200, null=True, blank=True )
 
     color = models.CharField( max_length = 30, null=True, blank=True )

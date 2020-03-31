@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.timezone import make_aware
 
 from django.core.management.base import BaseCommand, CommandError
-from smhouse.models import TermoAdress, TermoPlace, TermoReading
+from smhouse.models import Location, TermoPlace, TermoReading
 
 #import tarfile
 import re
@@ -14,15 +14,15 @@ import os
 
 
 
-#path = '/var/log/remotelogs/172.16.20.250/'
-path = '/home/alex/termo_dati_ktc/'
+path = '/var/log/remotelogs/172.16.20.250/'
+#path = '/home/alex/termo_dati_ktc/'
 
 # command
 class Command(BaseCommand):
     help = "Create objects for Adress ķesterciems"
     def handle(self, *args, **options):
         # Get KTC Termo Places relative to log files
-         ktc = TermoAdress.objects.get(slug='ktc')
+         ktc = Location.objects.get(slug='ktc')
          termo_obj = TermoPlace.objects.filter(where=ktc).order_by('-order')
 
          for filename in os.listdir(path):

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from smhouse.models import ElConsumption, LedTimer, TermoAdress, TermoPlace, TermoReading
+from smhouse.models import ElConsumption, LedTimer, Location, TermoPlace, TermoReading
 
 
 # Elecrticity
@@ -11,11 +11,12 @@ class ElConsumptionAdmin(admin.ModelAdmin):
 class LedTimerAdmin(admin.ModelAdmin):
     list_display = [ 'time', 'days', 'color', 'bright', 'effect' ]
 
-# Temperature
-class TermoAdressAdmin(admin.ModelAdmin):
+# Location
+class LocationAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('adress',), }
     list_display = [ 'adress', 'order', 'slug' ]
 
+# Temperature
 class TermoPlaceAdmin(admin.ModelAdmin):
     list_display = [ 'place', 'order', 'where', 'ambient', 'color', 'filename', 'regex' ]
     list_filter = [ 'where', 'ambient' ]
@@ -28,6 +29,7 @@ class TermoReadingAdmin(admin.ModelAdmin):
 admin.site.register(ElConsumption, ElConsumptionAdmin)
 admin.site.register(LedTimer, LedTimerAdmin)
 
-admin.site.register(TermoAdress, TermoAdressAdmin)
+admin.site.register(Location, LocationAdmin)
+
 admin.site.register(TermoPlace, TermoPlaceAdmin)
 admin.site.register(TermoReading, TermoReadingAdmin)

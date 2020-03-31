@@ -2,7 +2,7 @@
 from django.http import HttpResponse # Response for Ajax POST
 from django.shortcuts import render, redirect # response to template, redirect to another view
 
-from smhouse.models import TermoAdress, TermoPlace, TermoReading
+from smhouse.models import Location, TermoPlace, TermoReading
 
 from login.models import User_data # Access data
 
@@ -32,11 +32,10 @@ def smhouse_termo(request):
 # ACCESS GRANTED
 
    # Termo Adress
-    adress = TermoAdress.objects.all().order_by('order')
+    adress = Location.objects.all().order_by('order')
     args['adress'] = adress
 
-   # TermoAdress
-    termo = TermoAdress.objects.all().order_by('order')
+    termo = adress
 
 #    for t in termo
     args['ktc'] = TermoPlace.objects.filter( where = termo[0] )
@@ -54,9 +53,9 @@ def smhouse_termo(request):
     args['termo_year']  = [datetime.now(), datetime.now() - timedelta(days=365)]
 
    # Draw Termo day
-    draw_termo("ktc", 24, 24, "%H", 1, True)
-    draw_termo("ktc", 24, 24, "%H", 1, False)
-    draw_termo("ktc", 24, 24, "%H", 1, None)
+    draw_termo("ktc", 24, 24, "%H", 1, "day", True)
+    draw_termo("ktc", 24, 24, "%H", 1, "day", False)
+    draw_termo("ktc", 24, 24, "%H", 1, "day", None)
 
     response = render( request, 'termo.html', args )
     response.set_cookie( key='page_loc', value='/sm_house/termo/', path='/' )
