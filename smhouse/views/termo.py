@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse # Response for Ajax POST
+#from django.http import HttpResponse # Response for Ajax POST
 from django.shortcuts import render, redirect # response to template, redirect to another view
-
-from smhouse.models import Location, TermoPlace, TermoReading
 
 from login.models import User_data # Access data
 
 from main.args import create_args
 
+from smhouse.models import Location, TermoPlace, TermoReading
+
 # Import draw script
-#from smhouse.termo_draw import draw_termo_day
 from smhouse.termo_draw import draw_termo
 
 from datetime import datetime, timedelta
@@ -31,32 +30,43 @@ def smhouse_termo(request):
 
 # ACCESS GRANTED
 
-   # Termo Adress
-    adress = Location.objects.all().order_by('order')
-    args['adress'] = adress
-
-    termo = adress
-
-#    for t in termo
-    args['ktc'] = TermoPlace.objects.filter( where = termo[0] )
-    args['rpz'] = TermoPlace.objects.filter( where = termo[1] )
-
-   # TermoPlaces
-    args['ktc_ambient'] = TermoPlace.objects.filter( where = termo[0], ambient = True )
-    args['ktc_data'] = TermoPlace.objects.filter( where = termo[0], ambient = False )
-    args['ktc_humy'] = TermoPlace.objects.filter( where = termo[0] )
-
    # Date ranges
     args['termo_day']   = [datetime.now(), datetime.now() - timedelta(hours=24)]
     args['termo_week']  = [datetime.now(), datetime.now() - timedelta( days= 7)]
     args['termo_month'] = [datetime.now(), datetime.now() - timedelta( days=30)]
-    args['termo_year']  = [datetime.now(), datetime.now() - timedelta(days=365)]
 
-   # Draw Termo day
-    draw_termo("ktc", 24, 24, "%H", 1, "day", True)
-    draw_termo("ktc", 24, 24, "%H", 1, "day", False)
-    draw_termo("ktc", 24, 24, "%H", 1, "day", None)
+   # Termo Adress
+    adress = Location.objects.all().order_by('order')
+
+    out_data = []
+    for a in adress:
+        args[a.slug] = TermoPlace.objects.filter( where = a )
+
+       # TermoPlaces
+        args[a.slug + '_ambient'] = TermoPlace.objects.filter( where = a, ambient = True )
+        args[a.slug + '_data'] = TermoPlace.objects.filter( where = a, ambient = False )
+        args[a.slug + '_humy'] = TermoPlace.objects.filter( where = a )
+
+       # Draw Termo day
+        data = []
+        data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", True) )
+        data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", False) )
+        data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", None) )
+        if False in data:
+            data = False
+        else:
+            data = True
+
+       # output is shown or not
+        out_data.append(data)
+
+    temp = []
+    for i, a in enumerate(adress):
+         temp.append( [a, out_data[i]] )
+    args['adress'] = temp
+
 
     response = render( request, 'termo.html', args )
     response.set_cookie( key='page_loc', value='/sm_house/termo/', path='/' )
+    response.set_cookie( key='show_termo_graph', value='true', path='/', max_age=20 )
     return response

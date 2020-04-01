@@ -24,6 +24,9 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
         tp = TermoPlace.objects.filter( where = termo )
         data = "humy"
 
+    if tp.count() == 0:
+        return False
+
    # get Dateime range & array for x-axis (full hours)
     d_start, d_end = datetime.now() - timedelta(hours=day_h), datetime.now()
 
@@ -132,3 +135,5 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
             img.save( settings.MEDIA_ROOT + 'smhouse/termo/' + t.where.slug + '_' + name + '_temp_' + str(t.order) + '.png', 'PNG' )
         else:
             img.save( settings.MEDIA_ROOT + 'smhouse/termo/' + t.where.slug + '_' + name + '_humy_' + str(t.order) + '.png', 'PNG' )
+
+    return True
