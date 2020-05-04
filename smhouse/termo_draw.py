@@ -119,7 +119,10 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
             x = int( round(( r.date.timestamp() - d_start.timestamp() )/(day_h/24)/60 )) + tab
             if ambient is not None:
                # temperature output
-                y = int((float(r.temp) - min) * y_k) + 350
+                try:
+                    y = int((float(r.temp) - min) * y_k) + 350
+                except:
+                    pass
             else:
                # humidity
                 try:

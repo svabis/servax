@@ -2,20 +2,27 @@
 {% load static %}
 
 
-{% block style %}
-body { overflow-x: hidden; }
-{% endblock %}
-
-
-
-{% block javascript %}
-<script type="text/javascript" src="{% static 'datepicker.js' %}"></script>
-<link rel="stylesheet" href="{% static 'datepicker.css' %}"/>
-{% endblock %}
-
-
 {% block content %}
-<div class="container" style="margin-bottom: 10px;"></div>
+{% if mobile_browser %}
+<div class="col-xs-12 col-sm-12" id="jobs-menu">
+ <div class="nav-side-menu">
+  <div style="height: 50px; width:100%;"></div>
+  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#jobs-content"></i>
+  <div class="jobs-list">
+   <ul id="jobs-content" class="menu-content collapse out">
+{% else %}
+<div class="container-fluid">
+ <div class="navbar-collapse">
+  <ul class="nav nav-tabs">
+{% endif %}
+   <li class="active"><a data-toggle="tab" href="#readings">Rādījumi</a></li>
+   <li><a data-toggle="tab" href="#graphs">Grafiki</a></li>
+  </ul>
+ </div>
+</div>
+
+<div class="tab-content">
+  <div id="readings" class="tab-pane fade in active">
 
 {# <!-- "TABULAS DAĻA" --> #}
 {% if mobile_browser == True %}<div class="table-responsive">{% else %}<div>{% endif %}
@@ -70,4 +77,30 @@ $(document).ready(function(){ var date_input=$('input[name="date"]');
  </table>
 </div>
 </div>
+
+</div>
+  <div id="graphs" class="tab-pane fade">
+   <h3>Grafiki</h3>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'datepicker.css' %}"/>
+<script>
+$(document).ready(function(){
+    $(".nav-tabs li").click(function(){ scrollControl(); console.log("CLICK!"); });
+})
+</script>
+{% endblock %}
+
+
+{% block style %}
+    body { overflow-x: hidden; }
+
+   .nav-tabs > li > a{ color: #000; background-color: #ffffb3; }
+   .nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; }
+
 {% endblock %}

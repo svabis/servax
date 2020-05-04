@@ -40,7 +40,7 @@ def smhouse_termo(request):
 
     out_data = []
     for a in adress:
-        args[a.slug] = TermoPlace.objects.filter( where = a )
+        args[a.slug] = TermoPlace.objects.filter( where = a ).order_by('order')
 
        # TermoPlaces
         args[a.slug + '_ambient'] = TermoPlace.objects.filter( where = a, ambient = True )
@@ -68,5 +68,5 @@ def smhouse_termo(request):
 
     response = render( request, 'termo.html', args )
     response.set_cookie( key='page_loc', value='/sm_house/termo/', path='/' )
-    response.set_cookie( key='show_termo_graph', value='true', path='/', max_age=20 )
+#    response.set_cookie( key='show_termo_graph', value='true', path='/', max_age=20 )
     return response

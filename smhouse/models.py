@@ -49,11 +49,14 @@ class Location(models.Model):
     adress = models.CharField( max_length = 30, null=True, blank=True )
     slug = models.SlugField( default = 'ktc' )
 
+    sun_url = models.CharField( max_length = 200, null=True, blank=True )
+    bw_color_log  = models.CharField( max_length = 200, null=True, blank=True )
+
     def __str__(self):
         return self.adress
 
 
-#=========================== =========================== TERMO ======================================================
+#====================================================== TERMO ======================================================
 # !!!!! TERMO ADRESS !!!!!
 class TermoPlace(models.Model):
     class Meta():
@@ -82,3 +85,16 @@ class TermoReading(models.Model):
     date = models.DateTimeField( default = timezone.now )
     temp = models.DecimalField( max_digits = 5, decimal_places = 2, null=True, blank=True )
     humy = models.DecimalField( max_digits = 5, decimal_places = 2, null=True, blank=True )
+
+
+#====================================================== SUN ======================================================
+# SUNSET & SUNRISE
+class SunData(models.Model):
+    class Meta():
+        db_table = "sm_sun"
+
+    date = models.DateField( default = timezone.now )
+    where = models.ForeignKey( Location, on_delete=models.CASCADE )
+
+    sunrise = models.DateTimeField( default = timezone.now )
+    sunset = models.DateTimeField( default = timezone.now )

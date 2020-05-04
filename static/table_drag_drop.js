@@ -29,6 +29,18 @@ $(document).ready(function(){
         $(fake).hide();
         newOrder();
     })
+
+// Double Click
+    $("tr[draggable='true']").dblclick(function() {
+        var row = $(this);
+        $(this).fadeOut("slow");
+        setTimeout( function(){
+            $('#table tr:first').before( row );
+            $('#table tr:first').fadeIn("slow");
+            setTimeout( function(){ newOrder(); }, 200);
+        }, 500);
+    });
+
 })
 
 

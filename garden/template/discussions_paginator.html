@@ -23,7 +23,7 @@ function readURL(input, display) {
 };
 </script>
 
-<div class="container">
+<div class="container-fluid">
  <div class="row">
   <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> 
    <a href="/garden/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn garden_back">
@@ -35,11 +35,9 @@ function readURL(input, display) {
  </div>
 </div>
 
-<div class="container">
 {% block discussion_data %}{% endblock %}
-</div>
 
-<div class="container comment_form">
+<div class="comment_form">
  <div class="form_cover"></div>
  <div class="form_cover_text">
  <center><h4><b class="text-danger">Atvainojiet, jums nav tiesību pievienoties diskusijai!</b></h4></center>

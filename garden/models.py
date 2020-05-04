@@ -15,11 +15,7 @@ import string
 #from unidecode import unidecode
 from slugify import slugify
 
-#def rand_slug():
-#    return str( uuid.uuid4() ).split("-")[4]
-
 def upload_path(instance, filename):
-#    return os.path.join('garden/', slugify(unicode(filename)) )
     return os.path.join('garden/', slugify(filename) )
 
 
@@ -30,7 +26,7 @@ class SuperTheme(models.Model):
 
     order = models.IntegerField( default = 0 )
     title = models.CharField( max_length = 100 )
-    slug = models.SlugField( unique = True, max_length=50 ) #, default=rand_slug(title) )
+    slug = models.SlugField( unique = True, max_length=50 )
 
     def __str__(self):
         return self.title

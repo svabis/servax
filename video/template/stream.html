@@ -49,10 +49,10 @@ function timerIncrement() {
   <source src="{{ cam.cam_url_stream }}" type="application/x-mpegURL">
  </video>
 </div>
-{% else %}
- <div class="framediv">
-   <iframe src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}" width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;" marginheight="0" marginwidth="0" scrolling="no"></iframe>
- </div>
+{#{% else %}#}
+{# <div class="framediv">#}
+{#   <iframe src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}" width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;" marginheight="0" marginwidth="0" scrolling="no"></iframe>#}
+{# </div>#}
 {% endif %}
 {% endfor %}
 

@@ -11,6 +11,8 @@ from main.args import create_args
 
 from datetime import datetime, date, timedelta
 
+from jobs.sorter import sort_marked_jobs
+
 # JOBS ARGS LIST
 def default(request):
     args = create_args(request)
@@ -38,6 +40,8 @@ def add(request):
         job_add = True
 
     args['active_tab'] = 5
+
+    sort_marked_jobs()
 
     if job_add != True:
        # ADD JOBS DENIED

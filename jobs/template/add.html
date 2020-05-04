@@ -47,6 +47,38 @@ $(window).bind('beforeunload', function(){
     {{ form.jobs_descr }}
   </div>
  </div>
+<script>
+// min augstums
+let minHeight = document.getElementById("id_jobs_descr").clientHeight;
+
+function FitToContent(text, maxHeight)
+{
+   {# "elementa augstums" #}
+   var adjustedHeight = text.clientHeight;
+//   console.log(adjustedHeight);
+   console.log(text.scrollHeight);
+
+   {# "pārbauda vai augstums jau nepārsniedz maksimālo" #}
+   if ( maxHeight > adjustedHeight ) {
+
+      // mazākais no abiem (maksimālā vērtība un pašreizējā)
+      adjustedHeight = Math.min(maxHeight, adjustedHeight);
+
+      if ( adjustedHeight > text.clientHeight ) {
+         text.style.height = adjustedHeight + "px";
+      } else {
+         text.style.height = text.scrollHeight + "px";
+      }
+   }
+}
+
+window.onload = function() {
+    document.getElementById("id_jobs_descr").onkeyup = function() {
+      FitToContent( this, 500 )
+    };
+}
+//$("#id_jobs_descr").
+</script>
 {# <!-- "Darbs" --> #}
 
 {# <!-- Izcelt darbu rinda --> #}

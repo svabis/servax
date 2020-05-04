@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.utils import timezone
 
@@ -57,7 +58,7 @@ class Live_video(models.Model):
     tablet = models.BooleanField( default=False )
 
     visit = models.DateTimeField( default=timezone.now )
-    leave = models.DateTimeField( blank=True, null=True )
+    leave = models.DateTimeField( default=timezone.now )
 
     time = models.TimeField( blank=True, null=True )
 

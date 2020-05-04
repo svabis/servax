@@ -2,7 +2,7 @@
 <html>{% load static %}{% load tz %}
 <head>
   <title>{{ title }}</title>
-{# <!-- <base href="http://svabwilla.svabis.eu/" /> #}{#  <link rel="canonical" href="http://svabwilla.svabis.eu/" />--> #}
+{# <!-- <base href="https://svabis.eu/" /> #}{#  <link rel="canonical" href="https://svabis.eu/" />--> #}
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,9 +16,9 @@
   <meta property="og:description" content="Projekts dzīves kvalitātes uzlabošanai, izmantojot inovatīvus risinājumus ar kuru palīdzību ir iespējams attālināti vadīt atsevišķus elementus: vārti, laistīšanas sistēma, ventilācija u.c." />
   <meta property="og:site_name" content="svabwilla" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="http://svabwilla.svabis.eu{% static 'images/back4.jpg' %}" />
+  <meta property="og:image" content="https://svabis.eu{% static 'images/back4.jpg' %}" />
   <meta property="og:locale" content="en_US" />
-  <meta property="og:url" content="http://svabwilla.svabis.eu/" />
+  <meta property="og:url" content="https://svabis.eu/" />
 
   <link rel="shortcut icon" type="image/png" href="{% static favicon %}" />
 
@@ -36,12 +36,11 @@
 
   <script>
 {% if mobile_browser == False %}
-   $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 1000);
-})
-     function scrollControl() {
-       if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").toggle() }
-       $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
-       $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
+   $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 1000); })
+   function scrollControl() {
+     if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").show(); }
+     $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
+     $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
    }
 {% endif %}
 

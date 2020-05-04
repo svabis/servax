@@ -13,6 +13,9 @@ from datetime import datetime, date, timedelta
 
 from jobs.views.jobs_sort import *
 
+# marked jobs sorter
+from jobs.sorter import sort_marked_jobs
+
 # JOBS ARGS LIST
 def default(request):
     args = create_args(request)
@@ -61,6 +64,8 @@ def marking(request):
 # ACCESS RESTRICTED
         return redirect('main_job_list')
     else:
+
+        sort_marked_jobs()
 # ACCESS GRANTED
         if request.POST:
             jobs = request.POST.get('mark_job_id', '')
@@ -107,6 +112,8 @@ def unmarking(request):
             temp.marked_id = None
             temp.save()
 
+    sort_marked_jobs()
+
     response = redirect('marked_job_list')
     return response
 
@@ -133,6 +140,8 @@ def job_start(request, job_id):
         ret_loc = str(request.COOKIES.get('page_loc'))
     else:
         ret_loc = '/'
+
+    sort_marked_jobs()
 
     response = redirect( ret_loc )
     response.set_cookie( 'ret', 'True', max_age=5 ) # 5 second Cookie for not changing sort order
@@ -164,6 +173,8 @@ def job_finish(request, job_id):
     else:
         ret_loc = '/'
 
+    sort_marked_jobs()
+
     response = redirect( ret_loc )
     response.set_cookie( 'ret', 'True', max_age=5 ) # 5 second Cookie for not changing sort order
     return response
@@ -192,6 +203,8 @@ def job_cancel(request, job_id):
         ret_loc = str( request.COOKIES.get('page_loc') )
     else:
         ret_loc = '/'
+
+    sort_marked_jobs()
 
     response = redirect( ret_loc )
     response.set_cookie( 'ret', 'True', max_age=5 ) # 5 second Cookie for not changing sort order

@@ -42,6 +42,9 @@ urlpatterns = [
 # ACCESS DENIIED
     path('access_denied/', denied, name='access_denied'),
 
+# BUTTON
+    path('button/', include('button.urls')),
+
 # JOBS
     path('jobs/', include('jobs.urls')),
 

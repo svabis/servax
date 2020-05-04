@@ -40,11 +40,17 @@ class Command(BaseCommand):
                     temp = temp_rez[0]
                     if "." not in temp:
                         temp = temp[:-1] + "." + temp[-1:]
+
+                    temp = float(temp)
+                   # ignore wrong temeratue readings
+                    if temp > 95:
+                        temp = None
+
                    # humidity
                     try:
-                        data = [dtime, float(temp), float( temp_rez[1] )]
+                        data = [dtime, temp, float( temp_rez[1] )]
                     except:
-                        data = [dtime, float(temp), None]
+                        data = [dtime, temp, None]
 
 #                    print( data )
 

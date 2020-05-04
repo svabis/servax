@@ -1,0 +1,33 @@
+{% extends 'bt_head.html' %}
+
+{% block content %}
+
+<div class="caption">
+
+{% if ended %}
+  <span id="info" style="cursor:default; color:#3269a8;">Pasākums ir noslēdzies!</span>
+{% elif m_error %}
+  <span id="info" style="cursor:default;">Tāda pasākuma nav!</span>
+{% else %}
+<form action="/button/join/{{ m_id }}/" method=POST id="join_form">
+    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-xs-8  col-offset-5 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-2">
+	<div class="form-group">
+		{% csrf_token %}
+		<h3 style="margin-bottom:3px;">{{ meeting.title }}</h3>
+		<h4>Dalībnieka vārds</h4>
+		<input type="text" name="participiant" class="form-control" autofocus="autofocus">
+                {# {{ form.participiant }} #}
+	</div>
+	<div class="form-group">
+             <center>
+		<input class="btn btn-primary" type="submit" value="Pieteikties">
+             </center>
+	</div>
+    </div>
+</form>
+{% endif %}
+
+</div>
+
+{% endblock %}
+

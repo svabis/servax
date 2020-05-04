@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import os       # for work with filesystem
 import cv2      # image container reader
+
+from django.conf import settings
+import os
+
 from PIL import Image, ImageDraw
 
 
@@ -17,18 +21,18 @@ class Command(BaseCommand):
     help = "Create thumbnails for galerija"
     def handle(self, *args, **options):
 
-        path = "/var/www/svabwilla.svabis.eu/media/"
+#        path = "/var/www/svabwilla.svabis.eu/media/"
         images = Galery.objects.all()
 
         for obj in images:
 #            print( obj )
             if not obj.galery_thumb:
 
-                open_image = open(path + str(obj.galery_img), "rb")
+                open_image = open(settings.MEDIA_ROOT + str(obj.galery_img), "rb")
                 image_file = File(open_image)
 
-                infile = path + str(obj.galery_img)
-                outfile = "/var/www/svabwilla.svabis.eu/media/galery/thumb/thumb.jpg"
+                infile = settings.MEDIA_ROOT + str(obj.galery_img)
+                outfile = settings.MEDIA_ROOT + "/galery/thumb/thumb.jpg"
                 size = 200, 200 # THUMBNAIL MAXIMUM SIZE
 
                 try:
@@ -48,8 +52,8 @@ class Command(BaseCommand):
                         pass
 
                # SAVE TEMPORARY thumbnail FILE FOR UPLOAD TO /media/thumb/
-                im.save( "/var/www/svabwilla.svabis.eu/media/galery/thumb/thumb.jpg", "JPEG")
-                thumb = open( "/var/www/svabwilla.svabis.eu/media/galery/thumb/thumb.jpg", 'rb')
+                im.save( settings.MEDIA_ROOT + "/galery/thumb/thumb.jpg", "JPEG")
+                thumb = open( settings.MEDIA_ROOT + "/galery/thumb/thumb.jpg", 'rb')
                 thumb_file = File(thumb)   # create thumbnail
 
                # CREATE NEW galerija_thumb OBJECT

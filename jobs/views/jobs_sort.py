@@ -1,14 +1,5 @@
 # -*- coding: utf-8 -*-
-#from django.shortcuts import render, redirect
-
-#from jobs.models import Jobs		# import aplication models
-
-#from login.models import User_data
-
-#from main.args import create_args
-
 from datetime import datetime, date, timedelta
-#import itertools	# Nested Counter
 
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! SORT CHOISES START !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

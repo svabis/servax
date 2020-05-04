@@ -13,35 +13,6 @@ from datetime import datetime, date, timedelta
 import uuid
 
 
-
-def archive_main(request):
-    args = create_args(request)
-    args['heading'] = "Video Arhīvs"
-    args['title'] = 'Video arhīvs | Svabwilla'
-
-# RESTRICT ACCESS
-    if args['username'].get_username() == '': # NO USER
-        return redirect('access_denied')
-    else:
-        video_archive = User_data.objects.get(user_user = args['username']).video_archive
-    if video_archive != True:
-        return redirect('access_denied')
-    else:
-# ACCESS ALOWED
-#        d = datetime.now().replace(day=1).date()
-        d = ( datetime.now().replace(day=1) - timedelta(120) ).date()
-#        args['data'] = Video.objects.filter( video_date__startswith = d )
-#        args['data'] = Video.objects.filter( video_date__year = '2017', video_date__month = '05' )
-        args['data'] = Video.objects.filter( video_date__range = [ d, datetime.now().date() ] )
-#        args['data'] = Video.objects.all().order_by("-video_date")
-        args['today'] = datetime.now()
-
-    response = render( request, 'archive.html', args )
-    response.set_cookie( key='page_loc', value='/video/archive/', path='/' )
-    return response
-
-
-
 # ============================================================================================
 # LIVE VIDEO
 def live(request):
@@ -75,43 +46,6 @@ def live(request):
         return response
 
     return redirect( 'access_denied' )
-
-
-# ============================================================================================
-# LEAVE TIME AJAX FOR "LIVE VIDEO"
-def leave_video(request):
-    args = create_args(request)
-
-   # check uuid cookie
-    c_value = uuid.uuid4()
-    if 'video_live' in request.COOKIES:
-        c_value = request.COOKIES.get('video_live')
-        try:
-           temp = Live_video.objects.get( user = args['username'], cookie_uuid=c_value )
-           temp.leave = timezone.now()
-          # calculate time elapsed watching
-           t = temp.leave - temp.visit
-           visit_time = (datetime.min + t).time()
-           temp.time = visit_time
-           temp.save()
-        except:
-           pass
-
-        response = HttpResponse('ok')
-        response.set_cookie( key='page_loc', value='/video/live/', path='/' )
-        response.set_cookie( key='video_live', value=c_value, max_age=900 ) #datetime.now() + timedelta(minutes=10) )
-        return response
-
-    return HttpResponse('done')
-
-
-# ============================================================================================
-# TURNING ALL CAMERAS ON
-def all_cam_on(request):
-    for k in Camera.objects.all():
-        k.cam_visible = True
-        k.save()
-    return redirect('/video/live/')
 
 
 # ============================================================================================
@@ -151,3 +85,42 @@ def stream(request):
 # ACCESS DENIED -->
     else:
         return redirect( 'access_denied' )
+
+
+# ============================================================================================
+# LEAVE TIME AJAX FOR "LIVE VIDEO"
+def leave_video(request):
+    args = create_args(request)
+
+   # check uuid cookie
+    c_value = uuid.uuid4()
+    if 'video_live' in request.COOKIES:
+        c_value = request.COOKIES.get('video_live')
+        try:
+           temp = Live_video.objects.get( user = args['username'], cookie_uuid=c_value )
+           temp.leave = timezone.now()
+          # calculate time elapsed watching
+           t = temp.leave - temp.visit
+           visit_time = (datetime.min + t).time()
+           temp.time = visit_time
+           temp.save()
+        except:
+           pass
+
+        response = HttpResponse('ok')
+        response.set_cookie( key='page_loc', value='/video/live/', path='/' )
+        response.set_cookie( key='video_live', value=c_value, max_age=900 ) #datetime.now() + timedelta(minutes=10) )
+        return response
+
+    return HttpResponse('done')
+
+
+# ============================================================================================
+# TURNING ALL CAMERAS ON
+def all_cam_on(request):
+    for k in Camera.objects.all():
+        k.cam_visible = True
+        k.save()
+    return redirect('/video/live/')
+
+

@@ -1,0 +1,44 @@
+{% extends 'bt_head.html' %}
+
+{% block content %}
+
+
+<div class="navbar-collapse">
+ <ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#add">Pievienot</a></li>
+{% for m in meetings %}
+  <li><a data-toggle="tab" href="#{{ m.id }}">{{ m.title }}</a></li>
+{% endfor %}
+ </ul>
+</div>
+
+
+<div class="tab-content">
+ <div id="add" class="tab-pane fade in active">
+	PIEVIENOT TEKSTS
+ </div>
+
+{% for m in meetings %}
+ <div id="{{ m.id }}" class="tab-pane fade">
+  <h3>{{ m.title }}</h3>
+  <h5><a href="https://svabis.eu/button/join/{{ m.url }}/" target="_blank">https://svabis.eu/button/join/{{ m.url }}/</a></h5>
+  <table class="table table-hover table-striped table-condensed">
+   <thead>
+    <tr style="background: #aaa;">
+     <th style="vertical-align: top;">Datums/Laiks</th>
+     <th style="vertical-align: top;">Dalībnieks</th>
+     <th style="vertical-align: top;">Pēdējo reizi nopieda pogu</th>
+     <th style="vertical-align: top;">Atlika laiks</th>
+    </tr>
+   </thead>
+   <tbody>
+{# "Dalībnieku saraksts" #}
+   </tbody>
+  </table>
+ </div>
+{% endfor %}
+</div>
+
+{{ meetings }}
+
+{% endblock %}

@@ -16,8 +16,11 @@ video_chk		video		check video integrity (TESTS)
 
 count_comments		garden		count blog entries
 
+
 termo_data_read		smhouse		read  TermoReadings from log file last lines
 termo_draw_graph	smhouse		draw termo graphs at 00 & 12
 
 termo_ktc_misc		smhouse		DELETE ALL TermoReadings
 termo_ktc_import	smhouse		ktc old data import from log's
+
+sun			smhouse		get sunrise & sunset data
