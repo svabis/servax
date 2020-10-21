@@ -17,7 +17,8 @@
 {% endif %}
 
 {% for a in adress %}
-   <li{% if a.0.order == 1 %} class="active"{% endif %}><a data-toggle="tab" href="#{{ a.0.slug }}" id="tab_{{ a.0.slug }}">{{ a.0.adress }}</a></li>
+   <li{% if a.slug == slug %} class="active"{% endif %}><a href="/sm_house/termo/{{ a.slug }}/" id="tab_{{ a.slug }}">{{ a.adress }}</a></li>
+<!--   <li{% if a.slug == slug %} class="active"{% endif %}><a data-toggle="tab" href="/sm_house/termo/{{ a.slug }}/" id="tab_{{ a.slug }}">{{ a.adress }}</a></li> -->
 {% endfor %}
   </ul>
  </div>

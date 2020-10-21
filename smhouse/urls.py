@@ -16,5 +16,6 @@ urlpatterns = [
     path('led/', smhouse_led, name='sm_led'),
 
 # TERMO
+    path('termo/<str:slug>/', smhouse_termo),
     path('termo/', smhouse_termo),
 ]
