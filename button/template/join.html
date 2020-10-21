@@ -2,14 +2,21 @@
 
 {% block content %}
 
-<div class="caption">
-
 {% if ended %}
+<div class="caption">
   <span id="info" style="cursor:default; color:#3269a8;">Pasākums ir noslēdzies!</span>
+</div>
 {% elif m_error %}
+<div class="caption">
   <span id="info" style="cursor:default;">Tāda pasākuma nav!</span>
+</div>
 {% else %}
-<form action="/button/join/{{ m_id }}/" method=POST id="join_form">
+
+ <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12"></div>
+</div>
+
+<div class="caption">
+  <form action="/button/join/{{ m_id }}/" method=POST id="join_form">
     <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-xs-8  col-offset-5 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-2">
 	<div class="form-group">
 		{% csrf_token %}
@@ -24,10 +31,9 @@
              </center>
 	</div>
     </div>
-</form>
-{% endif %}
-
+  </form>
 </div>
+{% endif %}
 
 {% endblock %}
 

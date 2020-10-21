@@ -26,40 +26,52 @@ class Command(BaseCommand):
             for t in termo_obj:
                 try:
                  # Read log file
-                    with open(t.filename, 'r') as f:
+                  with open(t.filename, 'r') as f:
                         lines = f.read().splitlines()
-                        last_line = lines[-1]
+#                        last_lines = lines[-1000:-1]
 
-                   # get datetime from string
-                    dtime = make_aware( datetime.strptime(last_line[0:16], '%Y-%m-%dT%H:%M') )
-                   # get temerature & humidity
-                    rez = re.search(t.regex, last_line)
+                 # iterate last lines
+                  for last_line in lines[-50:-1]:
+#                  for last_line in lines[-7:-1]:
 
-                    temp_rez = rez.group(1).split(":")
-                   # temperature
-                    temp = temp_rez[0]
-                    if "." not in temp:
-                        temp = temp[:-1] + "." + temp[-1:]
-
-                    temp = float(temp)
-                   # ignore wrong temeratue readings
-                    if temp > 95:
-                        temp = None
-
-                   # humidity
                     try:
-                        data = [dtime, temp, float( temp_rez[1] )]
-                    except:
-                        data = [dtime, temp, None]
+#                      print(last_line)
 
-#                    print( data )
+                     # get datetime from string
+                      dtime = make_aware( datetime.strptime(last_line[0:16], '%Y-%m-%dT%H:%M') )
+                     # get temerature & humidity
+                      rez = re.search(t.regex, last_line)
+#                      print(rez)
 
-                   # Try to create new reading
-                    try:
-                        temp = TermoReading.objects.get( place = t, date = data[0] )
+                      temp_rez = rez.group(1).split(":")
+                     # temperature
+                      temp = temp_rez[0]
+                      if "." not in temp:
+                          temp = temp[:-1] + "." + temp[-1:]
+
+                      temp = float(temp)
+                     # ignore wrong temeratue readings
+                      if temp > 95:
+                          temp = None
+
+                     # humidity
+                      try:
+                          data = [dtime, temp, float( temp_rez[1] )]
+                      except:
+                          data = [dtime, temp, None]
+
+#                      print( data )
+
+                     # Try to create new reading
+                      try:
+                          temp = TermoReading.objects.get( place = t, date = data[0] )
+                      except:
+                          temp = TermoReading( place = t, date = data[0], temp = data[1], humy = data[2] )
+                          temp.save()
+
                     except:
-                        temp = TermoReading( place = t, date = data[0], temp = data[1], humy = data[2] )
-                        temp.save()
+                        print(last_line)
+                        pass
 
                # SKIP object
                 except:

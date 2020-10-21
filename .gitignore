@@ -1,1 +1,14 @@
+bin/
+lib/
+pyvenv.cfg
+
+RTFM
+serv
+
+main/settings.py
+
+node_modules/
 *.pyc
+
+
+

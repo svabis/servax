@@ -2,6 +2,8 @@
 from django.http import HttpResponse # for button calls e.t.c
 from django.shortcuts import render, redirect
 
+from django.utils import timezone
+
 from button.models import Meeting, MeetingPaticipant, MeetingButton
 
 from button.forms import MeetingPaticipantForm
@@ -12,13 +14,34 @@ from main.args import create_args
 # =================================================================================
 def host(request):
     args = create_args(request)
+    try:
+        m = Meeting.objects.filter(creator = args["username"])
+        c = m.count()
+        m = m[c-1]
+        args["meetings"] = m
+        args["m"] = True
+    except:
+        pass
 
-    args["meetings"] = Meeting.objects.filter(creator = args["username"])
+   # DATI
+    args["mp"] = MeetingPaticipant.objects.filter( meeting = m).order_by("-date_added")
+    args["mbp"] = MeetingButton.objects.filter( meeting = m ).order_by("-date_pushed")
+
+   # ASK TO PUSH
+    if request.POST:
+        if m.push == True:
+            m.push = False
+        else:
+            m.push = True
+            args["pushed"] = True
+        m.save()
+
     response = render( request, 'host.html', args )
-#    response.set_cookie( key='page_loc', value='/video/archive/', path='/' )
     return response
 
 
+
+# !!!!! Pievienot jaunu meetingu !!!!!
 def add_meeting(request):
     if request.POST:
         form = KlientsForm( request.POST )
@@ -30,18 +53,61 @@ def add_meeting(request):
 
     return redirect("/button/host/")
 
+
+
+
+
+
+# =================================================================================
+def push(request):
+   # get data from request
+    m_id = request.GET['data']
+    p_id = int( request.GET['p_id'] )
+    t = request.GET['time']
+
+   # get Meeting & Participant
+    try:
+        m = Meeting.objects.get( url = m_id )
+        p = MeetingPaticipant.objects.get( id = p_id )
+    except:
+        response = HttpResponse('error')
+        return response
+
+    temp = MeetingButton( participant = p, meeting = m, time_remaining = t )
+    temp.save()
+
+    response = HttpResponse("ok")
+    return response
+
 # =================================================================================
 def press(request):
+   # get data from request
     m_id = request.GET['data']
+    p_id = request.GET['p_id']
+
+   # get Meeting
     try:
         m = Meeting.objects.get( url = m_id )
     except:
         response = HttpResponse('error')
         return response
 
+   # Get Participant
+    try:
+        p = MeetingPaticipant.objects.get( id = int(p_id) )
+    except:
+        response = HttpResponse('error')
+        return response
+
+   # IF Meeting ended
     if m.end == True:
         response = HttpResponse('ended')
         return response
+
+   # Activate participiant
+    p.date_active = timezone.now()
+    p.active = True
+    p.save()
 
     resp = ""
     if m.push == True:

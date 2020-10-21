@@ -2,43 +2,97 @@
 
 {% block content %}
 
-
-<div class="navbar-collapse">
- <ul class="nav nav-tabs">
-  <li class="active"><a data-toggle="tab" href="#add">Pievienot</a></li>
-{% for m in meetings %}
-  <li><a data-toggle="tab" href="#{{ m.id }}">{{ m.title }}</a></li>
-{% endfor %}
- </ul>
 </div>
 
+<div class="row" style="background-color: #ccc; margin-top: 30px;">
+ <div class="col-md-2"></div>
+ <div class="col-md-8">
 
-<div class="tab-content">
- <div id="add" class="tab-pane fade in active">
-	PIEVIENOT TEKSTS
- </div>
+  <div class="navbar-collapse">
+   <ul class="nav nav-tabs">
+{% if m == True %}
+    <li class="active"><a data-toggle="tab" href="#{{ meetings.id }}">{{ meetings.title }}</a></li>
+{% endif %}
+    <li{% if m != True %} class="active"{% endif %}><a data-toggle="tab" href="#add">Pievienot</a></li>
+   </ul>
+  </div>
 
-{% for m in meetings %}
- <div id="{{ m.id }}" class="tab-pane fade">
-  <h3>{{ m.title }}</h3>
-  <h5><a href="https://svabis.eu/button/join/{{ m.url }}/" target="_blank">https://svabis.eu/button/join/{{ m.url }}/</a></h5>
-  <table class="table table-hover table-striped table-condensed">
-   <thead>
-    <tr style="background: #aaa;">
-     <th style="vertical-align: top;">Datums/Laiks</th>
-     <th style="vertical-align: top;">Dalībnieks</th>
-     <th style="vertical-align: top;">Pēdējo reizi nopieda pogu</th>
-     <th style="vertical-align: top;">Atlika laiks</th>
-    </tr>
-   </thead>
-   <tbody>
+  <div class="tab-content" style="background-color: #eee;">
+{% if meetings %}
+{# <!--"Meetings"--> #}
+   <div id="{{ meetings.id }}" class="tab-pane fade in active">
+    <h3>{{ meetings.title }}</h3>
+    <h5><a href="https://svabis.eu/button/join/{{ meetings.url }}/" target="_blank">https://svabis.eu/button/join/{{ meetings.url }}/</a></h5>
+
+    <form action="/button/host/" method="POST" id="ask_form">
+    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-6 col-xs-8  col-offset-5 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-2">
+	<div class="form-group">
+            {% csrf_token %}
+{% if pushed %}
+            <input class="btn btn-success" type="submit" value="Stop it!">
+{% else %}
+            <input class="btn btn-danger" type="submit" value="Push it!">
+{% endif %}
+	</div>
+    </div>
+  </form>
+
+
+
 {# "Dalībnieku saraksts" #}
-   </tbody>
-  </table>
- </div>
+    <table class="table table-hover table-striped table-condensed">
+     <thead>
+      <tr style="background: #aaa;">
+       <th style="vertical-align: top;">Pievienojās (Datums/Laiks)</th>
+       <th style="vertical-align: top;">Dalībnieks</th>
+       <th style="vertical-align: top;">Pēdējo reizi redzēts</th>
+      </tr>
+     </thead>
+     <tbody>
+{% for p in mp %}
+      <tr>
+       <td>{{ p.date_added|date:"d/m/Y H:i" }}</td>
+       <td>{{ p.participiant }}</td>
+       <td>{{ p.date_active|date:"d/m/Y H:i" }}</td>
+      </tr>
 {% endfor %}
-</div>
+     </tbody>
+    </table>
 
-{{ meetings }}
+{# "Pogas spiedumu saraksts" #}
+    <table class="table table-hover table-striped table-condensed">
+     <thead>
+      <tr style="background: #aaa;">
+       <th style="vertical-align: top;">Dalībnieks</th>
+       <th style="vertical-align: top;">Nospieda pogu (Datums/Laiks)</th>
+       <th style="vertical-align: top;">Atlikušais taimera laiks</th>
+      </tr>
+     </thead>
+     <tbody>
+{% for p in mbp %}
+      <tr>
+       <td>{{ p.participant }}</td>
+       <td>{{ p.date_pushed|date:"d/m/Y H:i" }}</td>
+       <td>{{ p.time_remaining }}</td>
+      </tr>
+{% endfor %}
+     </tbody>
+    </table>
+   </div>
+{# <!--"Meetings beigas"--> #}
+{% endif %}
+
+
+
+{# <!--"Izveidot jaunu Meetingu"--> #}
+   <div id="add" class="tab-pane fade{% if m != True %} in active{% endif %}">
+	PIEVIENOT TEKSTS
+   </div>
+{# <!--"Izveidot jaunu Meetingu"--> #}
+  </div>
+
+ </div>
+ <div class="col-md-2"></div>
+</div>
 
 {% endblock %}

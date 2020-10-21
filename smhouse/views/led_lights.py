@@ -54,9 +54,10 @@ def led_control(request):
         PORT = 65432
 
         try:
+#        if True:
             s = socket.socket()
             s.connect((HOST, PORT))
-            s.send( bytes( jdata ) )
+            s.send( bytes( jdata, 'utf-8' ) )
             data = s.recv(1024)
 
             j = json.loads(data)
@@ -65,6 +66,7 @@ def led_control(request):
             b = int( (j["RGB"][2]*j["B"])/255 )
             resp = '{"RGB":[' + str(r) + ', ' + str(g) + ', ' + str(b) + '], "B":' + str(j["B"]) + ', "S":' + str(j["S"]) + '}'
         except:
+#            resp = '{"ERROR":}'
             pass
 
     return HttpResponse( resp )

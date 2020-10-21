@@ -89,19 +89,23 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
     if zero <= 370:
         draw.line([tab, zero, 1490, zero], fill="#7092ba", width = 0)
         draw.text([10, zero-5], "  0", fill=(112,146,186,255))
+        draw.text([1495, zero-5], "  0", fill=(112,146,186,255))
 
    # max 'C
     draw.line([tab, ((max-min)*y_k)+350, 1490, ((max-min)*y_k)+350], fill="#A52A2A", width = 0)
     draw.text([10,  ((max-min)*y_k)+345], str(max), fill=(165,42,42,128))
+    draw.text([1495, ((max-min)*y_k)+345], str(max), fill=(165,42,42,128))
 
    # min 'C
     draw.line([tab, ((min-min)*y_k)+350, 1490, ((min-min)*y_k)+350], fill="#2a55a5", width = 0)
     draw.text([10,  ((min-min)*y_k)+345], str(min), fill=(42,85,165,128))
+    draw.text([1495, ((min-min)*y_k)+345], str(min), fill=(42,85,165,128))
 
    # calculated 'C
     for i in range(1, 5):
         draw.line([tab, ((max-min)*y_k*0.2*i)+350, 1490, ((max-min)*y_k*0.2*i)+350], fill=gr_col, width = 0)
         draw.text([10,  ((max-min)*y_k*0.2*i)+345], str(round( ((max-min)*0.2*i)+min, 1 )), fill=(0,0,0,128))
+        draw.text([1495,  ((max-min)*y_k*0.2*i)+345], str(round( ((max-min)*0.2*i)+min, 1 )), fill=(0,0,0,128))
 
     img.save( settings.MEDIA_ROOT + 'smhouse/termo/' + slug + '_' + name + '_back_' + str(ambient) + '.png' )
 

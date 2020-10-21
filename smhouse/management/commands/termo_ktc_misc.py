@@ -9,6 +9,7 @@ import re
 import os
 
 path = '/var/log/remotelogs/172.16.20.250/'
+
 log_files = ['kscboardtemp.sh.log', 'myhost.log', 'pi.log']
 
 last =["2020-03-21T11:40:01+02:00 upnix kscboardtemp.sh[2383]: .1.3.6.1.4.1.14988.1.1.3.10.0 = INTEGER: -390",

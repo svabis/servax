@@ -51,7 +51,7 @@ def smhouse_termo(request):
         data = []
         data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", True) )
         data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", False) )
-        data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", None) )
+#        data.append( draw_termo(a.slug, 24, 24, "%H", 1, "day", None) )
         if False in data:
             data = False
         else:

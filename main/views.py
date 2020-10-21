@@ -140,5 +140,5 @@ def stats(request):
     args['cam_online'] = temp
 
     response = render(request, 'stat.html', args)
-    response.set_cookie( key='page_loc', value='/stat/', path='/' )
+    response.set_cookie( key='page_loc', value='/stats/', path='/' )
     return response

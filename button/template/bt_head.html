@@ -49,13 +49,13 @@ body, html {
 }
 
 .info_btn {
-  position: absolute; 
+  position: relative; 
   top: 15px;
   left: 15px;
 }
 
 .m_title {
-  position: absolute; 
+  position: relative; 
   top: 15px;
   width: 100%;
   text-align: center;
@@ -63,7 +63,7 @@ body, html {
 }
 
 .m_user {
-  position: absolute; 
+  position: relative; 
   top: 15px;
   right: 15px;
   text-align: right;
@@ -98,11 +98,15 @@ body, html {
 <body>
 
 <div class="bgimg-1">
-<div class="info">
- <button class="btn btn-default info_btn"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Instrukcija</button>
-</div>
+ <div class="row">
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+   <div class="info">
+    <button class="btn btn-default info_btn"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Instrukcija</button>
+   </div>
+  </div>
 
-{% block content %}<p>NAV</p>{% endblock %}
+{% block content %}{% endblock %}
+
 </div>
 
 </body>

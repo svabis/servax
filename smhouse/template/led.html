@@ -47,9 +47,9 @@
  <div class="col-md-6">
   <div class="form-group">
    <b>Krāsa:</b>
-   <input id="favcolor" type="color" name="favcolor" value="#ff0000">
-   <input id="submit_color" type="button" value="Izvēlēties">
-  </div>
+  <input id="favcolor" type="color" name="favcolor" value="#ff0000">
+  <input id="submit_color" type="button" value="Izvēlēties">
+ </div>
 
   <div class="form-group">
    <b>Gaišums</b>
@@ -83,6 +83,7 @@ function send_led(val) {
     'data': JSON.stringify(val), 'csrfmiddlewaretoken': document.getElementsByName('csrfmiddlewaretoken')[0].value })
       .done(function(msg) { state(msg); })
       .fail(function(xhr, status, error) { console.log( xhr ); console.log( status ); console.log( error ); });
+//  console.log( val );
 }
 function state(val) { var j = JSON.parse( val ); var c = "rgb(" + j.RGB[0] + ", " + j.RGB[1] + ", " + j.RGB[2] + ")"; $("#output").css("background-color", c); }
 

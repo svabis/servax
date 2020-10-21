@@ -60,4 +60,4 @@ class MeetingButton(models.Model):
    # nospiests
     date_pushed = models.DateTimeField( default=timezone.now )
    # atlicis laiks
-    time_remaining = models.TimeField( blank=True, null=True )
+    time_remaining = models.CharField(max_length = 10, blank=True, null=True)

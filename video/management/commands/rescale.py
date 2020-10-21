@@ -25,8 +25,11 @@ class Command(BaseCommand):
     print( e_date )
 
     count = 0
+
     vid = Video.objects.all().order_by('video_date')
     for v in vid:
+
+     try:
      # Get Videos in date range
       if v.video_date > s_date and v.video_date < e_date:
        # Get all "big" videos
@@ -43,5 +46,7 @@ class Command(BaseCommand):
          # Create New Task
 #          new_task = Server_Task( task_type="rescale", task_object=t_obj, task_input=v.video_file, task_output=t_output )
 #          new_task.save()
+     except:
+       print( str(v) + " file missing" )
 
     print( count )
