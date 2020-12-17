@@ -17,7 +17,8 @@ from django.conf.urls import url
 
 # import views
 from main.views import home, weather, location, denied, stats
-from login.views import login, logout
+from main.views import ai
+from login.views import login, logout, plot
 
 # import django admin, access admin only loged in users
 from django.contrib.auth.decorators import login_required # LOGIN
@@ -42,8 +43,14 @@ urlpatterns = [
 # ACCESS DENIIED
     path('access_denied/', denied, name='access_denied'),
 
-# BUTTON
-#    path('button/', include('button.urls')),
+
+# !!!!!!!!!!!!!!!!!!!!!!!
+# !!!!! MAP PLOTTER !!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!
+    path('plot/', plot),
+
+# AI TESTI
+    path('ai/', ai),
 
 # JOBS
     path('jobs/', include('jobs.urls')),

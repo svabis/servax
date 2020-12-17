@@ -2,8 +2,6 @@
 from django.db.models import Max, Min
 from django.conf import settings
 
-from django.utils.timezone import make_aware
-
 from smhouse.models import Location, TermoPlace, TermoReading
 
 from datetime import datetime, timedelta
@@ -14,15 +12,11 @@ import os
 
 import math
 
-
-
 def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
    # output image parameters
-    gh, w_h, g_wh = 420, [1520, 450], [40,1480]
+    gh, w_h, g_wh = 390, [1520, 420], [40,1480]
     ax_col, gr_col = "#333", "#aaa"
     txtp = [10, 1495]
-    minmax_txt_loc = [ 50, 150, 250, 350, 450, 550, 650 ]
-
 
    # TermoAdress
     termo = Location.objects.get(slug = slug)
@@ -39,7 +33,7 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
         return False
 
    # get Dateime range & array for x-axis (full hours)
-    d_start, d_end = make_aware(datetime.now() - timedelta(hours=day_h)), make_aware(datetime.now())
+    d_start, d_end = datetime.now() - timedelta(hours=day_h), datetime.now()
 
    # Start Hour
     if x_s == 1:
@@ -85,7 +79,6 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
         try:
             if float(t_max[ data + '__max']) >= max:
                 max = math.ceil( float(t_max[ data + '__max']) )
-                max_old = int( t_max[ data + '__max'] )
         except:
             pass
 
@@ -98,65 +91,50 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
 
     y_k = -350/(max - min)
 
+   # Draw y-axis legend
 
-   # IF NO DATA IN THIS PERIOD --> don't draw y axis
-    if max != -20 and min != 60:
+   # max 'C
+    draw.line([g_wh[0], ((max-min)*y_k)+gh, g_wh[1], ((max-min)*y_k)+gh], fill="#A52A2A", width = 0)
+    draw.text([txtp[0], ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128))
+    draw.text([txtp[1], ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128))
 
-       # Draw y-axis legend
-       # max 'C
-        draw.line([g_wh[0], ((max-min)*y_k)+gh, g_wh[1], ((max-min)*y_k)+gh], fill="#A52A2A", width = 0)
-        draw.text([txtp[0], ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128))
-        draw.text([txtp[1], ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128))
+   # min 'C
+#    draw.line([g_wh[0], ((min-min)*y_k)+gh, 1480, ((min-min)*y_k)+gh], fill="#2a55a5", width = 0)
+    draw.text([txtp[0], ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128))
+    draw.text([txtp[1], ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128))
 
-       # min 'C
-#        draw.line([g_wh[0], ((max_old-min)*y_k)+gh, g_wh[1], ((max_old-min)*y_k)+gh], fill="#2a55a5", width = 0)
-        draw.text([txtp[0], ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128))
-        draw.text([txtp[1], ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128))
+   # calculate y-axis step
+    step = [1,  1,2,2,5,5,  5,5,10,10,10,  10,10,10,10,10,  10,10,20,20,20 ]
+    amp = round( float((max-min) /5) )
 
-       # calculate y-axis step
-        step = [1,  1,2,2,5,5,  5,5,10,10,10,  10,10,10,10,10,  10,10,20,20,20 ]
-        amp = round( float((max-min) /5) )
+   # calculated 'C
+    for t in range(-50, 100, step[amp]):
+        c = ((t-min)*y_k)+gh
+        if 21 <= c < gh:
+            draw.line([g_wh[0], c, g_wh[1], c], fill=gr_col, width = 0)
+            draw.text([txtp[0], c-5], str(t), fill=(0,0,0,128))
+            draw.text([txtp[1], c-5], str(t), fill=(0,0,0,128))
 
-       # calculated 'C
-        for t in range(-50, 100, step[amp]):
-            c = ((t-min)*y_k)+gh
-#            if g_wh[0] < c < gh:
-            if 70 < c < gh:
-                draw.line([g_wh[0], c, g_wh[1], c], fill=gr_col, width = 0)
-                draw.text([txtp[0], c-5], str(t), fill=(0,0,0,128))
-                draw.text([txtp[1], c-5], str(t), fill=(0,0,0,128))
-
-       # 0'C
-        zero = ((0-min)*y_k)+gh
-        if g_wh[0] < zero < gh:
-            draw.line([g_wh[0], zero, g_wh[1], zero], fill="#2a55a5", width = 0)
-            draw.text([txtp[0], zero-5], "0", fill=(42,85,165,128))
-            draw.text([txtp[1], zero-5], "0", fill=(42,85,165,128))
+   # 0'C
+    zero = ((0-min)*y_k)+370
+    if 21 < zero < gh:
+        draw.line([g_wh[0], zero, g_wh[1], zero], fill="#2a55a5", width = 0)
+        draw.text([txtp[0], zero-5], "0", fill=(42,85,165,128))
+        draw.text([txtp[1], zero-5], "0", fill=(42,85,165,128))
 
     img.save( settings.MEDIA_ROOT + 'smhouse/termo/' + slug + '_' + name + '_back_' + str(ambient) + '.png' )
 
 
+
+
    # iterate Graph's
-    for i, t in enumerate( tp ):
+    for t in tp:
        # TermoReaings
         tr = TermoReading.objects.filter(place=t, date__range=[d_start, d_end]).order_by('-date')
 
        # layer with Transparent backgroung
         img = Image.new('RGBA', w_h, (255, 0, 0, 0))
         draw = ImageDraw.Draw( img )
-
-       # min max
-        obj_max = tr.aggregate(Max( data ))
-        obj_min = tr.aggregate(Min( data ))
-
-#        print( obj_max )
-#        print( type(obj_max) )
-#        print( obj_max.keys() )
-
-        if obj_max.get(data+"__max") is not None:
-            draw.text([minmax_txt_loc[i],10], "MAX " + str( obj_max.get(data+"__max") ), fill=t.color)
-        if obj_min.get(data+"__min") is not None:
-            draw.text([minmax_txt_loc[i],20], "MIN " + str( obj_min.get(data+"__min") ), fill=t.color)
 
        # plot reaings data
         for r in tr:
@@ -191,4 +169,4 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
     return True
 
 #draw_termo("rpz", 24, 24, "%H", 1, "day", True)
-#draw_termo("rpz", 168, 7, "%d", 2, "week", True)
+draw_termo("rpz", 168, 7, "%d", 2, "week", True)

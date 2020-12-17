@@ -255,7 +255,7 @@
     <ul id="smarthouse" class="sub-menu collapse">
      <a href="/sm_house/electro/"><li><i></i>
       <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> &nbsp; Elektro Patēriņš</li></a>
-     <a href="/sm_house/termo/"><li><i></i>
+     <a href="/sm_house/termo/{% if username.username == "svabis" %}rpz/{% endif %}"><li><i></i>
       <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras</li></a>
      <a href="/sm_house/led/"><li><i></i>
       &nbsp;<span class="fa fa-lightbulb-o" aria-hidden="true"></span> &nbsp;&nbsp; Apgaismojums</li></a>
@@ -285,6 +285,21 @@
 {% endfor %}
 {# <!--{% endif %}--> #}
 
+{# <!-- "GRUPA misc" --> #}
+{% for g in username.groups.all %}
+  {% ifequal g.name "misc" %}
+    <li id="misc_list" data-toggle="collapse" data-target="#miscsection" class="collapsed" onclick="saveNavs(this);">
+     <i></i> <span class="glyphicon glyphicon-console" aria-hidden="true"></span> &nbsp; Dažādas muļķibas<span class="arrow"></span>
+    </li>
+    <ul id="miscsection" class="sub-menu collapse">
+     <a href="/plot/"><li><i></i>
+      <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> &nbsp; MAP Plot</li></a>
+     <a href="/ai/"><li><i></i>
+      <span class="fa fa-bug"></span> &nbsp; Life</li></a>
+    </ul>
+  {% endifequal %}
+{% endfor %}
+
    </ul>
   </div>
  </div>
@@ -299,10 +314,8 @@
 {# <!-- FOOTER AND VERTICAL NAV BUTTONS START --> #}
 <div id="footer" class="container-fluid"></div>
 <button id="back_to_top" type="button" class="btn btn-warning">
-{# <span class="glyphicon glyphicon-open" aria-hidden="true"> </span> #}
  <i class="fa fa-arrow-up" style="font-size:20px"></i>&nbsp;&nbsp;Uz lapas augšu</button>
 <button id="go_to_bottom" type="button" class="btn btn-warning">
-{# <span class="glyphicon glyphicon-save" aria-hidden="true"> </span> #}
  <i class="fa fa-arrow-down" style="font-size:20px"></i>&nbsp;&nbsp;Uz lapas leju</button>
 {# <!-- FOOTER AND VERTICAL NAV BUTTONS END --> #}
 

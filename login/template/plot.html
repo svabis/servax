@@ -11,10 +11,10 @@
  <link href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet"/>
 
 <script>
-{# "Target's GPS coordinates." #}
-var lat = '56.9687926'; var lon = '24.6827413'; var map;
+{# <!-- "Target's GPS coordinates." --> #}
+var lat = '56.9496487'; var lon = '24.105186399997'; var map;
 
-{# "GET LOCATION FROM BUTTON CLICK" #}
+{# <!-- "GET LOCATION FROM BUTTON CLICK" --> #}
 function getLocation() {
   var element = document.getElementById("osm-map");
   if (navigator.geolocation) {
@@ -23,9 +23,14 @@ function getLocation() {
 }
 function setPosition(position) {
   lat = position.coords.latitude; lon = position.coords.longitude; showPosition();
+  console.log( lat );
+  console.log( lon );
+//  $("#output").text(lat+"  "+lon);
+  $("#id_lat").val(lat);
+  $("#id_lon").val(lon);
 }
 
-{# "SHOW INITIAL POSITION OR RELOAD FROM BUTTON CLICK FUNCTION" #}
+{# <!-- "SHOW INITIAL POSITION OR RELOAD FROM BUTTON CLICK FUNCTION" --> #}
 function showPosition() {
   var element = document.getElementById("osm-map");
  {# "RESET MAP IF NEEDED" #}
@@ -42,6 +47,10 @@ function showPosition() {
   map.setView(target, 15);
  {# "Place a marker on the same location." #}
   L.marker(target).addTo(map);
+{# <OUTPUTS NO DB>#}
+{% for d in data %}
+  L.circle( [ '{{d.lat}}' , '{{d.lon}}' ], {color:'{{ d.radio }}', fillColor:'#f03', fillOpacity:0.5, radius:3}).addTo(map);
+{% endfor %}
 }
 
 $(document).ready(function () { showPosition(); });
@@ -50,28 +59,31 @@ $(document).ready(function () { showPosition(); });
 
 
 
+{# <!-- CONTENT --> #}
+{% block content %}
 
 {# <!-- "GRUPA misc" --> #}
 {% for g in username.groups.all %}
   {% ifequal g.name "misc" %}
 <div class="table-responsive" style="margin-top: 10px;">
+<form action="/plot/" method=POST>
  <a href="#" onclick="getLocation()">
   <button type="button" class="btn btn-danger btn-sm" style="margin-left: 5px;">
    <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"></span> GET LOCATION</button>
  </a>
- <a href="/login/map/">
-  <button type="button" class="btn btn-success btn-sm pull-right" style="margin-left: 5px;">
-   <span class="glyphicon glyphicon glyphicon-floppy-save" aria-hidden="true"></span> SAVE</button>
- </a>
+{% csrf_token %}
+{{ form }}
+ <button type="submit" class="btn btn-success btn-sm pull-right" style="margin-left: 5px;">
+  <span class="glyphicon glyphicon glyphicon-floppy-save" aria-hidden="true"></span> SAVE</button>
+</form>
 </div>
+
+
+<p id="output"></p>
 
   {% endifequal %}
 {% endfor %}
 
-
-
-{# <!-- CONTENT --> #}
-{% block content %}
 <div class="table-responsive" style="margin-top: 5px;">
  <center>
   <div id="osm-map"></div>

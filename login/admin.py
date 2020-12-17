@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
-from login.models import User_data, Live_video, Server_Task
+from login.models import User_data, Live_video, Server_Task, MapPlot
 
 
 class User_dataAdmin(admin.ModelAdmin):
@@ -34,6 +35,15 @@ class Server_TaskAdmin(admin.ModelAdmin):
     list_filter = ['task_type', 'task_time', 'task_status', 'task_wait']
     list_display = ['task_type', 'task_object', 'task_time', 'task_input', 'task_output', 'task_status', 'task_wait']
 
+class MapPlotAdmin(admin.ModelAdmin):
+    fields = ['date', 'mark', 'lat', 'lon', 'radio', 'chk_1', 'chk_2', 'chk_3']
+    list_filter = ['date', 'radio', 'chk_1', 'chk_2', 'chk_3']
+    list_display = ['date', 'mark', 'lat', 'lon', 'radio', 'chk_1', 'chk_2', 'chk_3']
+
+
+
 admin.site.register(User_data, User_dataAdmin)
 admin.site.register(Live_video, Live_videoAdmin)
 admin.site.register(Server_Task, Server_TaskAdmin)
+
+admin.site.register(MapPlot, MapPlotAdmin)

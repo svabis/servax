@@ -17,34 +17,34 @@ function jobScrollControl() { setInterval(function(){ document.cookie = "jobs_sc
 </script>
 {% endif %}
 
-{% if mobile_browser %}
-<div class="col-xs-12 col-sm-12" id="jobs-menu">
- <div class="nav-side-menu">
-  <div style="height: 50px; width:100%;"></div>
-  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#jobs-content"></i>
-  <div class="jobs-list">
-   <ul id="jobs-content" class="menu-content collapse out">
-{% else %}
+{#<!--{% if mobile_browser %}-->#}
+{#<div class="col-xs-12 col-sm-12" id="jobs-menu"> #}
+{# <div class="nav-side-menu"> #}
+{#  <div style="height: 50px; width:100%;"></div> #}
+{#  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#jobs-content"></i> #}
+{#  <div class="jobs-list"> #}
+{#   <ul id="jobs-content" class="menu-content collapse out"> #}
+{#<!--{% else %}-->#}
 <div class="container-fluid">
  <div class="navbar-collapse">
   <ul class="nav nav-tabs">
-{% endif %}
+{#<!--{% endif %}-->#}
 
    <a href="/jobs/marked/"><li {% if active_tab == 1 %}class="active"{% endif %}><i></i>&nbsp;
-    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>&nbsp; Izceltie darbi</a></li>
+    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>{% if mobile_browser == False %}&nbsp; Izceltie darbi{% endif %}</a></li>
    <a href="/jobs/to_do/"><li {% if active_tab == 2 %}class="active"{% endif %}><i></i>&nbsp;
-    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp; Veicamie darbi</a></li>
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>{% if mobile_browser == False %}&nbsp; Veicamie darbi{% endif %}</a></li>
    <a href="/jobs/done/"><li {% if active_tab == 3 %}class="active"{% endif %}><i></i>&nbsp;
-    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>&nbsp; Pabeigtie darbi</a></li>
+    <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>{% if mobile_browser == False %}&nbsp; Pabeigtie darbi{% endif %}</a></li>
    <a href="/jobs/canceled/"><li {% if active_tab == 4 %}class="active"{% endif %}><i></i>&nbsp;
-    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>&nbsp; Darbi kuri nav jāveic</a></li>
+    <span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>{% if mobile_browser == False %}&nbsp; Darbi kuri nav jāveic{% endif %}</a></li>
    <a href="/jobs/add/"><li {% if active_tab == 5 %}class="active"{% endif %}><i></i>&nbsp;
-    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>&nbsp; Pievienot jaunu darbu</a></li>
+    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>{% if mobile_browser == False %}&nbsp; Pievienot jaunu darbu{% endif %}</a></li>
   </ul>
  </div>
 </div>
 
-{% if mobile_browser %}</div>{% endif %}
+{#<!--{% if mobile_browser %}</div>{% endif %}-->#}
 
 {% if marking %}
  <button class="pull-right btn btn-warning" type="button" id="markingbtn" onclick="markID();">
@@ -106,6 +106,5 @@ function jobScrollControl() { setInterval(function(){ document.cookie = "jobs_sc
    .nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; }
 
 {# NOT SURE ABOUT NEXT ONE #}
-   .tab-content{ background-color:#303136; color:#fff; padding:5px }
+{#<!--   .tab-content{ background-color:#303136; color:#fff; padding:5px } -->#}
 {% endblock %}
-

@@ -6,7 +6,10 @@ from datetime import datetime, date, timedelta
 # JOBS START
 def sort1(job):
     today = date.today()
-    oldestDate = job.order_by('jobs_date_added')[0].jobs_date_added
+    try:
+        oldestDate = job.order_by('jobs_date_added')[0].jobs_date_added
+    except:
+        oldestDate = today
     listEnd = True
 
     jobs = []
@@ -25,7 +28,10 @@ def sort1(job):
 
 def sort2(job):
     today = date.today()
-    oldestDate = job.order_by('jobs_date_added')[0].jobs_date_added
+    try:
+        oldestDate = job.order_by('jobs_date_added')[0].jobs_date_added
+    except:
+        oldestDate = today
     listEnd = True
 
     jobs = []
@@ -64,7 +70,10 @@ def sort8(job):
 # JOBS DONE
 def sort9(job):
     today = date.today()
-    oldestDate = job.order_by('jobs_date_done')[0].jobs_date_done
+    try:
+        oldestDate = job.order_by('jobs_date_done')[0].jobs_date_done
+    except:
+        oldestDate = today
     listEnd = True
 
     jobs = []
@@ -84,7 +93,10 @@ def sort9(job):
 
 def sort10(job):
     today = date.today()
-    oldestDate = job.order_by('jobs_date_done')[0].jobs_date_done
+    try:
+        oldestDate = job.order_by('jobs_date_done')[0].jobs_date_done
+    except:
+        oldestDate = today
     listEnd = True
 
     jobs = []

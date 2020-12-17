@@ -2,9 +2,9 @@ $(document).ready(function(){
     let placeToDrop = '';
     let element = '';
     const fake = $("#fake");
-    $("tr[draggable='true']").on("dragstart", function(){
-        element = $(this);
-//        element.hide();
+    $("tr[draggable='true']").on("dragstart", function(e){
+//        e.preventDefault();
+        element = $(this); //        element.hide();
         $(fake).outerHeight($(this).outerHeight());
     })
 
@@ -33,6 +33,17 @@ $(document).ready(function(){
 // Double Click
     $("tr[draggable='true']").dblclick(function() {
         var row = $(this);
+        var parent = $(this).parent().children();
+        var first = parent.eq(0).find("td:first").html();
+        var last = parent.eq( parent.length-1 );
+
+//        console.log( parent );
+//        console.log( parent.length );
+//        console.log( parent.eq( parent.length-2 ).find("td:first").html() );
+//        console.log( row.find("td:first").html() );
+//        console.log( first );
+//        console.log( row.find("td:first").html() == first );
+
         $(this).fadeOut("slow");
         setTimeout( function(){
             $('#table tr:first').before( row );

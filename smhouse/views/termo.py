@@ -34,6 +34,7 @@ def smhouse_termo(request, slug=""):
     args['termo_day']   = [datetime.now(), datetime.now() - timedelta(hours=24)]
     args['termo_week']  = [datetime.now(), datetime.now() - timedelta( days= 7)]
     args['termo_month'] = [datetime.now(), datetime.now() - timedelta( days=30)]
+    args['termo_year']  = [datetime.now(), datetime.now() - timedelta(days=365)]
 
    # Get Termo Adress for tabs
     adress = Location.objects.all().order_by('order')
@@ -46,35 +47,25 @@ def smhouse_termo(request, slug=""):
     a = Location.objects.get( slug = slug )
     args['slug'] = slug
 
-    out_data = []
+    args['data'] = TermoPlace.objects.filter( where = a ).order_by('order')
 
-    if True:
-#    for a in adress:
-        args['data'] = TermoPlace.objects.filter( where = a ).order_by('order')
+   # latest data
+    l_data = []
+    for p in args["data"]:
+        temp = TermoReading.objects.filter( place=p, date__range=[datetime.now() - timedelta(hours=24), datetime.now()] ).order_by('-date')
+        l_data.append( [p, temp] )
+    args["l_data"] = l_data
 
-       # TermoPlaces
-        args['data_ambient'] = TermoPlace.objects.filter( where = a, ambient = True )
-        args['data_data'] = TermoPlace.objects.filter( where = a, ambient = False )
-        args['data_humy'] = TermoPlace.objects.filter( where = a )
 
-       # Draw Termo day
-        draw_termo(a.slug, 24, 24, "%H", 1, "day", True)
-        draw_termo(a.slug, 24, 24, "%H", 1, "day", False)
-        draw_termo(a.slug, 24, 24, "%H", 1, "day", None)
+   # TermoPlaces
+    args['data_ambient'] = TermoPlace.objects.filter( where = a, ambient = True )
+    args['data_data'] = TermoPlace.objects.filter( where = a, ambient = False )
+    args['data_humy'] = TermoPlace.objects.filter( where = a )
 
-#        if False in data:
-#            data = False
-#        else:
-#            data = True
-
-       # output is shown or not
-#        out_data.append(data)
-
-#    temp = []
-#    for i, a in enumerate(adress):
-#         temp.append( [a, out_data[i]] )
-#    args['adress'] = temp
-
+   # Draw Termo day
+    draw_termo(a.slug, 24, 24, "%H", 1, "day", True)
+    draw_termo(a.slug, 24, 24, "%H", 1, "day", False)
+    draw_termo(a.slug, 24, 24, "%H", 1, "day", None)
 
     response = render( request, 'termo.html', args )
     response.set_cookie( key='page_loc', value='/sm_house/termo/', path='/' )

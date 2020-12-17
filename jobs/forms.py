@@ -32,7 +32,7 @@ class JobsForm(ModelForm):
             'jobs_descr': forms.Textarea(attrs={'class': 'form-control', 'rows' : '5'}),
             'jobs_zone': forms.Select(attrs={'class': 'form-control'}),
             'jobs_type': forms.Select(attrs={'class': 'form-control'}),
-            'marked': forms.CheckboxInput(attrs={'class': 'form-control'})
+            'marked': forms.CheckboxInput(attrs={'class': 'form-control', 'style':'margin-left:0px;'})
         }
 
     def __init__(self, *args, **kwargs):

@@ -37,6 +37,17 @@ def dst(test_date):
     else:
         return test_date + datetime.timedelta(hours=2)
 
+# AI TESTI
+def ai(request):
+    args = create_args(request)
+    args['title'] = 'Viss ir slikti | Svabwilla'
+    args['heading'] = 'Viss ir slikti'
+
+    response = render(request, 'ai.html', args)
+    response.set_cookie( key='page_loc', value='/ai/', path='/' )
+    return response
+
+
 # ACCESS DENIED
 def denied(request):
     args = create_args(request)

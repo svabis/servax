@@ -16,7 +16,7 @@ import json
 #import unicodedata
 
 
-media = "/var/www/svabwilla.svabis.eu/media/"
+media = "/var/www/svabis.eu/media/"
 #home_folder = "/home/"
 task_folder = "/home/alex/skripti/video/tasks/"
 
@@ -53,16 +53,16 @@ class Command(BaseCommand):
 
     c = 0
     for t in task:
-     # Process only 10 at one run
+     # Process stop at count in one run
       c += 1
-      if c > 10:
+      if c > 20:
         return
 
       if DEBUG:
         print( datetime.now() )
 
       if DEBUG:
-        print( "TASK: " + t )
+        print( "TASK: " + t.task_type + " | " + t.task_input )
 
       try:
         os.system("cp " + media + t.task_input + " " + task_folder + "input.mp4" + console_out)
@@ -78,6 +78,7 @@ class Command(BaseCommand):
 
          # CLEANUP RECIEVED FILE
           os.remove(task_folder + t.task_output)
+          os.remove(task_folder + t.task_input)
 
           t.task_wait = False
           t.task_status = True

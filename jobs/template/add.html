@@ -31,16 +31,12 @@ if ( getCookie('job_added') == "true" ) { $("#addMsg").show(); setTimeout( funct
 {# on page leave if textarea contains something ask "are you sure you want to leave?" #}
 var sub = false;
 $(window).bind('beforeunload', function(){
-  if ( $("#id_jobs_descr").val() != "" ) {
-    if ( sub == false ) {
-      return 'Vai tiešām pamest šo lapu?';
-    }
-  }
+  if ( $("#id_jobs_descr").val() != "" ) { if ( sub == false ) { return 'Vai tiešām pamest šo lapu?'; } }
 });
 </script>
 
 {# <!-- "Darbs" --> #}
- <div class="col-md-12">
+ <div class="col-md-12 col-sm-12 col-xs-12">
   <div class="form-group">
    <label for="{{ form.jobs_descr.id_for_label }}">Darba uzdevums:</label>
     {{ form.jobs_descr.errors }}
@@ -48,59 +44,49 @@ $(window).bind('beforeunload', function(){
   </div>
  </div>
 <script>
-let minHeight = document.getElementById("id_jobs_descr").clientHeight + 2;
-let maxHeight = 400;
+let minH = document.getElementById("id_jobs_descr").clientHeight + 2; let maxH = 400;
 
-function FitToContent(text)
-{
-   {# "elementa augstums" #}
-   var adjustedHeight = text.clientHeight;
-
-   {# "pārbauda vai augstums jau nepārsniedz maksimālo" #}
-   if ( maxHeight > adjustedHeight ) {
-      // mazākais no abiem (maksimālā vērtība un pašreizējā)
-      adjustedHeight = Math.min( maxHeight, adjustedHeight);
-
-      if ( adjustedHeight > text.clientHeight ) {
-         text.style.height = adjustedHeight + "px";
-      // neiet zem min augstuma (sākotnējā)
-      } else if ( minHeight > text.scrollHeight ) {
-         text.style.height = minHeight + "px";
-      } else {
-         text.style.height = text.scrollHeight + "px";
-      }
-   }
+function FitToContent( t ) {
+{# <!-- elementa augstums --> #}
+  var aH = t.clientHeight;
+{# <!-- pārbauda vai augstums jau nepārsniedz maksimālo --> #}
+  if ( maxH > aH ) {
+{# <!-- mazākais no abiem (maksimālā vērtība un pašreizējā) --> #}
+    aH = Math.min( maxH, aH);
+    if ( aH > t.clientHeight ) { t.style.height = aH + "px";
+{# <!-- neiet zem min augstuma (sākotnējā) --> #}
+    } else if ( minH > t.scrollHeight ) {
+      t.style.height = minH + "px";
+    } else {
+      t.style.height = t.scrollHeight + "px";
+    }
+  }
 }
 
-window.onload = function() {
-    document.getElementById("id_jobs_descr").onkeyup = function() {
-      FitToContent( this )
-    };
-}
-//$("#id_jobs_descr").
+window.onload = function() { document.getElementById("id_jobs_descr").onkeyup = function() { FitToContent( this ) }; }
 </script>
 {# <!-- "Darbs" --> #}
 
 {# <!-- Izcelt darbu rinda --> #}
- <div class="col-md-10">
-  <div class="form-group">
+ <div class="col-md-10 col-sm-10 col-xs-10">
+  <div class="form-group" style="margin-top:10px;">
    <label for="{{ form.marked.id_for_label }}">Izcelt darbu?</label>
    {{ form.marked.errors }} 
   </div>
  </div>
 
- <div class="col-md-2">
+ <div class="col-md-2 col-sm-2 col-xs-2">
    <div class="checkbox" style="margin-top: 0px;">
     {{ form.marked }}
    </div>
  </div>
 
- <div class="col-md-10" id="hiddenLabel" style="margin-top:15 px;">
-  <div class="form-group">
+ <div class="col-md-10 col-sm-8 col-xs-8" id="hiddenLabel" style="margin-top:15 px;">
+  <div class="form-group" style="margin-top:10px;">
    <label>Uz cik dienām izcelt darbu?</label>
   </div>
  </div>
- <div class="col-md-2" id="hiddenInput">
+ <div class="col-md-2 col-sm-4 col-xs-4" id="hiddenInput">
   <div class="form-group">
    <input class="form-control" type="number" name="time" min="1" max="90" style="margin-top: 4px;">
   </div>
@@ -115,7 +101,7 @@ $("#id_marked").click(function() {
 </script>
 
 {# <!-- Darbu zona/veids un submit poga --> #}
- <div class="col-md-12">
+ <div class="col-md-12 col-sm-12 col-xs-12">
   <div class="form-group">
    <label for="{{ form.jobs_zone.id_for_label }}">Darba zona:</label>
     {{ form.jobs_zone.errors }}

@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+
+{% block style %}
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+
+</script>
+{% endblock %}
+
+
+{% block content %}
+{# <div class="table-responsive" style="margin-top: 5px;"> #}
+<div style="margin-top: 5px;">
+ <center>
+<!--  <canvas id="lifeCanvas" width="900" height="450" style='background-image: url("/media/stream/life.jpg")'></canvas> -->
+  <canvas id="lifeCanvas" width="900" height="450" style="background-color: #000;"></canvas>
+ </center>
+</div>
+
+<script>
+var c = document.getElementById("lifeCanvas");
+var ctx = c.getContext("2d");
+
+//c.width = theDiv.clientWidth;
+
+function redraw() {
+  var img = new Image;
+  img.src = "/media/stream/life.jpg" + "?" + (new Date()).getTime();
+
+  if (img.complete){
+    ctx.drawImage(img,0,0);
+  }else{
+    img.onload = function () {                            
+      ctx.drawImage( img,0,0);
+    };                                              
+  }
+//  console.log( img );
+}
+
+var t = setInterval(redraw, 1000);
+
+function stop() {
+  clearInterval(t);
+}
+
+setTimeout(stop, 6*60000);
+//document.addEventListener( "keydown", stop );
+
+
+</script>
+{% endblock %}

@@ -4,11 +4,11 @@
 {% block termo_data %}
 
 <div class="tab-content">
-<!--  <div id="{{ a.0.slug }}" class="tab-pane fade{% if a.0.order == 1 %} in active{% endif %}"> -->
   <div id="{{ a.0.slug }}" class="tab-pane fade in active">
 {# <!-- "Location DATI START" --> #}
 
-{# <!-- "Legend" --> #}
+{# <!-- "Legend START" --> #}
+{% if mobile_browser == False %}
  <div class="termo_btn_box" id="termo_btn_box">
   <button class="btn btn-warning" id="btn_data_show" style="margin-right: 32px;color: #000;"><i class="fa fa-angle-double-left"></i></button>
   <button class="btn" id="btn_data_ta"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> <i class="fa fa-thermometer"></i></button>
@@ -18,6 +18,22 @@
   <button class="btn" style="background-color:{{ img.color }};" id="btn_data_{{ img.order }}">{{ img.place }}</button>
 {% endfor %}
  </div>
+{% endif %}
+{# <!-- "Legend END" --> #}
+
+{# <!-- "Newest data START" --> #}
+    <div style="padding: 5px;"></div>
+    <h5>Pēdējie sensoru dati, nav teikts ka šī momenta, ja sensors "neatbild"</h5>
+{% for ld in l_data %}
+{% if ld.1.0.humy != None or ld.1.0.temp != None %}
+    <button class="btn" style="background-color:{{ ld.0.color }};"><b>{{ ld.0.place }}
+     <i class="fa fa-thermometer"></i> {{ ld.1.0.temp }} 
+     {% if ld.1.0.humy != None %}<i class="fa fa-tint"></i> {{ ld.1.0.humy }}{% endif %}</b>
+    </button>
+{% endif %}
+{% endfor %}
+    <hr>
+{# <!-- "Newest data END" --> #}
 
     <h4>
      <span id="day_eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
@@ -126,14 +142,17 @@
 
 
     <hr>
-{#    <h4><b>GADS</b> {{ termo_year.0|date:"d/m/Y H:i" }} - {{ termo_year.1|date:"d/m/Y H:i" }}</h4> #}
+    <h4>
+     <span id="rand_eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+     <b>GADS</b> {{ termo_year.0|date:"d/m/Y H:i" }} - {{ termo_year.1|date:"d/m/Y H:i" }}
+    </h4>
 
 
 
-<div class="row" id="data_rand_row" style="display:none;">
+<div class="row" id="data_rand_row">
 <div class="container-fluid">
 {# <!-- "RAND OUTSIDE" --> #}
- <div class="termo_parent" id="data_a_rand_p">
+ <div class="termo_parent data_termo_ta" id="data_a_rand_p">
    <img id="data_a_rand" class="termo_img termo_layer" src="/media/smhouse/termo/{{ slug }}_rand_back_True.png">
 {% for img in data_ambient %}
    <img id="data_rand_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ slug }}_rand_temp_{{ img.order }}.png">
@@ -141,7 +160,7 @@
  </div>
 
 {# <!-- "RAND INSIDE" --> #}
- <div class="termo_parent" id="data_d_rand_p">
+ <div class="termo_parent data_termo_td" id="data_d_rand_p">
    <img id="data_d_rand" class="termo_img termo_layer" src="/media/smhouse/termo/{{ slug }}_rand_back_False.png">
 {% for img in data_data %}
    <img id="data_rand_temp_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ slug }}_rand_temp_{{ img.order }}.png">
@@ -149,7 +168,7 @@
  </div>
 
 {# <!-- "RAND HUMIDITY" --> #}
- <div class="termo_parent" id="data_h_rand_p">
+ <div class="termo_parent data_termo_h" id="data_h_rand_p">
    <img id="data_h_rand" class="termo_img termo_layer" src="/media/smhouse/termo/{{ slug }}_rand_back_None.png">
 {% for img in data_humy %}
    <img id="data_rand_humy_{{ img.order }}" class="termo_img termo_layer" src="/media/smhouse/termo/{{ slug }}_rand_humy_{{ img.order }}.png">
@@ -174,6 +193,7 @@ function resizeImages_r() {
   h = $("#data_a_rand").height(); $("#data_a_rand_p").height( h + 15 );
   h = $("#data_d_rand").height(); $("#data_d_rand_p").height( h + 15 );
   h = $("#data_h_rand").height(); $("#data_h_rand_p").height( h + 15 );
+  scrollControl();
 }
 
 function resizeImages_m() {
@@ -182,7 +202,6 @@ function resizeImages_m() {
   h = $("#data_d_month").height(); $("#data_d_month_p").height( h + 15 );
   h = $("#data_h_month").height(); $("#data_h_month_p").height( h + 15 );
   setTimeout( function(){ resizeImages_r(); }, 1000);
-  scrollControl();
 }
 function resizeImages_w() {
   var h;
@@ -232,21 +251,28 @@ setTimeout( function(){ $(".data_termo_h").toggle(); }, 3000);
 
 {# <!-- day/week/month show hide --> #}
   $("#day_eye").click(function(){
-    $("#day_row").toggle();
+    $("#data_day_row").toggle();
     if( $(this).hasClass("glyphicon-eye-open") == true) {
       $(this).addClass("glyphicon-eye-close"); $(this).removeClass("glyphicon-eye-open"); }
     else {
       $(this).addClass("glyphicon-eye-open"); $(this).removeClass("glyphicon-eye-close"); }
   });
   $("#week_eye").click(function(){
-    $("#week_row").toggle();
+    $("#data_week_row").toggle();
     if( $(this).hasClass("glyphicon-eye-open") == true) {
       $(this).addClass("glyphicon-eye-close"); $(this).removeClass("glyphicon-eye-open"); }
     else {
       $(this).addClass("glyphicon-eye-open"); $(this).removeClass("glyphicon-eye-close"); }
   });
   $("#month_eye").click(function(){
-    $("#month_row").toggle();
+    $("#data_month_row").toggle();
+    if( $(this).hasClass("glyphicon-eye-open") == true) {
+      $(this).addClass("glyphicon-eye-close"); $(this).removeClass("glyphicon-eye-open"); }
+    else {
+      $(this).addClass("glyphicon-eye-open"); $(this).removeClass("glyphicon-eye-close"); }
+  });
+  $("#rand_eye").click(function(){
+    $("#data_rand_row").toggle();
     if( $(this).hasClass("glyphicon-eye-open") == true) {
       $(this).addClass("glyphicon-eye-close"); $(this).removeClass("glyphicon-eye-open"); }
     else {
