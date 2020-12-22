@@ -1,6 +1,8 @@
 {% extends 'main.html' %}
 
+{# <!-- JS BLOCK --> #}
 {% block javascript %}
+{% endblock %}
 <script>
 window.onload = function () { $("input.disabled_checkbox").attr("disabled", true); }
 $(document).ready(function(){
@@ -10,31 +12,23 @@ $(document).ready(function(){
  close.style.display = "block"; hider.children[0].src = event.target.nextSibling.innerHTML; });
 });
 </script>
-{% endblock %}
 
 
+{# <!-- STYLE BLOCK --> #}
 {% block style %}
-/*   .table-hover tbody tr:hover td, .table-hover tbody tr:hover th { background-color: #9b9da0; } */
-/*   .table.table > thead > tr > th { vertical-align:top } */
    a { color: #000; }
    .nav-tabs > li > a{ color: #000; background-color: #ffffb3; }
    .nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; }
 
-   #page_content_div { padding-left: 30px; padding-right: 30px; }
-   .obj_head { background-color: #999; border-top-left-radius: 6px; border-top-right-radius: 6px;
-    border-top: solid #ccc 1px; border-right: solid #ccc 1px; border-left: solid #ccc 1px; }
+   .obj_head { background-color: #999 !important; margin-bottom:0px; }
 
-   .obj_body { background-color: #ccc; padding: 5px 0px 5px 0px; margin-bottom: 8px;
-    border-bottom-left-radius: 6px; border-bottom-right-radius: 6px;
-    border-bottom: solid #ccc 1px; border-right: solid #ccc 1px; border-left: solid #ccc 1px;
-    text-align: justify; text-justify: inter-word; }
-
-   .obj_thumb { display: block; max-width: 100px; max-height: 100px;
-    width: auto; height: auto; margin-left: auto; margin-right: auto;
-    float: left; border: solid #fff 1px; }
+   .media-list { background-color: #ccc; }
+   .media-object { float: left; margin:2px; }
+   .obj_thumb { padding:0px; }
 {% endblock %}
 
 
+{# <!-- CONTENT BLOCK --> #}
 {% block content %}
 <div class="container-fluid" id="objects-menu">
   <div class="navbar-collapse">
@@ -46,70 +40,89 @@ $(document).ready(function(){
 </div>
 
 <div class="tab-content">
-  <div id="actual" class="tab-pane fade in active">
-
+{# <!-- ACTUAL OBJ TAB --> #}
+ <div id="actual" class="tab-pane fade in active">
 {% for d in data %}
-<div class="row obj_head" id="obj_{{ d.0.id }}">
- <div class="col-lg-2 col-md-2 text-center">{{ d.0.obj_added|date:"d/m/Y" }}</div>
- <div class="col-lg-8 col-md-8"><b>{{ d.0.obj_title }}</b></div>
- <div class="col-lg-2 col-md-2">{{ d.0.get_obj_zone_display }}</div>
-</div>
+  <ul class="media-list obj_head" id="obj_{{ d.0.id }}">
+   <li class="media">
+    <div class="media-left">{{ d.0.obj_added|date:"d/m/Y" }}</div>
+    <div class="media-body"><b>{{ d.0.obj_title }}</b></div>
+    <div class="media-right">{{ d.0.get_obj_zone_display }}</div>
+   </li>
+  </ul>
 
-<div class="row obj_body">
-<table>
- <tr>
-  <td style="padding: 0px 10px 0px 20px;">
-   {% for i in d.1 %}{% if i.obj_image_small != "" %}<img class="obj_thumb" src="{{ i.obj_image_small.url }}"><span style="display: none;">{{ i.obj_image_big.url }}
-</span>{% endif %}{% endfor %}
-   <h2 style="margin: 5px 5x 5px 30px; color: #888;">{% for f in d.2 %}{% if f.obj_file.url != '' %}<a href="{{ f.obj_file.url }}">
-    <span style="color: #888;" class="glyphicon glyphicon-save-file" aria-hidden="true"></span></a>{% endif %}{% endfor %}
-   </h2>
-  </td>
- </tr><tr>
-  <td valign="top" style="padding: 5px 25px 5px 25px;">
-   {{ d.0.obj_descr|safe }}{% if d.0.obj_url != None %}
-  </td>
- </tr><tr>
-  <td style="padding: 5px 15px 5px 15px; overflow: hidden;">
-{#   <a target="_blank" href="{{ d.0.obj_url }}">{{ d.0.obj_url }}</a>{% endif %} #}
-   <a target="_blank" href="{{ d.0.obj_url }}" class="text-danger">Links</a>{% endif %}
-  </td>
- </tr>
-</table>
-</div>
+  <ul class="media-list">
+   <li class="media">
+
+     {% for i in d.1 %}{% if i.obj_image_small != "" %}
+    <div class="media-left obj_thumb">
+     <a href="{{ i.obj_image_big.url }}">
+      <img class="media-object" src="{{ i.obj_image_small.url }}">
+     </a>
+    </div>
+     {% endif %}{% endfor %}
+     {% for f in d.2 %}{% if f.obj_file.url != '' %}
+    <div class="media-left obj_thumb">
+     <a href="{{ f.obj_file.url }}">
+      <span style="color: #888; font-size:45px;margin:3px;" class="glyphicon glyphicon-save-file" aria-hidden="true"></span>
+     </a>
+    </div>
+     {% endif %}{% endfor %}
+
+    <div class="media-body">
+     <h5>
+      {{ d.0.obj_descr|safe }}
+     </h5>
+     {% if d.0.obj_url != None %}
+     <a target="_blank" href="{{ d.0.obj_url }}" class="text-danger">Links</a>
+    {% endif %}
+    </div>
+   </li>
+  </ul>
 {% endfor %}
+ </div>
 
-  </div>
-  <div id="old" class="tab-pane fade">
 
+
+{# <!-- OLD OBJ TAB --> #}
+ <div id="old" class="tab-pane fade">
 {% for d in old_data %}
-<div class="row obj_head" id="obj_{{ d.0.id }}">
- <div class="col-lg-2 col-md-2"><center>{{ d.0.obj_added|date:"d/m/Y" }}</center></div>
- <div class="col-lg-8 col-md-8"><b>{{ d.0.obj_title }}</b></div>
- <div class="col-lg-2 col-md-2">{{ d.0.get_obj_zone_display }}</div>
-</div>
+  <ul class="media-list obj_head" id="obj_{{ d.0.id }}">
+   <li class="media">
+    <div class="media-left">{{ d.0.obj_added|date:"d/m/Y" }}</div>
+    <div class="media-body"><b>{{ d.0.obj_title }}</b></div>
+    <div class="media-right">{{ d.0.get_obj_zone_display }}</div>
+   </li>
+  </ul>
 
-<div class="row obj_body">
-<table>
- <tr>
-  <td style="padding: 0px 10px 0px 20px;">
-   {% for i in d.1 %}{% if i.obj_image_small != "" %}<img class="obj_thumb" src="{{ i.obj_image_small.url }}"><span style="display: none;">{{ i.obj_image_big.url }}</span>{% endif %}{% endfor %}
-   <h2 style="margin: 5px 5x 5px 30px; color: #888;">{% for f in d.2 %}{% if f.obj_file.url != '' %}<a href="{{ f.obj_file.url }}">
-    <span style="color: #888;" class="glyphicon glyphicon-save-file" aria-hidden="true"></span></a>{% endif %}{% endfor %}
-   </h2>
-  </td>
- </tr><tr>
-  <td valign="top" style="padding: 5px 25px 5px 25px;">
-   {{ d.0.obj_descr|safe }}{% if d.0.obj_url != None %}
-  </td>
- </tr><tr>
-  <td style="padding: 5px 15px 5px 15px; overflow: hidden;">
-{#   <a target="_blank" href="{{ d.0.obj_url }}">{{ d.0.obj_url }}</a>{% endif %} #}
-   <a target="_blank" href="{{ d.0.obj_url }}" class="text-danger">Links</a>{% endif %}
-  </td>
- </tr>
-</table>
-</div>
+  <ul class="media-list">
+   <li class="media">
+
+     {% for i in d.1 %}{% if i.obj_image_small != "" %}
+    <div class="media-left obj_thumb">
+     <a href="{{ i.obj_image_big.url }}">
+      <img class="media-object" src="{{ i.obj_image_small.url }}">
+     </a>
+    </div>
+     {% endif %}{% endfor %}
+     {% for f in d.2 %}{% if f.obj_file.url != '' %}
+    <div class="media-left obj_thumb">
+     <a href="{{ f.obj_file.url }}">
+      <span style="color: #888; font-size:45px;margin:3px;" class="glyphicon glyphicon-save-file" aria-hidden="true"></span>
+     </a>
+    </div>
+     {% endif %}{% endfor %}
+
+    <div class="media-body">
+     <h5>
+      {{ d.0.obj_descr|safe }}
+     </h5>
+     {% if d.0.obj_url != None %}
+     <a target="_blank" href="{{ d.0.obj_url }}" class="text-danger">Links</a>
+    {% endif %}
+    </div>
+   </li>
+  </ul>
 {% endfor %}
 
   </div>
