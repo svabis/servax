@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+from django.shortcuts import render, redirect
+
+from django.contrib import auth
+
+from login.models import User_data
+
+from .models import MapPlot, MapPlotCity
+from .forms import MapPlotForm
+
+from main.args import create_args
+
+
+# Create your views here.
+# !!!!!
+def plot(request):
+    args = create_args(request)
+    args['title'] = 'Kartes plotteris | Svabwilla'
+    args['heading'] = 'Kartes ploteris'
+
+    args['data'] = MapPlot.objects.all()
+
+    args['form'] = MapPlotForm
+
+    if request.POST: # actions if login Form is submitted
+        form = MapPlotForm( request.POST )
+        if form.is_valid():
+            form.save()
+
+           # Set return to added Point
+            c = request.POST['zoom']
+            response = redirect( '/mapplot/plot/')
+            response.set_cookie( key='view', value=c, path='/', max_age=5 )
+
+            response.set_cookie( key='city', value=request.POST['city'], path='/') #, max_age=5 )
+
+            return response
+
+        else:
+# !!!!! TE IF IR ERRORS FORMAI
+            pass
+
+
+    response = render(request, 'plot.html', args)
+    response.set_cookie( key='page_loc', value='/plot/', path='/' )
+    return response
+
+

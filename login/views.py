@@ -4,8 +4,9 @@ from django.shortcuts import redirect
 
 from django.contrib import auth
 
-from login.models import User_data, MapPlot
-from .forms import MapPlotForm
+from login.models import User_data
+#, MapPlot
+#from .forms import MapPlotForm
 
 from main.args import create_args
 
@@ -52,23 +53,4 @@ def logout(request):
     return redirect('/')
 
 
-
-def plot(request):
-    args = create_args(request)
-    args['title'] = 'Kartes plotteris | Svabwilla'
-    args['heading'] = 'Kartes ploteris'
-
-    args['data'] = MapPlot.objects.all()
-
-    args['form'] = MapPlotForm
-
-    if request.POST: # actions if login Form is submitted
-        form = MapPlotForm( request.POST )
-        if form.is_valid():
-            form.save()
-        
-
-    response = render(request, 'plot.html', args)
-    response.set_cookie( key='page_loc', value='/plot/', path='/' )
-    return response
 

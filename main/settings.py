@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'garden',
     'galery',
 
+# MAP PLOTTING APP
+    'mapplot',
+
 # ZOOM buttons
 #    'button',
 
@@ -74,11 +77,11 @@ TEMPLATES = [
         'DIRS': [
                 '/home/alex/web22/template', '/home/alex/web22/video/template', '/home/alex/web22/login/template', '/home/alex/web22/jobs/template',
                 '/home/alex/web22/smhouse/template', '/home/alex/web22/garden/template', '/home/alex/web22/galery/template',
-#		'/home/alex/web22/button/template',
+		'/home/alex/web22/mapplot/template',
 
 #                '/var/www/svabis.eu/template', '/var/www/svabis.eu/video/template', '/var/www/svabis.eu/login/template', '/var/www/svabis.eu/jobs/template',
 #                '/var/www/svabis.eu/smhouse/template', '/var/www/svabis.eu/garden/template', '/var/www/svabis.eu/galery/template',
-#		 '/var/www/svabis.eu/button/template',
+#		 '/var/www/svabis.eu/mapplot/template',
                 ],
         'APP_DIRS': True,
         'OPTIONS': {

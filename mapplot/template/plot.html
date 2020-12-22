@@ -1,0 +1,284 @@
+{% extends 'map_main.html' %}
+
+{% block style %}
+/*  #osm-map { background-color: lightblue; border: solid black 1px; height: 300px; max-width: 640px; } */
+  #osm-map { background-color: lightblue; border: solid black 1px; height: 95vh; max-height: 95vh; max-width: 90vw; }
+ .btn { min-width:100%; }
+{% endblock %}
+
+
+{% block javascript %}
+ <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+ <link href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet"/>
+
+<script>
+{# <!-- "Starting GPS coordinates" --> #}
+{# var xy = [['56.9496487', '24.105186399997'], ['56.85042697806207', '26.220760345458988'],['56.9471467', '24.004397899999997'],]; #}
+var xy = [['56.85042697806207', '26.220760345458988'],['56.9471467', '24.004397899999997'],];
+
+var map;
+
+let zoom = 14;  {# <!-- starting zoom --> #}
+var taget;     {# <!-- Marker--> #}
+var st = []    {# <!-- Stabu masīvs --> #}
+
+{# <!-- "GET LOCATION FROM GPS" --> #}
+function getLocation() {
+  var element = document.getElementById("osm-map");
+  if (navigator.geolocation) {
+    zoom = 18;
+    navigator.geolocation.getCurrentPosition(setPosition);
+  } else {
+    alert( "Geolocation is not supported by this device." );
+    element.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+{# <!-- "translate geolocation object to coords and transit to map" --> #}
+function setPosition(position) {
+  lat = position.coords.latitude; lon = position.coords.longitude;
+ {# "Target's GPS coordinates." #}
+  var temp_target = L.latLng( lat, lon);
+ {# "Set map's center to target with zoom." #}
+  map.setView(temp_target, zoom);
+ {# "Place a marker on the new location." #}
+  map.removeLayer(target);
+  target = L.marker(temp_target).addTo(map);
+  $("#id_lat").val(lat); $("#id_lon").val(lon);
+}
+
+{# <!--"MAP __init__" --> #}
+function showMap(val) {
+ {# <!--"RESET MAP IF NEEDED" --> #}
+  try { map.remove(); } catch (err) {}
+ {# "Create Leaflet map on map element." #}
+  var element = document.getElementById("osm-map");
+  map = L.map(element);
+ {# "Add OSM tile leayer to the Leaflet map." #}
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { maxZoom: 19, minZoom: 8,
+{#    id: 'mapbox/streets-v11', #}
+{#    id: 'mapbox/satellite-v9', #}
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+ {# "Target's GPS coordinates." #}
+ {# "Set map's center to target with zoom." #}
+ {# "Place a marker on the same location." #}
+  var temp_target = L.latLng( val );
+  map.setView(temp_target, zoom);
+  target = L.marker(temp_target).addTo(map);
+
+{# <OUTPUTS NO DB> #}
+//var myMarker = L.circleMarker(stuSplit, { title: 'unselected' }).addTo(map);
+
+{% for d in data %}
+  var temp = L.circle( [ '{{d.lat}}' , '{{d.lon}}' ], {color:'{{ d.radio }}', fillColor:'{{ d.radio }}', fillOpacity:0.5, radius:3}).addTo(map);
+{% if edit %}{% else %}
+  temp.bindTooltip( "{{ d.mark }}" );
+  temp.bindPopup( "<a href='/mapplot/plot/{{d.id}}/'><b>{{ d.mark }}</b></a><br>{{ d.get_radio_display }}<br>{{d.chk_1}}<br>{{d.chk_2}}<br>{{d.chk_3}}" );
+{% endif %}
+  st.push(temp)
+{% endfor %}
+
+{# <Stabu liste> #}
+  console.log(st);
+  map.on('click', function(e) {
+    $("#id_lat").val(e.latlng.lat); $("#id_lon").val(e.latlng.lng);
+{% if edit %}{% else %}
+    map.panTo([e.latlng.lat, e.latlng.lng]);
+{% endif %}
+    map.removeLayer(target);
+    target = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+  });
+
+{# <initial zoom&location + update on map move> #}
+  $("#id_zoom").val( map.getCenter().lat + ":" + map.getCenter().lng + ":" + map.getZoom() );
+{% if edit %}
+  map.dragging.disable();
+{% else %}
+  map.on('move', function(e) { $("#id_zoom").val( map.getCenter().lat + ":" + map.getCenter().lng + ":" + map.getZoom() ); });
+{% endif %}
+}
+
+{# <Cepumi> #}
+function getCookie(name) { var value = "; " + document.cookie; var parts = value.split("; " + name + "="); if (parts.length == 2) return parts.pop().split(";").shift(); }
+$(document).ready(function () {
+{% if edit %}
+  zoom = 18; showMap( [{{ edit.lat }}, {{ edit.lon }}] );
+{% else %}
+  if ( getCookie('view') ) { 
+    console.log( t );
+    var t = getCookie('view').split(":"); var loc = [t[0], t[1]]; zoom = t[2]; showMap(loc);  } else { showMap(xy[0]); }
+{% endif %}
+});
+
+{# <EDIT> #}
+{% if edit %}
+$(document).ready(function () {
+  $("#id_mark").attr('readonly', true);
+  $("#id_city").attr('readonly', true);
+});
+{% endif %}
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+{% block content %}
+{# <!--DELETE MODAL START--> #}
+{% if edit %}
+<div class="modal fade" id="DelModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog" style="margin-top: 100px"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;Dzēst punktu</h3>
+</div>
+{# <div class="modal-body"></div> #}
+<div class="modal-footer">
+ <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+   <a href="/mapplot/plot/del/{{ edit.id }}/">
+    <button class="btn btn-danger" type="submit">Dzēst</button>
+   <a>
+ </div>
+ <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4"></div>
+ <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+  <button type="button" class="btn btn-success" data-dismiss="modal">Atcelt</button>
+ </div>
+</div></div></div>
+ </form>
+</div>
+{% endif %}
+{# <!--DELETE MODAL END--> #}
+
+
+{# <!--LEFT MENU BAR START--> #}
+<div class="col-xs-6 col-sm-3 col-md-3 col-lg-2" id="side-menu">
+<center>
+
+{% if edit %}
+ <div style="margin-top:69px;"></div>
+{% else %}
+ <div class="form-group" style="margin-top:20px;">
+  <a href="#" onclick="getLocation()">
+   <button type="button" class="btn btn-warning">
+    <span class="glyphicon glyphicon glyphicon-globe" aria-hidden="true"></span> GET GPS DATA</button>
+  </a>
+ </div>
+{% endif %}
+
+<form action="/mapplot/plot/{% if edit %}{{ edit.id }}/{% endif %}" method=POST id="mapform">
+
+ {% csrf_token %}
+ <input type="hidden" name="zoom" id="id_zoom">
+
+ <div class="form-group">
+  {{ form.city }}
+ </div>
+
+
+{% if edit%}
+ <div class="input-group">
+  {{ form.mark }}
+  <span class="input-group-btn">
+  <button class="btn btn-danger" type="button" onclick="$('#id_mark').attr('readonly', false);">
+   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+  </span>
+ </div>
+{% else %}
+ <div class="form-group">
+  <label>ID:</label>
+  {{ form.mark }}
+  {{ form.mark.errors }}
+ </div>
+{% endif %}
+
+ <div class="form-group">
+  <label>Position:</label>
+  {{ form.lat }}
+  {{ form.lon }}
+ </div>
+
+ <div class="form-group">
+  <label>Select:</label>
+  {{ form.radio }}
+ </div>
+
+<script>
+$("#id_radio").on('change', function() {
+  if (this.value == "green") { $("#chk_div").hide(); $("#hiden_chk").show(); } else { $("#chk_div").show(); $("#hiden_chk").hide(); }
+});
+</script>
+
+ <div id="hiden_chk" style="margin-top:98px; display:none;"></div>
+ <div class="form-group" id="chk_div">
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+   <label>OLD</label>
+   {{ form.chk_1 }}<br>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+   <label>LED</label>
+   {{ form.chk_2 }}<br>
+  </div>
+  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+   <label>Konsole</label>
+   {{ form.chk_3 }}<br>
+  </div>
+ </div>
+
+ <div class="form-group">
+  <button type="submit" class="btn btn-success">
+   <span class="glyphicon glyphicon glyphicon-floppy-save" aria-hidden="true"></span> SAVE{% if edit %} CHANGES{% endif %}</button>
+ </div>
+
+</form>
+
+{% if edit %}
+ <div class="form-group">
+  <a href="/mapplot/plot/">
+   <button type="button" class="btn btn-warning">
+    <span class="glyphicon glyphicon glyphicon-step-backward" aria-hidden="true"></span> CANCEL</button>
+  </a>
+ </div>
+
+ <div class="form-group">
+   <button type="button" class="btn btn-danger" onclick="$('#DelModal').modal('show');">
+    <span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span> DELETE</button>
+ </div>
+{% endif %}
+
+</center>
+</div>
+{# <!--LEFT MENU BAR END--> #}
+
+
+{# <!--PAGE CONTENT START--> #}
+<div class="col-xs-6 col-sm-9 col-md-9 col-lg-10">
+  <center><div id="osm-map"></div></center>
+</div>
+{# <!--PAGE CONTENT END--> #}
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+$("#id_city").on('change', function() {
+  console.log( this.value );
+  zoom = 14;
+  map.setView(xy[this.value], zoom);
+  map.removeLayer(target);
+  target = L.marker( xy[ this.value ] ).addTo(map);
+});
+</script>
+
+

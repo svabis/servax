@@ -95,28 +95,3 @@ class Server_Task(models.Model):
         return self.task_type
 
 
-# !!!!! MAP PLOT !!!!!
-PLOT_TYPES = (
-    ('red', 'sarkans'),
-    ('green', 'zaļš'),
-    ('blue', 'zils'),
-)
-
-class MapPlot(models.Model):
-#'date', 'mark', 'lat', 'lon', 'radio', 'chk_1', 'chk_2', 'chk_3'
-    class Meta():
-        db_table = "map_plot_points"
-
-    date = models.DateTimeField( default = timezone.now )
-
-    mark = models.IntegerField( null=True, blank=True )
-
-    lat = models.CharField( max_length=50 )
-    lon = models.CharField( max_length=50 )
-
-    radio = models.CharField( max_length=10, choices=PLOT_TYPES, default="red")
-
-    chk_1 = models.BooleanField( default=False )
-    chk_2 = models.BooleanField( default=False )
-    chk_3 = models.BooleanField( default=False )
-
