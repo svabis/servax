@@ -90,6 +90,7 @@
 {% endif %}
    }
 
+   .badge { background-color: #b50e0e; }
    .btn { border: solid #555 1px; }
    #meteo { width: 850px; height: 50px; border: solid #eee 1px; background-image: linear-gradient(to bottom right, #eee, #00ffcc); cursor: pointer; }
    yr { position: absolute; width: 850px; height: 340px; z-index: 0; background-image: url( {% static 'images\empty.png' %} ); }
@@ -123,6 +124,9 @@
 <nav class="navbar-xs navbar-inverse navbar-fixed-top" id="topNavbar">
  <div class="container-fluid">
   <div class="navbar-header">
+   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-content">
+    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+   </button>
    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
     <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
    </button>
@@ -225,9 +229,8 @@
 
 {# <!--LEFT MENU BAR START--> #}
 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="side-menu">
- <div class="nav-side-menu">
- <div style="height: 50px; width:100%;"></div>
-  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content">{# <!--te virsrakts laikam--> #}</i>
+ <div class="nav-side-menu"{% if mobile_browser == False %} style="top:50px;"{% endif %}>
+{#  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i> #}
   <div class="menu-list">
    <ul id="menu-content" class="menu-content collapse out">
 
@@ -256,7 +259,7 @@
      <a href="/sm_house/electro/"><li><i></i>
       <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> &nbsp; Elektro Patēriņš</li></a>
      <a href="/sm_house/termo/{% if username.username == "svabis" %}rpz/{% endif %}"><li><i></i>
-      <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras</li></a>
+      <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras <span class="badge">Jauns</span></li></a>
      <a href="/sm_house/led/"><li><i></i>
       &nbsp;<span class="fa fa-lightbulb-o" aria-hidden="true"></span> &nbsp;&nbsp; Apgaismojums</li></a>
     </ul>

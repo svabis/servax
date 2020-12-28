@@ -12,7 +12,7 @@ class MapPlotForm(ModelForm):
         fields = ['mark', 'city', 'lat', 'lon', 'radio', 'chk_1', 'chk_2', 'chk_3']
 
         widgets = {
-            'mark': forms.TextInput(attrs={'class': 'form-control'}),
+            'mark': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
 
             'city': forms.Select(attrs={'class': 'form-control'}),
 

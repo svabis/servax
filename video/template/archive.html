@@ -15,10 +15,10 @@
  var notikumi = [ {% for d in data %}
  { title: '{{ d.video_cam }}', start: '{{ d.video_date|date:"Y-m-d" }}', url: '{{ d.video_file.url }}' },{% endfor %} ];
 
-function gaidas() {
+function gaidas(val) {
   try {
     var vid = videojs("videoPlayer");
-    var newSource = notikumi[notikumi.length - 31].url;
+    var newSource = notikumi[notikumi.length - val].url;
   }
   catch(err) {
     console.log( "Errors!" );
@@ -31,11 +31,11 @@ function gaidas() {
 
 $(document).ready(function() {
   console.log("v2");
- // "funkcija kas nomaina augšējā video src"
-  gaidas();
+{# <funkcija kas nomaina augšējā video src"> #}
+  gaidas(31);
 
  {# <!-- create calendar - must be fired after page load --> #}
- // mēneša "notikumi (video)"
+{# <mēneša "notikumi (video)"> #}
   men_not();
 
  {# <!-- add event on video modal close to stop video playback --> #}
@@ -58,16 +58,19 @@ $(document).ready(function() {
 {# <!-- "BLOCK CONTENT START" --> #}
 {% block content %}
 {# "VIDEO START" #}
-<div id="playerContainer justify-content">
- <video id="videoPlayer" muted {#autoplay#} class="video-js vjs-default-skin" controls preload="auto" data-setup='{ "playbackRates": [0.25, 0.5, 1, 2, 4] }' width="640" height="360">
-  <source id="source" src="/media/video/2019_43/20191101_s.mp4" type="video/mp4">
- </video>
-</div>
+<CENTER>
+{# class="embed-responsive embed-responsive-16by9">#}
+ <div id="playerContainer justify-content">
+  <video id="videoPlayer" muted {#autoplay#} class="video-js vjs-default-skin" controls preload="auto" data-setup='{ "playbackRates": [0.25, 0.5, 1, 2, 4] }' width="640" height="360">
+   <source id="source" src="/media/video/2019_43/20191101_s.mp4" type="video/mp4">
+  </video>
+ </div>
+</CENTER>
 <br>
 {# "VIDEO END" #}
 
 
-<div class="table-responsive">
+<div> {# class="table-responsive"> #}
   <h1 id="title" class="text-center"></h1>
   <span id="prev_poga" class="glyphicon glyphicon-backward" style="font-size:2em;cursor:pointer;opacity:0.5"></span>
   <span id="next_poga" class="glyphicon glyphicon-forward" style="font-size:2em;cursor:pointer;float:right;opacity:0.5"></span>

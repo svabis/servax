@@ -16,7 +16,7 @@ from slugify import slugify
 
 
 # images on page
-img_on_page = 15
+img_on_page = 18
 
 
 # !!!!! Main parameters acces, public e.t.c. !!!!!

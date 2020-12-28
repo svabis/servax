@@ -45,13 +45,14 @@ class Command(BaseCommand):
                     im = Image.open(infile)         # OPEN IMAGE FULL SIZE
 
                    # KEEP ORIENTATION
-                    for orientation in ExifTags.TAGS.keys():
-                        if ExifTags.TAGS[orientation] == 'Orientation':
-                            break
+#                    for orientation in ExifTags.TAGS.keys():
+#                        if ExifTags.TAGS[orientation] == 'Orientation':
+#                            break
+                    orientation = 274
 
                     try:
                         exif = dict( im._getexif().items() )
-                        print( exif[orientation] )
+                        exif[orientation] = exif[orientation]
                     except:
                         exif[orientation] = 1
 

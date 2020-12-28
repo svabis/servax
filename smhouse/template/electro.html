@@ -54,7 +54,7 @@ $(document).ready(function(){ var date_input=$('input[name="date"]');
 
      <td colspan=2 style="border-top: solid red 2px;">
       <div class="input-group">
-       <input class="form-control" id="read" name="read" size="20" type="text" placeholder="{{ input_read.read }}">
+       <input class="form-control" id="read" name="read" size="20" type="number" placeholder="{{ input_read.read }}" autocomplete="off">
        <span class="input-group-btn">
         <button class="btn btn-warning" type="submit">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
@@ -65,7 +65,7 @@ $(document).ready(function(){ var date_input=$('input[name="date"]');
     </form>
    </tr>
 {% for d in data reversed %}
-   <tr>
+   <tr onmouseover="disp('{{d.coment}}');">
     <td>{{ d.date|date:"Y/m/d" }}</td>
     <td>{{ d.days }}</td>
     <td>{{ d.read }}</td>
@@ -90,6 +90,10 @@ $(document).ready(function(){ var date_input=$('input[name="date"]');
 <script type="text/javascript" src="{% static 'datepicker.js' %}"></script>
 <link rel="stylesheet" href="{% static 'datepicker.css' %}"/>
 <script>
+function disp(val){
+  if (val=='') val = 'x';
+  console.log( val );
+}
 $(document).ready(function(){
     $(".nav-tabs li").click(function(){ scrollControl(); console.log("CLICK!"); });
 })
@@ -99,8 +103,6 @@ $(document).ready(function(){
 
 {% block style %}
     body { overflow-x: hidden; }
-
    .nav-tabs > li > a{ color: #000; background-color: #ffffb3; }
    .nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; }
-
 {% endblock %}

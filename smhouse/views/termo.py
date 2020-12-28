@@ -31,10 +31,10 @@ def smhouse_termo(request, slug=""):
 # ACCESS GRANTED
 
    # Date ranges
-    args['termo_day']   = [datetime.now(), datetime.now() - timedelta(hours=24)]
-    args['termo_week']  = [datetime.now(), datetime.now() - timedelta( days= 7)]
-    args['termo_month'] = [datetime.now(), datetime.now() - timedelta( days=30)]
-    args['termo_year']  = [datetime.now(), datetime.now() - timedelta(days=365)]
+    args['termo_day']   = [datetime.now() - timedelta(hours=24), datetime.now()]
+    args['termo_week']  = [datetime.now() - timedelta( days= 7), datetime.now()]
+    args['termo_month'] = [datetime.now() - timedelta( days=30), datetime.now()]
+    args['termo_year']  = [datetime.now() - timedelta(days=365), datetime.now()]
 
    # Get Termo Adress for tabs
     adress = Location.objects.all().order_by('order')
@@ -50,11 +50,11 @@ def smhouse_termo(request, slug=""):
     args['data'] = TermoPlace.objects.filter( where = a ).order_by('order')
 
    # latest data
-    l_data = []
-    for p in args["data"]:
-        temp = TermoReading.objects.filter( place=p, date__range=[datetime.now() - timedelta(hours=24), datetime.now()] ).order_by('-date')
-        l_data.append( [p, temp] )
-    args["l_data"] = l_data
+#    l_data = []
+#    for p in args['data']:
+#        temp = TermoReading.objects.filter( place=p, date__range=[datetime.now() - timedelta(hours=24), datetime.now()] ).order_by('-date')[0]
+#        l_data.append( [p, temp] )
+#    args['l_data'] = l_data
 
 
    # TermoPlaces
@@ -63,9 +63,21 @@ def smhouse_termo(request, slug=""):
     args['data_humy'] = TermoPlace.objects.filter( where = a )
 
    # Draw Termo day
-    draw_termo(a.slug, 24, 24, "%H", 1, "day", True)
-    draw_termo(a.slug, 24, 24, "%H", 1, "day", False)
-    draw_termo(a.slug, 24, 24, "%H", 1, "day", None)
+    import threading
+    d1 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", True ), daemon=True)
+    d1.start()
+    d2 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", False ), daemon=True)
+    d2.start()
+    d3 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", None ), daemon=True)
+    d3.start()
+
+#    draw_termo(a.slug, 24, 24, "%H", 1, "day", True)
+#    draw_termo(a.slug, 24, 24, "%H", 1, "day", False)
+#    draw_termo(a.slug, 24, 24, "%H", 1, "day", None)
+
+   # rand for image cache reload
+    import random
+    args['cache'] = "?=" + str(random.randint(20,99))
 
     response = render( request, 'termo.html', args )
     response.set_cookie( key='page_loc', value='/sm_house/termo/', path='/' )

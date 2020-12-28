@@ -1,9 +1,14 @@
 {% extends 'map_main.html' %}
 
 {% block style %}
-/*  #osm-map { background-color: lightblue; border: solid black 1px; height: 300px; max-width: 640px; } */
   #osm-map { background-color: lightblue; border: solid black 1px; height: 95vh; max-height: 95vh; max-width: 90vw; }
  .btn { min-width:100%; }
+
+ .autocomplete { position: relative; display: inline-block; }
+ .autocomplete-items { position: absolute; border: 1px solid #d4d4d4; border-bottom: none; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; }
+ .autocomplete-items div { padding: 10px; cursor: pointer; background-color: #fff; border-bottom: 1px solid #d4d4d4; }
+ .autocomplete-items div:hover { background-color: #e9e9e9; }
+ .autocomplete-active { background-color: DodgerBlue !important; color: #ffffff; }
 {% endblock %}
 
 
@@ -12,37 +17,62 @@
  <link href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet"/>
 
 <script>
+{# <!-- "SEARCH" --> #}
+function autocomplete(inp, arr) {
+  var currentFocus; inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value; closeAllLists(); if (!val) { return false; }
+      currentFocus = -1; a = document.createElement("DIV"); a.setAttribute("id", this.id + "autocomplete-list"); a.setAttribute("class", "autocomplete-items");
+      this.parentNode.appendChild(a); for (i = 0; i < arr.length; i++) {
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          b = document.createElement("DIV"); b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length); b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          b.addEventListener("click", function(e) { inp.value = this.getElementsByTagName("input")[0].value; closeAllLists(); }); a.appendChild(b);
+        }
+      }
+  });
+  inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list"); if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) { currentFocus++; addActive(x); } else if (e.keyCode == 38) { currentFocus--; addActive(x);
+      } else if (e.keyCode == 13) { e.preventDefault(); if (currentFocus > -1) { if (x) x[currentFocus].click(); } }
+  });
+  function addActive(x) {
+    if (!x) return false; removeActive(x); if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1); x[currentFocus].classList.add("autocomplete-active");
+  }
+  function removeActive(x) {
+    for (var i = 0; i < x.length; i++) { x[i].classList.remove("autocomplete-active"); }
+  }
+  function closeAllLists(elmnt) {
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) { x[i].parentNode.removeChild(x[i]); }
+    }
+  }
+  document.addEventListener("click", function (e) { closeAllLists(e.target); });
+}
+
+
+
 {# <!-- "Starting GPS coordinates" --> #}
-{# var xy = [['56.9496487', '24.105186399997'], ['56.85042697806207', '26.220760345458988'],['56.9471467', '24.004397899999997'],]; #}
 var xy = [['56.85042697806207', '26.220760345458988'],['56.9471467', '24.004397899999997'],];
 
 var map;
-
 let zoom = 14;  {# <!-- starting zoom --> #}
 var taget;     {# <!-- Marker--> #}
-var st = []    {# <!-- Stabu masīvs --> #}
 
 {# <!-- "GET LOCATION FROM GPS" --> #}
 function getLocation() {
   var element = document.getElementById("osm-map");
   if (navigator.geolocation) {
-    zoom = 18;
-    navigator.geolocation.getCurrentPosition(setPosition);
+    zoom = 18; navigator.geolocation.getCurrentPosition(setPosition);
   } else {
-    alert( "Geolocation is not supported by this device." );
-    element.innerHTML = "Geolocation is not supported by this browser.";
+    alert( "Geolocation is not supported by this device." ); element.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 {# <!-- "translate geolocation object to coords and transit to map" --> #}
 function setPosition(position) {
-  lat = position.coords.latitude; lon = position.coords.longitude;
- {# "Target's GPS coordinates." #}
-  var temp_target = L.latLng( lat, lon);
- {# "Set map's center to target with zoom." #}
-  map.setView(temp_target, zoom);
- {# "Place a marker on the new location." #}
-  map.removeLayer(target);
-  target = L.marker(temp_target).addTo(map);
+  lat = position.coords.latitude; lon = position.coords.longitude; var temp_target = L.latLng( lat, lon);
+  map.setView(temp_target, zoom); map.removeLayer(target); target = L.marker(temp_target).addTo(map);
   $("#id_lat").val(lat); $("#id_lon").val(lon);
 }
 
@@ -50,37 +80,21 @@ function setPosition(position) {
 function showMap(val) {
  {# <!--"RESET MAP IF NEEDED" --> #}
   try { map.remove(); } catch (err) {}
- {# "Create Leaflet map on map element." #}
-  var element = document.getElementById("osm-map");
-  map = L.map(element);
- {# "Add OSM tile leayer to the Leaflet map." #}
+  var element = document.getElementById("osm-map"); map = L.map(element);
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { maxZoom: 19, minZoom: 8,
-{#    id: 'mapbox/streets-v11', #}
-{#    id: 'mapbox/satellite-v9', #}
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
-
- {# "Target's GPS coordinates." #}
- {# "Set map's center to target with zoom." #}
- {# "Place a marker on the same location." #}
-  var temp_target = L.latLng( val );
-  map.setView(temp_target, zoom);
-  target = L.marker(temp_target).addTo(map);
-
+  var temp_target = L.latLng( val ); map.setView(temp_target, zoom); target = L.marker(temp_target).addTo(map);
 {# <OUTPUTS NO DB> #}
 //var myMarker = L.circleMarker(stuSplit, { title: 'unselected' }).addTo(map);
-
 {% for d in data %}
   var temp = L.circle( [ '{{d.lat}}' , '{{d.lon}}' ], {color:'{{ d.radio }}', fillColor:'{{ d.radio }}', fillOpacity:0.5, radius:3}).addTo(map);
 {% if edit %}{% else %}
   temp.bindTooltip( "{{ d.mark }}" );
-  temp.bindPopup( "<a href='/mapplot/plot/{{d.id}}/'><b>{{ d.mark }}</b></a><br>{{ d.get_radio_display }}<br>{{d.chk_1}}<br>{{d.chk_2}}<br>{{d.chk_3}}" );
-{% endif %}
-  st.push(temp)
-{% endfor %}
+  temp.bindPopup( "<a href='/mapplot/plot/{{d.id}}/'><b>{{ d.mark }}</b></a><br>{{ d.get_radio_display }}<br>{%if d.chk_1%}OLD<br>{%endif%}{%if d.chk_2%}LED<br>{%endif%}{%if d.chk_3%}Konsole{%endif%}" );
+{% endif %}{% endfor %}
 
-{# <Stabu liste> #}
-  console.log(st);
+{# <Click events> #}
   map.on('click', function(e) {
     $("#id_lat").val(e.latlng.lat); $("#id_lon").val(e.latlng.lng);
 {% if edit %}{% else %}
@@ -106,17 +120,13 @@ $(document).ready(function () {
   zoom = 18; showMap( [{{ edit.lat }}, {{ edit.lon }}] );
 {% else %}
   if ( getCookie('view') ) { 
-    console.log( t );
     var t = getCookie('view').split(":"); var loc = [t[0], t[1]]; zoom = t[2]; showMap(loc);  } else { showMap(xy[0]); }
 {% endif %}
 });
 
-{# <EDIT> #}
+{# <EDIT SET ATTRIBUTES TO INPUT FIELD> #}
 {% if edit %}
-$(document).ready(function () {
-  $("#id_mark").attr('readonly', true);
-  $("#id_city").attr('readonly', true);
-});
+$(document).ready(function () { $("#id_mark").attr('readonly', true); $("#id_city").attr('readonly', true); });
 {% endif %}
 </script>
 {% endblock %}
@@ -135,7 +145,6 @@ $(document).ready(function () {
 <div class="modal-header">
  <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;Dzēst punktu</h3>
 </div>
-{# <div class="modal-body"></div> #}
 <div class="modal-footer">
  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
    <a href="/mapplot/plot/del/{{ edit.id }}/">
@@ -246,7 +255,26 @@ $("#id_radio").on('change', function() {
    <button type="button" class="btn btn-danger" onclick="$('#DelModal').modal('show');">
     <span class="glyphicon glyphicon glyphicon-trash" aria-hidden="true"></span> DELETE</button>
  </div>
+{% else %}
+ <div class="form-group">
+  <form autocomplete="off" action="/mapplot/search/" method="POST">
+   {% csrf_token %}
+   <div class="autocomplete">
+    <input class="form-control" id="searchInput" type="text" name="search" placeholder="Search">
+   </div>
+    <button type="submit" class="btn btn-info">
+     <span class="glyphicon glyphicon glyphicon-search" aria-hidden="true"></span> SEARCH</button>
+  </form>
+ </div>
+
+<script>
+{# <!-- An array containing all the country names in the world: --> #}
+var countries = [{% for d in data %}"{{ d.mark }}", {% endfor %}];
+{# <!-- initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values: --> #}
+autocomplete(document.getElementById("searchInput"), countries);
+</script>
 {% endif %}
+
 
 </center>
 </div>
@@ -259,6 +287,8 @@ $("#id_radio").on('change', function() {
 </div>
 {# <!--PAGE CONTENT END--> #}
 {% endblock %}
+
+
 
 
 

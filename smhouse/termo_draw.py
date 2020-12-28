@@ -68,7 +68,7 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
    # draw hours
     for h in hours:
         x = int( round(( h.timestamp() - d_start.timestamp() )/(day_h/24))/60 ) + g_wh[0]
-        draw.line([x, g_wh[0], x, gh], fill=gr_col, width = 0)
+        draw.line([x, g_wh[0]+20, x, gh], fill=gr_col, width = 0)
         draw.text([x-4, gh+5], h.strftime(fmt), fill=(0,0,0,128))
 
    # draw axis
@@ -139,7 +139,7 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
    # iterate Graph's
     for i, t in enumerate( tp ):
        # TermoReaings
-        tr = TermoReading.objects.filter(place=t, date__range=[d_start, d_end]).order_by('-date')
+        tr = TermoReading.objects.filter(place=t, date__range=[d_start, d_end]).order_by('date')
 
        # layer with Transparent backgroung
         img = Image.new('RGBA', w_h, (255, 0, 0, 0))
@@ -153,11 +153,16 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
 #        print( type(obj_max) )
 #        print( obj_max.keys() )
 
-        if obj_max.get(data+"__max") is not None:
-            draw.text([minmax_txt_loc[i],10], "MAX " + str( obj_max.get(data+"__max") ), fill=t.color)
-        if obj_min.get(data+"__min") is not None:
-            draw.text([minmax_txt_loc[i],20], "MIN " + str( obj_min.get(data+"__min") ), fill=t.color)
+#        font = ImageFont.truetype("/var/www/svabis.eu/static/Debrosee-ALPnL.ttf", 10)
+        font = ImageFont.truetype("/var/www/svabis.eu/static/Nasa21-l23X.ttf", 16)
 
+        if obj_max.get(data+"__max") is not None:
+            draw.text([minmax_txt_loc[i],10], "MAX " + str( obj_max.get(data+"__max") ), fill=t.color, font=font)
+        if obj_min.get(data+"__min") is not None:
+            draw.text([minmax_txt_loc[i],28], "MIN " + str( obj_min.get(data+"__min") ), fill=t.color, font=font)
+
+       # last temperature
+        l_temp = None
        # plot reaings data
         for r in tr:
             x = int( round(( r.date.timestamp() - d_start.timestamp() )/(day_h/24)/60 )) + g_wh[0]
@@ -166,7 +171,8 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
                 try:
                     y = int((float(r.temp) - min) * y_k) + gh
                 except:
-                    pass
+                    y = None
+#                    pass
             else:
                # humidity
                 try:
@@ -175,12 +181,20 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
                    # humidity is None
                     y = int((float(120) - min) * y_k) + gh
 
-            if x_s == 1:
+           # NO VERTICAL DATA
+            if y is not None:
+              l_temp = r.temp
+              if x_s == 1:
                 draw.rectangle( [x, y, x+2, y+2], fill=t.color, outline=t.color, width=4 )
-            elif x_s == 2:
+              elif x_s == 2:
                 draw.rectangle( [x, y, x+1, y+1], fill=t.color, outline=t.color, width=4 )
-            else:
+              else:
                 draw.rectangle( [x, y, x,   y],   fill=t.color, outline=t.color, width=4 )
+
+# LAST DATA
+        if l_temp is not None: # and ambient is not None:
+#        if True:
+            draw.text([minmax_txt_loc[i],46], "LAST " + str( l_temp ), fill=t.color, font=font)
 
        # save image
         if ambient is not None:

@@ -31,7 +31,7 @@ class Command(BaseCommand):
 #                        last_lines = lines[-1000:-1]
 
                  # iterate last lines
-                  for last_line in lines[-50:-1]:
+                  for last_line in lines[-20:-1]:
 #                  for last_line in lines[-7:-1]:
 
                     try:

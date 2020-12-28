@@ -3,30 +3,34 @@ from django.contrib import admin
 from smhouse.models import ElConsumption, LedTimer, Location, TermoPlace, TermoReading, SunData
 
 
+# =======================================================================================
 # Elecrticity
 class ElConsumptionAdmin(admin.ModelAdmin):
-    list_display = [ 'date', 'read', 'cons', 'days', 'cons_days' ]
+    list_display = [ 'date', 'read', 'cons', 'days', 'cons_days', 'coment' ]
 
+# =======================================================================================
 # Led
 class LedTimerAdmin(admin.ModelAdmin):
     list_display = [ 'time', 'days', 'color', 'bright', 'effect' ]
 
-
-
+# =======================================================================================
 # Location
 class LocationAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('adress',), }
     list_display = [ 'adress', 'order', 'slug', 'sun_url', 'bw_color_log' ]
 
-# Temperature
+# =======================================================================================
+# Temperature VIETAS
 class TermoPlaceAdmin(admin.ModelAdmin):
     list_display = [ 'place', 'order', 'where', 'ambient', 'color', 'filename', 'regex' ]
     list_filter = [ 'where', 'ambient' ]
 
+# Temperature DATI
 class TermoReadingAdmin(admin.ModelAdmin):
     list_display = [ 'date', 'temp', 'humy', 'place' ]
-    list_filter = [ 'date', 'place' ]
+    list_filter = [ 'date', 'place', ] #'place.where' ]
 
+# =======================================================================================
 # Sunrise & Sunset
 class SunDataAdmin(admin.ModelAdmin):
     list_display = [ 'date', 'where', 'sunrise', 'sunset' ]

@@ -67,6 +67,16 @@ window.onload = function() { document.getElementById("id_jobs_descr").onkeyup = 
 </script>
 {# <!-- "Darbs" --> #}
 
+{# <!-- "Darba links" --> #}
+ <div class="col-md-12 col-sm-12 col-xs-12">
+  <div class="form-group">
+   <label for="{{ form.jobs_link.id_for_label }}">Darba hiper-saite:</label>
+    {{ form.jobs_link.errors }}
+    {{ form.jobs_link }}
+  </div>
+ </div>
+{# <!-- "Darba links" --> #}
+
 {# <!-- Izcelt darbu rinda --> #}
  <div class="col-md-10 col-sm-10 col-xs-10">
   <div class="form-group" style="margin-top:10px;">

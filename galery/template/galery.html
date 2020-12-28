@@ -61,10 +61,12 @@ $(document).ready(function(){
  var hider = document.getElementsByClassName("hider")[0]; var close = document.getElementById("galery_close");
  $("#galery_close").click(function() { hider.style.display = "none"; close.style.display = "none"; hider.children[0].src = ""; });
 
+{% if mobile_browser == False %}
  $(".image").click(function( event ) { hider.style.display = "table-cell"; close.style.display = "block";
   hider.children[0].src = event.target.parentElement.children[0].innerHTML; var temp = event.target.parentElement.children[1].innerHTML.split(",");
   temp.remove(""); tags = ""; temp.forEach( iterTags ); hider.children[2].innerHTML = tags; });
 });
+{% endif %}
 
 function iterTags (item) { tags += "<a href='/galery/tag=" + slugify(item) + "/'>#" + item + "</a> "; }
 </script>

@@ -74,7 +74,7 @@ def plot_edit(request, e_id):
 
            # Set return to added Point
             c = request.POST['zoom']
-            response = redirect( '/mapplot/plot/')
+            response = redirect( '/mapplot/plot/' )
             response.set_cookie( key='view', value=c, path='/', max_age=5 )
 #            response.set_cookie( key='city', value=request.POST['city'], path='/') #, max_age=5 )
             return response
@@ -89,6 +89,18 @@ def plot_edit(request, e_id):
     return response
 
 
+# ==================================================================================================================================================
+def plot_search(request):
+    args = create_args(request)
+    try:
+        s = request.POST['search']
+        edit = MapPlot.objects.filter(mark=s)[0]
+        response = redirect( '/mapplot/plot/'+str(edit.id)+'/')
+        return response
+
+    except:
+        response = redirect( '/mapplot/plot/')
+        return response
 
 
 # ==================================================================================================================================================

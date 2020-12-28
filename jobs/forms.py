@@ -26,10 +26,11 @@ class JobsForm(ModelForm):
 
     class Meta:
         model = Jobs
-        fields = ['jobs_descr', 'jobs_zone', 'jobs_type', 'marked']
+        fields = ['jobs_descr', 'jobs_link', 'jobs_zone', 'jobs_type', 'marked']
 
         widgets = {
             'jobs_descr': forms.Textarea(attrs={'class': 'form-control', 'rows' : '5'}),
+            'jobs_link': forms.TextInput(attrs={'class': 'form-control'}),
             'jobs_zone': forms.Select(attrs={'class': 'form-control'}),
             'jobs_type': forms.Select(attrs={'class': 'form-control'}),
             'marked': forms.CheckboxInput(attrs={'class': 'form-control', 'style':'margin-left:0px;'})

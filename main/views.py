@@ -43,6 +43,11 @@ def ai(request):
     args['title'] = 'Viss ir slikti | Svabwilla'
     args['heading'] = 'Viss ir slikti'
 
+    import threading
+    from main.life_v3 import main_life
+    life = threading.Thread(target=main_life, args=(), daemon=True)
+    life.start()
+
     response = render(request, 'ai.html', args)
     response.set_cookie( key='page_loc', value='/ai/', path='/' )
     return response
@@ -125,7 +130,8 @@ def stats(request):
    # 7days
     week_end = (start - timedelta(days=7))
 
-    video_stat = Live_video.objects.filter(visit__range=[week_end, start]).order_by('-visit')
+#    video_stat = Live_video.objects.filter(visit__range=[week_end, start]).order_by('-visit')
+    video_stat = Live_video.objects.filter(leave__range=[week_end, start]).order_by('-leave')
     vid = []
 
    # days in different colors

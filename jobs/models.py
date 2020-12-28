@@ -42,6 +42,8 @@ class Jobs(models.Model):
     class Meta():
         db_table = "jobs"
 
+    jobs_user = models.ForeignKey( User, blank=True, null=True, on_delete=models.CASCADE ) # User kurš pievienoja darbu
+
     jobs_date_added = models.DateField( default=datetime.datetime.now, verbose_name="Darbs pievienots" )
     jobs_date_done = models.DateField( null=True, blank=True )
     jobs_date_start = models.DateField( null=True, blank=True, verbose_name="Darbs uzsākts" )
@@ -49,9 +51,10 @@ class Jobs(models.Model):
     jobs_descr = models.TextField( blank=False, verbose_name="Darba uzdevums" )
 
     jobs_zone = models.CharField( max_length=10, choices=ZONE_CHOICES, default="IT", verbose_name="Darba zona" )
-    jobs_user = models.ForeignKey( User, blank=True, null=True, on_delete=models.CASCADE ) # User kurš pievienoja darbu
-
     jobs_type = models.CharField( max_length=10, choices=URGENT_CHOICES, default="JADARA", verbose_name="Darba veids/svarīgums" )
+
+    jobs_link = models.URLField( max_length=200, blank=True, null=True, verbose_name="Saite" )
+
     jobs_done = models.BooleanField( default=False )
     jobs_cancel = models.BooleanField( default=False )
 

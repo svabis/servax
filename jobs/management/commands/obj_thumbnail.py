@@ -45,7 +45,7 @@ class Command(BaseCommand):
 
                     try:
                         exif = dict( im._getexif().items() )
-                        print( exif[orientation] )
+#                        print( exif[orientation] )
                     except:
                         exif[orientation] = 1
 

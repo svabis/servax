@@ -152,7 +152,7 @@ var modals = {
  </td>
  <td>{{ job.jobs_date_added|date:"d/m/Y" }}</td>
  <td>{% if job.jobs_date_start != None %}{{ job.jobs_date_start|date:"d/m/Y" }}{% endif %}</td>
- <td>{{ job.jobs_descr|safe }}</td>
+ <td>{{ job.jobs_descr|safe }}{% if job.jobs_link %}<br><a href="{{ job.jobs_link }}" target="_blank" class="text-danger">{{ job.jobs_link|truncatechars:50 }}</a>{% endif %}</td>
  <td class="fit">{{ job.get_jobs_zone_display }}</td>
  <td class="fit">{{ job.get_jobs_type_display }}</td>
  <td class="fit">{% if job.jobs_date_start == None %}

@@ -15,6 +15,8 @@ class ElConsumption(models.Model):
     days = models.IntegerField( null=True, blank=True )
 
     cons_days = models.DecimalField( max_digits = 5, decimal_places = 3, null=True, blank=True )
+    coment = models.CharField( max_length = 100, default = "" )
+
 
     def __str__(self):
         return "Datums:" + str(self.date) + " Skaititajs:" + str(self.read)
