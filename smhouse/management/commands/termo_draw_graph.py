@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 draw_termo(a.slug, 24, 24, "%H", 1, "day", False)
                 draw_termo(a.slug, 24, 24, "%H", 1, "day", None)
 
-#            if now == 0:
+            if now == 0:
                # Draw Termo week
                 print(a.slug, "week")
                 draw_termo(a.slug, 168, 7, "%d", 2, "week", True)

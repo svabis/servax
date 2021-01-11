@@ -59,6 +59,22 @@ function timerIncrement() {
 <script src="{% static 'videojs-contrib-hls.min.js' %}"></script>
 
 <script>
+function reloadSrc(){
+{% for cam in cameras %}{% if cam.cam_stream %}
+  try { var vid = videojs("stream_{{ forloop.counter }}"); var newSource = "{{ cam.cam_url_stream }}"; vid.src([ {type: "application/x-mpegURL", src: newSource} ]); }
+  catch(err) { console.log( "Errors!" ); console.log( err ); }
+{% endif %}{% endfor %}
+  var newTime = new Date().getMinutes(); console.log( newTime );
+  reloadTimer = setInterval(reloadSrc, 3600*1000);
+}
+
+{# <!-- Set video stream relod at next_hour:02 --> #}
+$(document).ready(function () {
+  var timeNow = new Date(); var m = timeNow.getMinutes(); var s = timeNow.getSeconds(); var ms = 3720-((m*60)+s); setTimeout(reloadSrc, ms*1000);
+});
+
+
+
 $(".framediv").each(function () {
   $(this).append('<span class="togglebutton">ZOOM</span>');
 });

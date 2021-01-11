@@ -11,7 +11,7 @@ from smhouse.models import Location, TermoPlace, TermoReading
 # Import draw script
 from smhouse.termo_draw import draw_termo
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 # !!!!! TERMO VIEW !!!!!
@@ -36,13 +36,21 @@ def smhouse_termo(request, slug=""):
     args['termo_month'] = [datetime.now() - timedelta( days=30), datetime.now()]
     args['termo_year']  = [datetime.now() - timedelta(days=365), datetime.now()]
 
+    if datetime.now().hour > 12:
+        args['hours'] = "12:00"
+    else:
+        args['hours'] = "00:00"
+
    # Get Termo Adress for tabs
     adress = Location.objects.all().order_by('order')
     args['adress'] = adress
 
    # set variable slug
     if slug == "":
-        slug = adress[0].slug
+        if User_data.objects.get(user_user = args['username']).location is not None:
+            slug = User_data.objects.get(user_user = args['username']).location.slug
+        else:
+            slug = adress[0].slug
 
     a = Location.objects.get( slug = slug )
     args['slug'] = slug

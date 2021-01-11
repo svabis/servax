@@ -6,11 +6,13 @@ from django.contrib.auth.models import User
 
 from datetime import datetime
 
+from smhouse.models import Location
+
 
 # !!!!! USER DATA - USER ACCESS RIGHTS !!!!!
 class User_data(models.Model):
     class Meta():
-        db_table = "user_data"
+        db_table = "login_user_data"
 
     user_user = models.OneToOneField( User, related_name='u', on_delete=models.CASCADE ) # User from Django Users&Groups
     user_last_visit = models.DateTimeField( null=True, blank=True ) # FOR LAST LOG (NOT AUTORIZATION)
@@ -38,10 +40,12 @@ class User_data(models.Model):
     obj_list_add = models.BooleanField( default=False )
     obj_list_edit = models.BooleanField( default=False )
 
-    garden = models.BooleanField( default=False )
-    garden_add = models.BooleanField( default=False )
+    idea = models.BooleanField( default=False )
+    idea_add = models.BooleanField( default=False )
 
     map = models.BooleanField( default=False )
+
+    location = models.ForeignKey( Location, null=True, blank=True, on_delete=models.CASCADE )
 
     def __unicode__(self):
         return u'%s' % (self.user_user)
@@ -50,7 +54,7 @@ class User_data(models.Model):
 # !!!!! LIVE VIDEO WATCH STATISTICS !!!!!
 class Live_video(models.Model):
     class Meta():
-        db_table = "live_video_log"
+        db_table = "login_live_video_log"
 
     user = models.ForeignKey( User, on_delete=models.CASCADE )
 
@@ -78,7 +82,7 @@ TASK_TYPES = (
 
 class Server_Task(models.Model):
     class Meta():
-        db_table = "server_tasks"
+        db_table = "login_server_tasks"
 
     task_type = models.CharField( max_length=30, choices=TASK_TYPES, default="imgtovid")
     task_object = models.CharField( max_length=50 )

@@ -7,7 +7,7 @@ from django.utils import timezone
 # !!!!! BILDE !!!!!
 class Galery(models.Model):
     class Meta():
-        db_table = "galerija"
+        db_table = "gallery"
 
     galery_date = models.DateField( default = timezone.now )
 

@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block javascript %}
+ <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/garden.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+
+<div class="navbar-collapse">
+ <ul class="nav nav-tabs">
+{% if active_tab == "visas" %}<li class="active">{% else %}<li>{% endif %}<a href="/idea/">
+<span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true"></span>&nbsp;&nbsp;
+{% if mobile_browser == False %}Visas Idejas{% endif %}</a></li>
+
+{% for s in super %}
+<li {% if active_tab == s.slug %} class="active">{% else %}>{% endif %}<a href="/idea/{{ s.slug }}/">
+{% if s.icon != "" %}<span class="glyphicon {{ s.icon }}" aria-hidden="true"></span>&nbsp;&nbsp;{% endif %}
+{% if mobile_browser == False %}{{ s.title }}{% endif %}</a></li>
+
+{% endfor%}
+
+ </ul>
+</div>
+
+{% block idea_content %}{% endblock %}
+
+{% endblock %}

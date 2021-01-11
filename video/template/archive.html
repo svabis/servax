@@ -1,48 +1,49 @@
+
 {% extends 'main.html' %}
 {% load static %}
 
 {# <!-- "BLOCK JAVASCRIPT" --> #}
 {% block javascript %}
-{# videojs player #}
+{# <!-- videojs player --> #}
 <link href="//vjs.zencdn.net/7.2/video-js.min.css" rel="stylesheet">
 <script src="//vjs.zencdn.net/7.2/video.min.js"></script>
 
-{# <link rel="stylesheet" href="http://glyphicons.com/css/style.css?v=10"> #}
-<script src="{% static 'calendar.js' %}"></script>
+<link href="{% static 'videojs-markers-0.7.0/dist/videojs.markers.css' %}" rel="stylesheet">
+<script src="{% static 'videojs-markers-0.7.0/dist/videojs-markers.js' %}"></script>
+
+<script src="{% static 'archive.js' %}"></script>
 
 <script>
-{# load events #}
+{# <!-- load events --> #}
  var notikumi = [ {% for d in data %}
- { title: '{{ d.video_cam }}', start: '{{ d.video_date|date:"Y-m-d" }}', url: '{{ d.video_file.url }}' },{% endfor %} ];
+ { id: '{{ d.video_cam.id }}', start: '{{ d.video_date|date:"Y-m-d" }}', url: '{{ d.video_file.url }}' },{% endfor %} ];
+{# <!-- load cam_info --> #}
+ var camData = [ {% for d in cam %}
+ { id: '{{ d.id }}', name: '{{ d.cam_name }}', icon: '{{ d.cam_icon }}', color: '{{ d.cam_color }}' },{% endfor %} ];
+{# <!-- load comment --> #}
+ var comments = [ {% for c in comments %}
+ { id: '{{ c.id }}', date: '{{ c.date|date:"Y-m-d" }}',{% if time is not None %} time: '{{ c.time }}',{% endif %} comment: '{{ c.comment }}' },{% endfor %} ];
 
-function gaidas(val) {
-  try {
-    var vid = videojs("videoPlayer");
-    var newSource = notikumi[notikumi.length - val].url;
-  }
-  catch(err) {
-    console.log( "Errors!" );
-    console.log( err );
-  }
+ console.log( comments );
 
+function showVideo(val) {
+  try { var vid = videojs("videoPlayer"); var newSource = val.id; }
+  catch(err) { console.log( "Errors!" ); console.log( err ); }
   vid.src([ {type: "video/mp4", src: newSource} ]);
-  console.log( newSource );
+
+  var m = {markers:[
+      { time: 95, text: "Marķieris", },
+//      { time: 15, text: "STOP", }
+  ]}
+
+  vid.markers( m );
 }
 
-$(document).ready(function() {
-  console.log("v2");
-{# <funkcija kas nomaina augšējā video src"> #}
-  gaidas(31);
-
  {# <!-- create calendar - must be fired after page load --> #}
-{# <mēneša "notikumi (video)"> #}
-  men_not();
-
- {# <!-- add event on video modal close to stop video playback --> #}
-  $("#video_modal_close").click(function(e) { $("video").trigger("pause"); });
-});
+$(document).ready(function() { initCalendar(); });
 </script>
 {% endblock %}
+
 
 
 {# <!-- "BLOCK STYLE" --> #}
@@ -51,32 +52,34 @@ $(document).ready(function() {
    .video-js .vjs-volume-menu-button { display:none; }
    .video-js.vjs-fullscreen .vjs-volume-menu-button { display:block; }
 
-   #playerContainer { width: 642px; border: 1px solid white; margin: 0px; }
+   .text-center { min-width:110px; }
 {% endblock %}
+
 
 
 {# <!-- "BLOCK CONTENT START" --> #}
 {% block content %}
-{# "VIDEO START" #}
-<CENTER>
-{# class="embed-responsive embed-responsive-16by9">#}
- <div id="playerContainer justify-content">
-  <video id="videoPlayer" muted {#autoplay#} class="video-js vjs-default-skin" controls preload="auto" data-setup='{ "playbackRates": [0.25, 0.5, 1, 2, 4] }' width="640" height="360">
-   <source id="source" src="/media/video/2019_43/20191101_s.mp4" type="video/mp4">
-  </video>
- </div>
-</CENTER>
-<br>
-{# "VIDEO END" #}
+{% if mobile_browser == False %}
+<div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+ <div class="container-fluid">
+{% endif %}
+
+{# <!--"VIDEO START"--> #}
+  <div id="playerContainer" class="video-js-responsive-container vjs-hd">
+   <video id="videoPlayer" muted class="video-js vjs-default-skin" controls preload="auto" data-setup='{ "playbackRates": [0.2, 0.25, 0.5, 1, 2, 4], "fluid": true }'> {# width="640" height="360"> #}
+    <source id="source" src="/media/video_new/2020_08/20200301_l.mp4" type="video/mp4">
+   </video>
+  </div>
+{# <!--"VIDEO END"--> #}
 
 
-<div> {# class="table-responsive"> #}
+ <div> {# class="table-responsive"> #}
   <h1 id="title" class="text-center"></h1>
   <span id="prev_poga" class="glyphicon glyphicon-backward" style="font-size:2em;cursor:pointer;opacity:0.5"></span>
   <span id="next_poga" class="glyphicon glyphicon-forward" style="font-size:2em;cursor:pointer;float:right;opacity:0.5"></span>
-</div>
-
-<div class="table-responsive" id="kalendars">
+ </div>
+ <div class="table-responsive" id="kalendars">
   <table class="table table-bordered table-responsive" style="background-color: #fff;" width="100%">
    <thead>
     <tr style="background-color:#666; color:#FFF"> <!-- #4286f4 -->
@@ -91,7 +94,13 @@ $(document).ready(function() {
    </thead>
    <tbody id="tab_bod"></tbody>
   </table>
+ </div>
+
+
+{% if mobile_browser == False %}
+ </div>
 </div>
+{% endif %}
 
 {# <script src="{% static 'videojs-contrib-hls.min.js' %}"></script> #}
 {% endblock %}

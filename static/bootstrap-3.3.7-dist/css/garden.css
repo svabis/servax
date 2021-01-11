@@ -43,4 +43,4 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 .user { border: solid #ccc 1px; margin-left: 10px; padding-bottom: 10px; }
 .com_body { margin-left: -10px; padding-left: 20px; overflow:hidden; }
 .com_head { background-color: #ccc; height: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px;}
-.forum_image { display: block; max-width: 600px; max-height: 300px; width: auto; height: auto; }
+.forum_image { display: block; max-width: 40%; max-height: 40%; width: auto; height: auto; border:solid 2px red; }

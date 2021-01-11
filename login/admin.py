@@ -10,8 +10,8 @@ class User_dataAdmin(admin.ModelAdmin):
               'sm_electr', 'sm_termo',  'sm_led',
               'job_list', 'job_add', 'job_mark', 'job_start', 'job_fin', 'job_cancel', 'job_restart',
               'obj_list', 'obj_list_add', 'obj_list_edit',
-              'garden', 'garden_add',
-              'map']
+              'idea', 'idea_add',
+              'map', 'location']
 
     list_display = ['user_user', 'user_last_visit',
               'video_live', 'video_live_local', 'video_archive',
@@ -19,8 +19,8 @@ class User_dataAdmin(admin.ModelAdmin):
               'sm_electr', 'sm_termo', 'sm_led',
               'job_list', 'job_add', 'job_mark', 'job_start', 'job_fin', 'job_cancel', 'job_restart',
               'obj_list', 'obj_list_add', 'obj_list_edit',
-              'garden', 'garden_add',
-              'map']
+              'idea', 'idea_add',
+              'map', 'location']
 
 
 class Live_videoAdmin(admin.ModelAdmin):

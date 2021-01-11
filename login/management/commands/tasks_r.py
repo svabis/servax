@@ -55,8 +55,8 @@ class Command(BaseCommand):
     for t in task:
      # Process stop at count in one run
       c += 1
-      if c > 20:
-        return
+#      if c > 20:
+#        return
 
       if DEBUG:
         print( datetime.now() )
@@ -72,21 +72,21 @@ class Command(BaseCommand):
 
       if os.path.exists( task_folder + t.task_output ):
        # If file already exists
-        try:
+#        try:
           temp = Video.objects.get(video_name = t.task_object)
           os.system("cp " + task_folder + t.task_output + " " + media + str(temp.video_file))
 
          # CLEANUP RECIEVED FILE
           os.remove(task_folder + t.task_output)
-          os.remove(task_folder + t.task_input)
+          os.remove(task_folder + "input.mp4")
 
           t.task_wait = False
           t.task_status = True
           t.save()
 
-        except:
-          if DEBUG:
-            print( "!!!!! SOMETHING WENT WRONG CREATING VIDEO FILE !!!!!" )
+#        except:
+#          if DEBUG:
+#            print( "!!!!! SOMETHING WENT WRONG CREATING VIDEO FILE !!!!!" )
 
       else:
         t.task_wait = False

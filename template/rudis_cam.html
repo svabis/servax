@@ -1,0 +1,64 @@
+{% extends 'main.html' %}
+
+
+{% block style %}
+a { color:#000; }
+.well { padding:3px; margin-bottom:6px; }
+{% endblock %}
+
+
+{% block content %}
+<h1 style="margin-top: 0px;">Simple VIDEO webserver</h1>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Versija <b>1.0</b> sastāv no 3 failiem: .html (paraugs lapas apakšā), .py (jāstratē no crontab, ar biežumu atbilstoši jaunu video failu izveidei), .json (saraksts ar video failiem).</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;<b>vid_collector.py</b> - atrašanās vieta var nebūt piesaistīta WEB serverim.</p>
+
+<div class="well"> 8.	filesys_path = "/var/www/svabis.eu/media/video_new/"</div>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;šeit liekam reālo failu sistēmas ceļu līdz saknes mapei, no kuras sākt video failu meklēšanu</p>
+
+<div class="well">11.	replace_path = ["/var/www/svabis.eu/", "https://svabis.eu/"]</div>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;šeit ir divi string mainīgie: pirmais ko mainīt un otrais uz ko mainīt. Pielietojums - pirmajā iet liekais reālās failu sistēmas ceļa posms un otrā - tā vietā liekamais webserverim saprotamais url fragments.</p>
+
+<div class="well">13.	out_file = "/var/www/svabis.eu/static/vid.json"</div>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;šeit rakstās .json faila atrašanās vieta, obligāti jābūt pieejamam webserverim, piemēram, /var/www/html/... P.S. json fails ir tikai nosaukuma ziņā, jo saturs nav īsts JSON, tas tā ir veidots priekš v1.0, lai varētu šo versiju novienkāršot neizmantojot prakstiski neko kas būtu jāpieinstalē atsevišķi.</p>
+
+<p class="text-justify">&nbsp;&nbsp;&nbsp;<b>index.html</b> - atrodās webservera mapēs (nosaukumu protams var mainīt). Sastāv no diviem elementiem: Video atskaņotāja un saraksta ar pieejamajiem video failiem. Saraksts sastāv no "virsrakstiem" un pašiem failiem. "Virsraksti" ir mapes nosaukumi, kurās skripts ir atradis video failu, jeb savādāk sakot pēdējā mape faila ceļā, ja ir vajadzīgs smalkāks dalījums, piemēram, PARENT-->CHILD-->VIDEO, tad .html fails ir jāpielabo.</p>
+
+<div class="well">16.	&#60;script type=&#34;text/javascript&#34; src=&#34;/static/vid.json&#34;&#62;&#60;/script&#62;</div>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;src rakstam webserverim pieejamo vietu kur atrodās python skripta izveidotais fails ar sarakstu.</p>
+
+<a href="/static/R_VID_v1.tar.gz"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> R_VID_v1.tar.gz</a>
+
+<hr>
+
+<video controls="" id="videoTag">
+ <source id="videoPlayer" type="video/mp4">
+</video>
+<div id="videoList"></div>
+
+<script type="text/javascript" src="/static/vid.json"></script>
+<script>
+var vidData = JSON.parse(data);
+var out = document.getElementById("videoList");
+var video = document.getElementById("videoTag");
+var player = document.getElementById("videoPlayer");
+
+function playThis(val) {
+  video.pause();
+  player.src = vidData[val];
+  video.load();
+}
+
+var date = vidData[0].split("/")[ vidData[0].split("/").length-2 ]
+out.innerHTML += "<h3>" + date +"</h3<br>";
+
+for (i=0;i<vidData.length;i++) {
+  var tdate = vidData[i].split("/")[ vidData[i].split("/").length-2 ]
+  if (tdate != date) { date = tdate; out.innerHTML += "<h3>" + date +"</h3<br>"; }
+  var t = vidData[i].split("/")[ vidData[i].split("/").length-1 ];
+  out.innerHTML += "<b onclick='playThis(" + i + ");' style='cursor:pointer;'>" + t +"</b><br>";
+}
+</script>
+{% endblock %}
+

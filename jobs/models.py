@@ -75,7 +75,7 @@ class Jobs(models.Model):
 # OBJECT
 class JobObj(models.Model):
     class Meta():
-        db_table = "job_objects"
+        db_table = "jobs_objects"
 
     obj_added = models.DateField( default=datetime.datetime.now, verbose_name="Darbs pievienots" )
     obj_title = models.CharField( max_length=50, blank=False )
@@ -95,7 +95,7 @@ class JobObj(models.Model):
 # OBJECT IMAGES
 class JobObj_image(models.Model):
     class Meta():
-        db_table = "job_objects_images"
+        db_table = "jobs_objects_images"
 
     job_obj = models.ForeignKey( JobObj, default=1, related_name='o_i', on_delete=models.CASCADE )
     obj_image_big = models.ImageField( blank = True, null=True, upload_to = "job_obj/big/" )
@@ -107,7 +107,7 @@ class JobObj_image(models.Model):
 # OBJECT FILES
 class JobObj_file(models.Model):
     class Meta():
-        db_table = "job_objects_files"
+        db_table = "jobs_objects_files"
 
     job_obj = models.ForeignKey( JobObj, default=1, related_name='o_f', on_delete=models.CASCADE )
     obj_file = models.FileField( blank = True, null=True, upload_to = "job_obj/file/" )

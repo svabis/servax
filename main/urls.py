@@ -16,7 +16,7 @@ from django.conf.urls import url
 # -- ??? --
 
 # import views
-from main.views import home, weather, location, denied, stats
+from main.views import home, weather, location, denied, stats, r_web
 from main.views import ai
 from login.views import login, logout
 
@@ -52,6 +52,9 @@ urlpatterns = [
 # AI TESTI
     path('ai/', ai),
 
+# SIMPLE VIDEO WEB_SERVER
+    path('r_web/', r_web),
+
 # JOBS
     path('jobs/', include('jobs.urls')),
 
@@ -65,8 +68,8 @@ urlpatterns = [
 # STATISTICS
     path('stats/', stats),
 
-# GARDEN
-    path('garden/', include('garden.urls')),
+# IDEA (previously GARDEN)
+    path('idea/', include('idea.urls')),
 
 # GALERY
     path('galery/', include('galery.urls')),

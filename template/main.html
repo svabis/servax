@@ -39,8 +39,8 @@
    $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 1000); })
    function scrollControl() {
      if ($("body").height()+70 > $(window).height()) { $("#back_to_top").show(); $("#go_to_bottom").show(); $("#footer").show(); }
-     $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 2000); })
-     $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 2000); })
+     $("#back_to_top").click(function(){ $("html, body").animate({ scrollTop: 0 }, 500); })
+     $("#go_to_bottom").click(function(){ $("html, body").animate({ scrollTop: $("body").height() }, 500); })
    }
 {% endif %}
 
@@ -72,8 +72,9 @@
 {% block javascript %}{% endblock %}
 
   <style>
-   #back_to_top { color: #222; border-color: #555; display: none; bottom: 47px; right: 30px; position: fixed; min-width: 160px; z-index:100; }
-   #go_to_bottom { color: #222; border-color: #555; display: none; bottom: 10px; right: 30px; position: fixed; min-width: 160px; z-index:100; }
+   #back_to_top  { bottom: 47px; }
+   #go_to_bottom { bottom: 10px; }
+   #back_to_top, #go_to_bottom { color: #222; border-color: #555; display: none; right: 25px; position: fixed; min-width: 36px; z-index:100; }
    #footer { display:none; height: 76px;}
 
    #container {
@@ -125,10 +126,10 @@
  <div class="container-fluid">
   <div class="navbar-header">
    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-content">
-    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="color:#fff; width:22px;"></span>
    </button>
    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+    <span class="glyphicon glyphicon-cog" aria-hidden="true" style="color:#fff; width:22px;"></span>
    </button>
    <a class="navbar-brand" href="/">Svabwilla{% if heading %} | {{ heading }}{% endif %}</a>
   </div>
@@ -213,11 +214,11 @@
  {% else %}<h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;piekļuve lietu parametriem:</strong><strong class="text-danger">Nē</strong>{% endif %}</h5>
 
 <hr style="margin-top:5px; margin-bottom:5px;">
- <h4 style="margin-bottom: 0px;"><strong>Sadaļas "Dārzs" tiesības</strong></h4>
+ <h4 style="margin-bottom: 0px;"><strong>Sadaļas "Ideju Lāde" tiesības</strong></h4>
  <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;skatīt sadaļu:</strong>
- {% if username.u.garden %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
- <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pievienoties diskusijām:</strong>
- {% if username.u.garden_add %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ {% if username.u.idea %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
+ <h5><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pievienoties:</strong>
+ {% if username.u.idea_add %}<strong class="text-success">Jā</strong>{% else %}<strong class="text-danger">Nē</strong>{% endif %}</h5>
 
 </div><div class="modal-footer" style="padding-top: 5px;"> <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button></div></div></div></div>{% endif %}
 {# <!--USER MODAL END--> #}
@@ -247,7 +248,7 @@
  {% endif %}
       <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> &nbsp; Video dzīvajā</li></a>
      <a href="/video/archive/"><li><i></i>
-      <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Video arhīvs</li></a>
+      <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Video arhīvs &nbsp;<span class="badge">Jauns</span></li></a>
     </ul>
 
     <a href="/galery/"><li><i></i> <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> &nbsp; Galerija</li></a>
@@ -258,8 +259,8 @@
     <ul id="smarthouse" class="sub-menu collapse">
      <a href="/sm_house/electro/"><li><i></i>
       <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> &nbsp; Elektro Patēriņš</li></a>
-     <a href="/sm_house/termo/{% if username.username == "svabis" %}rpz/{% endif %}"><li><i></i>
-      <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras <span class="badge">Jauns</span></li></a>
+     <a href="/sm_house/termo/"><li><i></i>
+      <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras</li></a>
      <a href="/sm_house/led/"><li><i></i>
       &nbsp;<span class="fa fa-lightbulb-o" aria-hidden="true"></span> &nbsp;&nbsp; Apgaismojums</li></a>
     </ul>
@@ -274,7 +275,10 @@
       <span class="glyphicon glyphicon-resize-horizontal" aria-hidden="true"></span> &nbsp; Lietu parametri</li></a>
     </ul>
 
-    <a href="/garden/"><li><i></i> <span class="glyphicon glyphicon-grain" aria-hidden="true"></span> &nbsp; Dārzs</li></a>
+
+    <a href="/idea/"><li><i></i><i class="fa fa-cube" style="padding-left:2px;"></i> &nbsp; Ideju Lāde &nbsp;<span class="badge">Jauns</span></li></a>
+
+
 {% if location %}
     <a href="/weather/"><li><i></i><img src="https://www.yr.no/assets/images/logo-yr-50.png" height="16px;" width="16px;"> &nbsp; Laika Prognoze</li></a>
     <a href="/location/"><li><i></i> <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> &nbsp; Atrašanās vieta</li></a>
@@ -299,7 +303,11 @@
       <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> &nbsp; MAP Plot</li></a>
      <a href="/ai/"><li><i></i>
       <span class="fa fa-bug"></span> &nbsp; Life</li></a>
+     <a href="/r_web/"><li><i></i>
+      <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; Simple VIDEO</li></a>
     </ul>
+
+
   {% endifequal %}
 {% endfor %}
 
@@ -316,10 +324,8 @@
 
 {# <!-- FOOTER AND VERTICAL NAV BUTTONS START --> #}
 <div id="footer" class="container-fluid"></div>
-<button id="back_to_top" type="button" class="btn btn-warning">
- <i class="fa fa-arrow-up" style="font-size:20px"></i>&nbsp;&nbsp;Uz lapas augšu</button>
-<button id="go_to_bottom" type="button" class="btn btn-warning">
- <i class="fa fa-arrow-down" style="font-size:20px"></i>&nbsp;&nbsp;Uz lapas leju</button>
+<button id="back_to_top" type="button" class="btn btn-warning"><i class="fa fa-arrow-up" style="font-size:20px"></i>{# &nbsp;&nbsp;Uz lapas augšu #}</button>
+<button id="go_to_bottom" type="button" class="btn btn-warning"><i class="fa fa-arrow-down" style="font-size:20px"></i>{# &nbsp;&nbsp;Uz lapas leju #}</button>
 {# <!-- FOOTER AND VERTICAL NAV BUTTONS END --> #}
 
 </div>

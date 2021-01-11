@@ -28,9 +28,11 @@ def dst(test_date):
 
     dst_start = max(week[-1] for week in calendar.monthcalendar(year, 10)) # last sunday of this years Oct
     dst_end   = max(week[-1] for week in calendar.monthcalendar(year, 3))  # last sunday of this years Mar
+
    # convert to date objects
     date_dst_start = datetime.date(year, 10, dst_start)
     date_dst_end = datetime.date(year, 3, dst_end)
+
    # compare if in range (summer --> True)
     if date_dst_end <= test_day <= date_dst_start:
         return test_date + datetime.timedelta(hours=3)
@@ -40,6 +42,11 @@ def dst(test_date):
 # AI TESTI
 def ai(request):
     args = create_args(request)
+
+   # LIMIT ACCES TO GROUP MEMBERS
+    if not args['username'].groups.filter(name="misc").exists():
+        return redirect("/")
+
     args['title'] = 'Viss ir slikti | Svabwilla'
     args['heading'] = 'Viss ir slikti'
 
@@ -70,6 +77,15 @@ def home(request):
     response.set_cookie( key='page_loc', value='/', path='/' )
     return response
 
+# SIMPLE VIDEO WEB
+def r_web(request):
+    args = create_args(request)
+    args['title'] = 'Simple Video WEB | Svabwilla'
+
+    response = render(request, 'rudis_cam.html', args)
+    response.set_cookie( key='page_loc', value='/r_web/', path='/' )
+    return response
+
 
 # LOCATION
 def location(request):
@@ -91,7 +107,6 @@ def weather(request):
     response = render(request, 'weather.html', args)
     response.set_cookie( key='page_loc', value='/weather/', path='/' )
     return response
-
 
 # STATISTIC
 def stats(request):
@@ -130,21 +145,20 @@ def stats(request):
    # 7days
     week_end = (start - timedelta(days=7))
 
-#    video_stat = Live_video.objects.filter(visit__range=[week_end, start]).order_by('-visit')
     video_stat = Live_video.objects.filter(leave__range=[week_end, start]).order_by('-leave')
     vid = []
 
    # days in different colors
-    temp_day = dst(video_stat[0].visit).day
+    temp_day = dst(video_stat[0].leave).day
     day = 0
     for v in video_stat:
        # set day color
-        if dst(v.visit).day != temp_day:
+        if dst(v.leave).day != temp_day:
             day = 1 if day == 0 else 0
-            temp_day = dst(v.visit).day
+            temp_day = dst(v.leave).day
 
        # set 24h/7day
-        if end <= dst(v.visit).replace(tzinfo=None) <= start:
+        if end <= dst(v.leave).replace(tzinfo=None) <= start:
             vid.append([0, day, v])
         else:
             vid.append([1, day, v])

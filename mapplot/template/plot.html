@@ -267,6 +267,16 @@ $("#id_radio").on('change', function() {
   </form>
  </div>
 
+ <div class="form-group">
+  <input type="file" accept="image/*" capture="camera" style="display: none">
+  <button type="button" class="btn btn-warning" id="camera">
+   <span class="glyphicon glyphicon glyphicon-camera" aria-hidden="true"></span>{# TAKE PHOTO#}</button>
+ </div>
+
+<script>
+$("#camera").click(function (){ $(this).parent().find("input").click(); });
+</script>
+
 <script>
 {# <!-- An array containing all the country names in the world: --> #}
 var countries = [{% for d in data %}"{{ d.mark }}", {% endfor %}];

@@ -20,7 +20,8 @@ def get_file_path(instance, filename):
 # !!!!! KAMERA !!!!!
 class Camera(models.Model):
     class Meta():
-        db_table = "kameras"
+        db_table = "video_cameras"
+        verbose_name_plural = "Kameras"
 
     cam_name = models.CharField( max_length = 100 )
 
@@ -41,6 +42,9 @@ class Camera(models.Model):
     cam_width = models.IntegerField( default = 640 )
     cam_height = models.IntegerField( default = 320 )
 
+    cam_icon = models.CharField( max_length = 50, default = '' )
+    cam_color = models.CharField( max_length = 7, default = '' )
+
     def __str__(self):
         return self.cam_name
 
@@ -48,7 +52,8 @@ class Camera(models.Model):
 # !!!!! KAMERA ONLINE !!!!!
 class Camera_online(models.Model):
     class Meta():
-        db_table = "kameras_online"
+        db_table = "video_cameras_online"
+        verbose_name_plural = "Kameras onlainā"
 
     date = models.DateTimeField( default = timezone.now )
 
@@ -65,6 +70,7 @@ class Camera_online(models.Model):
 class Video(models.Model):
     class Meta():
         db_table = "video"
+        verbose_name_plural = "Videoklipi"
 
     video_cam  = models.ForeignKey( Camera, on_delete=models.CASCADE )
     video_name = models.CharField( max_length = 50 )
@@ -74,3 +80,19 @@ class Video(models.Model):
 
     def __str__(self):
         return 'Video: ' + self.video_name
+
+
+# !!!!! VIDEO DAY COMMENT !!!!!
+class VideoDayComment(models.Model):
+    class Meta():
+        db_table = "video_day_comment"
+        verbose_name_plural = "Video arhīva dienu komentāri"
+
+    date = models.DateField( default = timezone.now )
+
+    time = models.DateTimeField( null=True, blank=True )
+
+    comment = models.CharField( max_length = 250 )
+
+    def __str__(self):
+        return 'Comment: ' + self.comment

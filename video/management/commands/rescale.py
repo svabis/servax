@@ -17,12 +17,12 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
 
    # Date where to start
-    s_date = datetime(2019, 10, 11).date()
-   # Date 2 weaks ago (end date)
+    s_date = datetime(2020, 3, 3).date()
+   # Date weak ago (end date)
     e_date = (datetime.now() - timedelta(days=7)).date()
 
-    print( s_date )
-    print( e_date )
+#    print( s_date )
+#    print( e_date )
 
     count = 0
 
