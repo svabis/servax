@@ -10,16 +10,16 @@
 
 {# <!-- "Legend START" --> #}
  <div class="termo_btn_box" id="termo_btn_box">
-  <button class="btn btn-warning" id="btn_data_show" style="margin-right: 32px;color: #000;" onclick="openNav()">☰</button>
+  <button class="btn btn-warning" id="btn_data_show" onclick="openNav()">☰</button>
  </div>
  <div id="mySidebar" class="sidebar">
   <div style="min-width:220px;">
-   <button class="btn" id="btn_data_ta" style="min-width:70px;"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> <i class="fa fa-thermometer"></i></button>
-   <button class="btn" id="btn_data_td" style="min-width:70px;"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> <i class="fa fa-thermometer"></i></button>
-   <button class="btn" id="btn_data_h" style="min-width:70px;"><i class="fa fa-tint"></i></button><br>
+   <button class="btn legend" id="btn_data_ta" style="min-width:70px;"><span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> <i class="fa fa-thermometer"></i></button>
+   <button class="btn legend radius" id="btn_data_td" style="min-width:70px;"><span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> <i class="fa fa-thermometer"></i></button>
+   <button class="btn legend radius" id="btn_data_h" style="min-width:70px;"><i class="fa fa-tint"></i></button><br>
   </div>
 {% for img in data %}
-  <button class="btn" style="background-color:{{ img.color }}; min-width:218px; margin-top:4px;" id="btn_data_{{ img.order }}">{{ img.place }}</button><br>
+  <button class="btn legend" style="background-color:{{ img.color }}; min-width:218px; margin-top:4px;" id="btn_data_{{ img.order }}">{{ img.place }}</button><br>
 {% endfor %}
  </div>
 {# <!-- "Legend END" --> #}
@@ -144,14 +144,14 @@ $(document).ready(function(){
 </div>
 
 
-{#    <hr> #}
-{#    <h4> #}
-{#     <span id="rand_eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> #}
+    <hr>
+    <h4>
+     <span id="rand_eye" class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
 {#     <b>GADS</b> {{ termo_year.0|date:"d/m/Y" }} - {{ termo_year.1|date:"d/m/Y" }} #}
-{#    </h4> #}
+    </h4>
 
 
-<div class="row" id="data_rand_row" style="display:none;">
+<div class="row" id="data_rand_row"> {# style="display:none;"> #}
 <div class="container-fluid">
 {# <!-- "RAND OUTSIDE" --> #}
  <div class="termo_parent data_termo_ta" id="data_a_rand_p">
@@ -249,9 +249,9 @@ setTimeout( function(){ $(".data_termo_h").toggle(); }, 9000);
     $("#data_rand_temp_{{ img.order }}").toggle();  $("#data_rand_humy_{{ img.order }}").toggle();
   });
 {% endfor %}
-  $("#btn_data_ta").click(function(){ $(".data_termo_ta").toggle(); $(this).css("border", "solid red 2px"); });
-  $("#btn_data_td").click(function(){ $(".data_termo_td").toggle(); $(this).css("border", "solid red 2px"); });
-  $("#btn_data_h").click(function(){ $(".data_termo_h").toggle(); $(this).css("border", "solid red 2px"); });
+  $("#btn_data_ta").click(function(){ $(".data_termo_ta").toggle(); });
+  $("#btn_data_td").click(function(){ $(".data_termo_td").toggle(); });
+  $("#btn_data_h").click(function(){ $(".data_termo_h").toggle(); });
 
 {# <!-- day/week/month show hide --> #}
   $("#day_eye").click(function(){
@@ -286,7 +286,7 @@ setTimeout( function(){ $(".data_termo_h").toggle(); }, 9000);
 
 {# <!-- show/hidde legend --> #}
 function openNav() {
-  if (h) { document.getElementById("mySidebar").style.width = "250px"; h = false; }
+  if (h) { document.getElementById("mySidebar").style.width = "234px"; h = false; }
   else { document.getElementById("mySidebar").style.width = "0"; h = true; }
 }
 
@@ -298,5 +298,16 @@ if ( getCookie('show_termo_graph') == "true" ) {
  $("#data_rand_row").show();
 }
 
+
+{# <!-- border on off --> #}
+$("button.legend").click(function(){
+  if($(this).is(".radius")){
+    $(this).removeClass("radius"); return;
+  }
+  else {
+    $(this).addClass("radius");
+  }
+//  $(this).addClass("radius").siblings().removeClass("radius");
+});
 </script>
 {% endblock %}

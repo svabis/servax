@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
-from login.models import User_data # Access data
-from main.args import create_args
 
-# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User     # Django Users library
 from django.contrib import auth # autorisation library
 
-from idea.paginator import Paginator # import paginator
+from login.models import User_data # Access data
+from main.args import create_args
 
 from idea.models import SuperTheme, Theme, Post
 from idea.forms import PostForm, ThemeForm
@@ -49,11 +47,11 @@ def add_tema(request):
             ts = list(Theme.objects.values_list('slug', flat=True))
             slugs = st + ts
 
-            new_tema = form.save()
+            new_tema = form.save( commit=False )
             new_tema.relate_to_super = SuperTheme.objects.get( slug = location[2] )
 
             new_tema.created_by = auth.get_user(request)
-            new_tema.save()
+#            new_tema.save()
 
            # Create Tema slug from title
             slug = form.cleaned_data.get('title').replace("/", "")

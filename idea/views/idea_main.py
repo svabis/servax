@@ -7,7 +7,7 @@ from main.args import create_args
 from django.contrib.auth.models import User     # Django Users library
 from django.contrib import auth # autorisation library
 
-from idea.paginator import Paginator # import paginator
+from main.paginator import Paginator # import paginator
 
 from idea.models import SuperTheme, Theme, Post
 from idea.forms import ThemeForm
@@ -53,15 +53,15 @@ def main(request, pageid=1):
 
     pagecount = int(math.ceil( int(rez_obj.count()) / float( results_per_page ))) # integer identical to range by count
 
-#    if int(pageid) > pagecount and int(pageid) > 1: # pageid exceeds pagecount --> 404
-#        return redirect ('/idea/')
+    if int(pageid) > pagecount: # pageid exceeds pagecount --> 404
+        return redirect ('/idea/')
 
     start_obj = int(pageid) * results_per_page - results_per_page # start from image NR
     end_obj = int(pageid) * results_per_page # end with image NR
     if end_obj > rez_obj.count(): # if end NR exceeds limit set it to end NR
         end_obj = rez_obj.count()
 
-    args['paginator'] = Paginator( pagecount, pageid )
+    args['paginator'] = Paginator( pagecount, pageid, 10 )
     args['temas'] = rez_obj[start_obj:end_obj]
 
     response = render(request, 'theme.html', args)
@@ -109,7 +109,7 @@ def super(request, s_id, pageid=1):
 
     pagecount = int(math.ceil( int(rez_obj.count()) / float( results_per_page ))) # integer identical to range by count
 
-    if int(pageid) > pagecount and int(pageid) > 1: # pageid exceeds pagecount --> 404
+    if int(pageid) > pagecount: # pageid exceeds pagecount --> 404
         return redirect ('/idea/')
 
     start_obj = int(pageid) * results_per_page - results_per_page # start from image NR
@@ -117,7 +117,7 @@ def super(request, s_id, pageid=1):
     if end_obj > rez_obj.count(): # if end NR exceeds limit set it to end NR
         end_obj = rez_obj.count()
 
-    args['paginator'] = Paginator( pagecount, pageid )
+    args['paginator'] = Paginator( pagecount, pageid, 10 )
     args['temas'] = rez_obj[start_obj:end_obj]
 
     args['add_tema'] = True

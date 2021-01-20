@@ -3,13 +3,12 @@ from django.shortcuts import render, redirect
 from login.models import User_data # Access data
 from main.args import create_args
 
-# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User     # Django Users library
 from django.contrib import auth # autorisation library
 
-from idea.paginator import Paginator # import paginator
+from main.paginator import Paginator # import paginator
 
-from idea.models import SuperTheme, Theme, Post
+from idea.models import SuperTheme, Theme, Post, PostImage
 from idea.forms import PostForm, ThemeForm
 
 import unicodedata
@@ -84,7 +83,7 @@ def temas(request, s_id, t_id, pageid=1):
     if end_obj > rez_obj.count(): # if end NR exceeds limit set it to end NR
         end_obj = rez_obj.count()
 
-    args['paginator'] = Paginator( pagecount, pageid )
+    args['paginator'] = Paginator( pagecount, pageid, 10 )
     args['diskusija'] = rez_obj[start_obj:end_obj]
 
     args['form'] = PostForm
@@ -92,11 +91,17 @@ def temas(request, s_id, t_id, pageid=1):
     if request.POST:
         form = PostForm( request.POST, request.FILES )
 
+       # save Post object
         if form.is_valid():
             new_coment = form.save( commit = False )
             new_coment.relate_to = t
             new_coment.user = args['user']
             new_coment.save()
+
+           # Save images
+#            for img in request.FILES.getlist('file'):
+            for img in request.FILES.getlist('image'):
+                PostImage.objects.create( post=new_coment, image=img )
 
             while t.parent != None:
                 try:

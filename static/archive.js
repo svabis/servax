@@ -128,8 +128,10 @@ function eventAdd(gads, menesis){
       if(eventu_datumi[0] == gads && eventu_datumi[1] == menesis && eventu_datumi[2] == elementa_saturs){
         events = document.createElement("span");
 
-        events.addEventListener("mouseover", function(){ $(this).animate({ opacity:1, fontSize:"+=5px" },"fast"); });
-        events.addEventListener("mouseout", function(){ $(this).animate({ opacity:0.6, fontSize:"-=5px" },"fast"); });
+//        events.addEventListener("mouseover", function(){ $(this).animate({ opacity:1, fontSize:"+=5px" },"fast"); });
+//        events.addEventListener("mouseout", function(){ $(this).animate({ opacity:0.6, fontSize:"-=5px" },"fast"); });
+        events.addEventListener("mouseover", function(){ $(this).animate({ opacity:1 },"fast"); });
+        events.addEventListener("mouseout", function(){ $(this).animate({ opacity:0.6 },"fast"); });
         events.addEventListener("click", function(){ showVideo(this); });
 
      // Get icon, color, title

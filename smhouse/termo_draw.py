@@ -15,12 +15,17 @@ import os
 import math
 
 
+#font = ImageFont.truetype("/var/www/svabis.eu/static/Debrosee-ALPnL.ttf", 16)
+font = ImageFont.truetype("/var/www/svabis.eu/static/Nasa21-l23X.ttf", 16)
+
+y_font = ImageFont.truetype("/var/www/svabis.eu/static/Nasa21-l23X.ttf", 13)
+
 
 def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
    # output image parameters
     gh, w_h, g_wh = 420, [1520, 450], [40,1480]
     ax_col, gr_col = "#333", "#aaa"
-    txtp = [10, 1495]
+    txtp = [25, 1505]
     minmax_txt_loc = [ 50, 150, 250, 350, 450, 550, 650, 750, 850 ]
 
 
@@ -69,7 +74,7 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
     for h in hours:
         x = int( round(( h.timestamp() - d_start.timestamp() )/(day_h/24))/60 ) + g_wh[0]
         draw.line([x, g_wh[0]+20, x, gh], fill=gr_col, width = 0)
-        draw.text([x-4, gh+5], h.strftime(fmt), fill=(0,0,0,128))
+        draw.text([x-4, gh+5], h.strftime(fmt), fill=(0,0,0,128), font=y_font)
 
    # draw axis
     draw.line([g_wh[0], g_wh[0], g_wh[0], gh], fill=ax_col, width = 0)
@@ -77,7 +82,7 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
     draw.line([g_wh[0], gh,      g_wh[1], gh], fill=ax_col, width = 0)
 
    # Format y-axis
-    min, max = 60, -20
+    min, max = 96, -20
     for t in tp:
         temp = TermoReading.objects.filter(place = t, date__range=[d_start, d_end])
 
@@ -85,7 +90,6 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
         try:
             if float(t_max[ data + '__max']) >= max:
                 max = math.ceil( float(t_max[ data + '__max']) )
-                max_old = int( t_max[ data + '__max'] )
         except:
             pass
 
@@ -98,40 +102,42 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
 
     y_k = -350/(max - min)
 
-
    # IF NO DATA IN THIS PERIOD --> don't draw y axis
-    if max != -20 and min != 60:
+    if min != 96 and max != -20:
 
        # Draw y-axis legend
-       # max 'C
+       # max 'C or %
         draw.line([g_wh[0], ((max-min)*y_k)+gh, g_wh[1], ((max-min)*y_k)+gh], fill="#A52A2A", width = 0)
-        draw.text([txtp[0], ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128))
-        draw.text([txtp[1], ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128))
+        wt, ht = draw.textsize( str( max ) )
+        draw.text([txtp[0]-wt, ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128), font=y_font)
+        draw.text([txtp[1]-wt, ((max-min)*y_k)+gh-5], str(max), fill=(165,42,42,128), font=y_font)
 
-       # min 'C
-#        draw.line([g_wh[0], ((max_old-min)*y_k)+gh, g_wh[1], ((max_old-min)*y_k)+gh], fill="#2a55a5", width = 0)
-        draw.text([txtp[0], ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128))
-        draw.text([txtp[1], ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128))
+       # min 'C or %
+        wt, ht = draw.textsize( str( min ) )
+        draw.text([txtp[0]-wt, ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128), font=y_font)
+        draw.text([txtp[1]-wt, ((min-min)*y_k)+gh-5], str(min), fill=(0,0,0,128), font=y_font)
 
        # calculate y-axis step
         step = [1,  1,2,2,5,5,  5,5,10,10,10,  10,10,10,10,10,  10,10,20,20,20 ]
         amp = round( float((max-min) /5) )
 
-       # calculated 'C
+       # calculated 'C or %
         for t in range(-50, 100, step[amp]):
             c = ((t-min)*y_k)+gh
-#            if g_wh[0] < c < gh:
+
             if 70 < c < gh:
                 draw.line([g_wh[0], c, g_wh[1], c], fill=gr_col, width = 0)
-                draw.text([txtp[0], c-5], str(t), fill=(0,0,0,128))
-                draw.text([txtp[1], c-5], str(t), fill=(0,0,0,128))
+                wt, ht = draw.textsize( str( t ) )
+                draw.text([txtp[0]-wt, c-5], str(t), fill=(0,0,0,128), font=y_font)
+                draw.text([txtp[1]-wt, c-5], str(t), fill=(0,0,0,128), font=y_font)
 
        # 0'C
         zero = ((0-min)*y_k)+gh
         if g_wh[0] < zero < gh:
             draw.line([g_wh[0], zero, g_wh[1], zero], fill="#2a55a5", width = 0)
-            draw.text([txtp[0], zero-5], "0", fill=(42,85,165,128))
-            draw.text([txtp[1], zero-5], "0", fill=(42,85,165,128))
+            wt, ht = draw.textsize( str( "0" ) )
+            draw.text([txtp[0]-wt, zero-5], "0", fill=(42,85,165,128), font=y_font)
+            draw.text([txtp[1]-wt, zero-5], "0", fill=(42,85,165,128), font=y_font)
 
     img.save( settings.MEDIA_ROOT + 'smhouse/termo/' + slug + '_' + name + '_back_' + str(ambient) + '.png' )
 
@@ -148,13 +154,6 @@ def draw_termo(slug, day_h, step_h, fmt, x_s, name, ambient):
        # min max
         obj_max = tr.aggregate(Max( data ))
         obj_min = tr.aggregate(Min( data ))
-
-#        print( obj_max )
-#        print( type(obj_max) )
-#        print( obj_max.keys() )
-
-#        font = ImageFont.truetype("/var/www/svabis.eu/static/Debrosee-ALPnL.ttf", 16)
-        font = ImageFont.truetype("/var/www/svabis.eu/static/Nasa21-l23X.ttf", 16)
 
         if obj_max.get(data+"__max") is not None:
             draw.text([minmax_txt_loc[i], 10], "MAX", fill=t.color, font=font)

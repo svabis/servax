@@ -42,6 +42,13 @@ function showPosition() {
   map.setView(target, 15);
  {# "Place a marker on the same location." #}
   L.marker(target).addTo(map);
+
+
+//  var myMarker = L.circleMarker(stuSplit, { title: 'unselected' }).addTo(map);
+//  var temp = L.circle( [ '{{d.lat}}' , '{{d.lon}}' ], {color:'{{ d.radio }}', fillColor:'{{ d.radio }}', fillOpacity:0.5, radius:3}).addTo(map);
+//  temp.bindTooltip( "{{ d.mark }}" );
+
+
 }
 
 $(document).ready(function () { showPosition(); });

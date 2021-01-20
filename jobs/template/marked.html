@@ -5,24 +5,21 @@
 {% block jobs_marked %}
 <script>
 var unmarkedArray = [];
+var unmarkBtnTxt = '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> ';
 
 function mb_click( el, thisValue ) {
   if ( unmarkedArray.indexOf( thisValue ) === -1 ) {
-    unmarkedArray.push( thisValue );
-    el.classList.add('btn-danger');
-    el.classList.remove('btn-warning');
-    el.childNodes[1].classList.add('glyphicon-ok');
-    el.childNodes[1].classList.remove('glyphicon-remove');
+    unmarkedArray.push( thisValue ); el.classList.add('btn-danger'); el.classList.remove('btn-warning');
+    el.childNodes[1].classList.add('glyphicon-ok'); el.childNodes[1].classList.remove('glyphicon-remove');
   }
   else {
-    unmarkedArray.remove( thisValue );
-    el.classList.add('btn-warning');
-    el.classList.remove('btn-danger');
-    el.childNodes[1].classList.add('glyphicon-remove');
-    el.childNodes[1].classList.remove('glyphicon-ok');
+    unmarkedArray.remove( thisValue ); el.classList.add('btn-warning'); el.classList.remove('btn-danger');
+    el.childNodes[1].classList.add('glyphicon-remove'); el.childNodes[1].classList.remove('glyphicon-ok');
   }
-  console.log( unmarkedArray );
-  if (unmarkedArray.length > 0) { $("#unmarkingbtn").show(); } else { $("#unmarkingbtn").hide(); }
+  if (unmarkedArray.length > 0) { $("#unmarkingbtn").show();
+    if (unmarkedArray.length == 1) { $("#unmarkingbtn").html(unmarkBtnTxt + "Noņemt darbu"); } else {
+      $("#unmarkingbtn").html(unmarkBtnTxt + "Noņemt darbus"); }
+  } else { $("#unmarkingbtn").hide(); }
 }
 
 window.onload = function () { $("#unmarkingbtn").hide(); $("input.disabled_checkbox").attr("disabled", true); modals.init(); }

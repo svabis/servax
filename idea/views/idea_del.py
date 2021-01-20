@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import redirect
-from main.args import create_args
 
-# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User     # Django Users library
 from django.contrib import auth # autorisation library
+
+from main.args import create_args
 
 from idea.models import Theme, Post
 

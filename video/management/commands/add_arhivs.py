@@ -14,18 +14,18 @@ from slugify import slugify
 
 # COMAND BEGIN
 class Command(BaseCommand):
-  def handle(self, *args, **options):
-    today = datetime.datetime.today() - datetime.timedelta(days = 1)
-    today_str = str(today)[:10].replace('-', '')
+    def handle(self, *args, **options):
+        today = datetime.datetime.today() - datetime.timedelta(days = 1)
+        today_str = str(today)[:10].replace('-', '')
 
-    cameras = Camera.objects.all()
-    for c in cameras:
-      input = c.cam_user + "/" + today_str + "/"
+        cameras = Camera.objects.all()
+        for c in cameras:
+            input = c.cam_user + "/" + today_str + "/"
 
-      if c.cam_nr == 3 or c.cam_nr == 4:
-        input = input + "images/"
+            if c.cam_nr == 3 or c.cam_nr == 4:
+                input = input + "images/"
 
-      output = today_str + "_" + slugify(c.cam_name)[0] + ".mp4"
+            output = today_str + "_" + slugify(c.cam_name)[0] + ".mp4"
 
-      new_task = Server_Task( task_object=c.cam_user, task_input=input, task_output=output )
-      new_task.save()
+            new_task = Server_Task( task_object=c.cam_user, task_input=input, task_output=output )
+            new_task.save()

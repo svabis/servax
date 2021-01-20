@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+># -*- coding: utf-8 -*-
 import os       # for work with filesystem
 import cv2      # image container reader
 

@@ -4,7 +4,11 @@
   <title>{{ title }}</title>
 {# <!-- <base href="https://svabis.eu/" /> #}{#  <link rel="canonical" href="https://svabis.eu/" />--> #}
 
+{% if mobile_zoom %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% else %}
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' >
+{% endif %}
 
   <meta charset="UTF-8" />
   <meta name="description" content="Projekts dzīves kvalitātes uzlabošanai, izmantojot inovatīvus risinājumus ar kuru palīdzību ir iespējams attālināti vadīt atsevišķus elementus: vārti, laistīšanas sistēma, ventilācija u.c." />
@@ -58,11 +62,17 @@
      navCookies = getNavs().split(","); navCookies.remove(""); navCookies.forEach( iterArray );
 {# <!--MENU Arrows--> #}
      $("#video_list").click(function() {
-      var el = $("#video_list").children().last(); if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); } });
+      var el = $("#video_list").children().last();
+// if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); }
+ });
      $("#smarthouse_list").click(function() {
-      var el = $("#smarthouse_list").children().last(); if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); } });
+      var el = $("#smarthouse_list").children().last();
+// if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); }
+ });
      $("#jobsection_list").click(function() {
-      var el = $("#jobsection_list").children().last(); if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); } });
+      var el = $("#jobsection_list").children().last();
+// if (el.css("transform") == 'none' ) { el.css("transform" , "rotate(-180deg)"); } else { el.css("transform","" ); }
+ });
    });
    Array.prototype.remove = function() { var what, a = arguments, L = a.length, ax; while (L && this.length) { what = a[--L]; while ((ax = this.indexOf(what)) !== -1) { this.splice(ax, 1); }} return this; };
    function iterArray(item) { if (item != "") { $("#"+item+"_list").attr("aria-expanded","true"); $("#"+item+"_list").removeClass( "collapsed" ); $("#"+item).attr("aria-expanded","true"); $("#"+item).addClass( "in" ); } }
@@ -140,9 +150,10 @@
     <li class="nav-link"><a target="_blank" href="/adminlucy/"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span>&nbsp;&nbsp;Django</a></li>
 {% endif %}
     <li class="nav-link"><a href="#" data-toggle="modal" data-target="#UserModal"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;{{ username.username }}</a></li>
-    <li class="nav-link"><a href="/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Iziet</a></li>
+    <li class="nav-link"><a href="/login/password/"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;&nbsp;Paroles maiņa</a></li>
+    <li class="nav-link"><a href="/login/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;&nbsp;Iziet</a></li>
 {% else %} 
-    <li class="nav-link"><a href="/login/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Autorizēties</a></li>
+    <li class="nav-link"><a href="/login/login/"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;&nbsp;Autorizēties</a></li>
 {% endif %}
    </ul>
   </div>
@@ -231,7 +242,6 @@
 {# <!--LEFT MENU BAR START--> #}
 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2" id="side-menu">
  <div class="nav-side-menu"{% if mobile_browser == False %} style="top:50px;"{% endif %}>
-{#  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i> #}
   <div class="menu-list">
    <ul id="menu-content" class="menu-content collapse out">
 
@@ -251,7 +261,7 @@
       <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp; Video arhīvs &nbsp;<span class="badge">Jauns</span></li></a>
     </ul>
 
-    <a href="/galery/"><li><i></i> <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> &nbsp; Galerija</li></a>
+    <a href="/gallery/"><li><i></i> <span class="glyphicon glyphicon-picture" aria-hidden="true"></span> &nbsp; Galerija</li></a>
 
     <li id="smarthouse_list" data-toggle="collapse" data-target="#smarthouse" class="collapsed" onclick="saveNavs(this);">
      <i></i> <span class="glyphicon glyphicon-home" aria-hidden="true"></span> &nbsp; Gudrā Māja<span class="arrow"></span>

@@ -19,13 +19,13 @@
  {#    <button class="btn btn-xs btn-danger" style="min-width: 22px;">-</button> #}
   </div>
   <div class="col-sm-10 col-md-10 col-lg-10 com_body">
-{#<!--    <h4>{{ d.text|safe }}</h4> -->#}
-{#<!--    <h4>{{ d.text|linebreaks }}</h4> -->#}
     <h4>{{ d.text|linebreaks }}</h4>
+    {# <!-- url --> #}
+    {% if d.url %}<a href="{{ d.url }}" target="_blank"><b class="text-danger">{{ d.url|truncatechars:50 }}</b></a>{% endif %}
 
-{% if d.url %}<a href="{{ d.url }}" target="_blank"><b class="text-danger">{{ d.url|truncatechars:50 }}</b></a>{% endif %}
+    {# <!-- images --> #}
+    {% for i in d.img.all %}<img class="forum_image" src="{{ i.image.url }}">{% endfor %}
 
-    {% if d.image != "" %}<img class="forum_image" src="{{ d.image.url }}">{% endif %}
   </div>
 </div>
 

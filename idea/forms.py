@@ -2,19 +2,33 @@
 from django.forms import ModelForm
 from django import forms
 
-from .models import Post, Theme
+from .models import Theme, Post, PostImage
+
+
 
 # Ieraksts
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ('text', 'image', 'url')
+        fields = ('text', 'url')
 
         widgets = {
             'text': forms.Textarea(attrs={'class': 'form-control', 'rows' : '5', 'style':'resize:none;'}),
             'url': forms.TextInput(attrs={'class': 'form-control', 'autocomplete':'off'}),
-            'image': forms.FileInput(),
         }
+
+
+# Iepaksta Attēls
+#class PostImageForm(ModelForm):
+#    class Meta:
+#        model = PostImage
+#        field = ('post', 'image')
+
+#        widgets = {
+#            'image': forms.FileInput(),
+#        }
+
+
 
 # Tema/Diskusija
 class ThemeForm(ModelForm):
@@ -24,3 +38,5 @@ class ThemeForm(ModelForm):
     class Meta:
         model = Theme
         fields = ('title', 'comment')
+
+

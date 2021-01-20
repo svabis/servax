@@ -35,16 +35,21 @@ class Command(BaseCommand):
                 draw_termo(a.slug, 720, 30, "%d", 2, "month", False)
                 draw_termo(a.slug, 720, 30, "%d", 2, "month", None)
 
+               # Draw 6 months
+                draw_termo(a.slug, 2880, 4, "%m", 3, "rand", True)
+                draw_termo(a.slug, 2880, 4, "%m", 3, "rand", False)
+                draw_termo(a.slug, 2880, 4, "%m", 3, "rand", None)
+
                # Draw 9 months
 #                draw_termo(a.slug, 6480, 9, "%m", 3, "rand", True)
 #                draw_termo(a.slug, 6480, 9, "%m", 3, "rand", False)
 #                draw_termo(a.slug, 6480, 9, "%m", 3, "rand", None)
 
                # Draw 1 year
-                print(a.slug, "rand")
-                draw_termo(a.slug, 8640, 12, "%m", 3, "rand", True)
-                draw_termo(a.slug, 8640, 12, "%m", 3, "rand", False)
-                draw_termo(a.slug, 8640, 12, "%m", 3, "rand", None)
+#                print(a.slug, "rand")
+#                draw_termo(a.slug, 8640, 12, "%m", 3, "rand", True)
+#                draw_termo(a.slug, 8640, 12, "%m", 3, "rand", False)
+#                draw_termo(a.slug, 8640, 12, "%m", 3, "rand", None)
 
             if now == 12:
                # Draw Termo week

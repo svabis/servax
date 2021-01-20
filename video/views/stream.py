@@ -20,6 +20,9 @@ def live(request):
     args['title'] = 'Video dzīvajā | Svabwilla'
     args['heading'] = 'Video dzīvajā'
 
+   # enable zoom on mobile device
+    args["mobile_zoom"] = True
+
     if args['username'].get_username() == '': # NO USER
         return redirect( 'access_denied' )
     else:

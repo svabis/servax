@@ -2,8 +2,8 @@
 import math     # for rounding up Page Counter
 
 class Paginator(object):
-    visible = True		# PAGINATOR ON/OFF
-    big = True		# <<<< / >>>> ON/OFF
+    visible = True  # PAGINATOR ON/OFF
+    big = True      # <<<< / >>>> ON/OFF
     pages = []
     active_page = 1
     pagecount = 1
@@ -22,10 +22,12 @@ class Paginator(object):
 
 
 # CONSTRUCTOR
-    def __init__(self, count, current):
+    def __init__(self, count, current, pc ):
         self.active_page = int(current)
         self.pagecount = count
         self.pages = []
+#        pc = 5
+        pch = int(pc/2)
 
        # IF PAGE IS ONE => PAGINATOR HIDEN
         if count < 2:
@@ -34,38 +36,42 @@ class Paginator(object):
             self.visible = True
 
        # NO "GAP'S"
-        if count < 10:
+        if count < pc:
             self.big = False
             for nr in range(count):
                 self.pages.append( nr + 1 )
        # ONE OR TWO "GAP'S"
         else:
            # "GAP" IN THE END
-            if int(current) < 6:
-                for nr in range(6):
+            if int(current) < pch:
+                for nr in range(pch):
                     self.pages.append( nr + 1 )
                 self.pages.append( 0 )
                 self.pages.append( count-1 )
                 self.pages.append( count )
 
            # "GAP" IN THE BEGINING
-            elif int(current) > (count-5):
+            elif int(current) > (count-pch):
                 self.pages.append( 1 )
                 self.pages.append( 2 )
                 self.pages.append( 0 )
-                for nr in range(count-6, count):
+                for nr in range(count-pch, count):
                     self.pages.append( nr + 1 )
 
            # TWO "GAP'S"
             else:
                 self.pages.append( 1 )
-                self.pages.append( 2 )
+                if pc > 6:
+                    self.pages.append( 2 )
                 self.pages.append( 0 )		# GAP
-                self.pages.append( int(current) - 1 )
+                if pc > 6:
+                    self.pages.append( int(current) - 1 )
                 self.pages.append( int(current) )
-                self.pages.append( int(current) + 1 )
+                if pc > 6:
+                    self.pages.append( int(current) + 1 )
                 self.pages.append( 0 )		# GAP
-                self.pages.append( count-1 )
+                if pc > 6:
+                    self.pages.append( count-1 )
                 self.pages.append( count )
 
 # piemēram ja ir tikai viena tad lapu dalītāja nav vispār	# DONE !!!

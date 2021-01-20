@@ -16,9 +16,9 @@ from django.conf.urls import url
 # -- ??? --
 
 # import views
-from main.views import home, weather, location, denied, stats, r_web
-from main.views import ai
-from login.views import login, logout
+from main.views import home, weather, location, denied, stats
+from main.views import ai, r_web
+#from login.views import login, logout
 
 from mapplot.views import plot
 
@@ -38,20 +38,17 @@ urlpatterns = [
 # ADMIN
     path('adminlucy/', admin.site.urls),
 
-# LOGINSYS
-    path('login/', login),
-    path('logout/', logout),
+# LOGIN
+    path('login/', include('login.urls')),
 
 # ACCESS DENIIED
     path('access_denied/', denied, name='access_denied'),
-
 
 # MAP PLOTTER
     path('mapplot/', include('mapplot.urls')),
 
 # AI TESTI
     path('ai/', ai),
-
 # SIMPLE VIDEO WEB_SERVER
     path('r_web/', r_web),
 
@@ -72,7 +69,7 @@ urlpatterns = [
     path('idea/', include('idea.urls')),
 
 # GALERY
-    path('galery/', include('galery.urls')),
+    path('gallery/', include('galery.urls')),
 
 # SMART HOUSE
     path('sm_house/', include('smhouse.urls')),

@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
+
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 from django.contrib import auth
 
 from login.models import User_data
-#, MapPlot
-#from .forms import MapPlotForm
 
 from main.args import create_args
-
-#import datetime
 
 
 # !!!!! LOG-IN !!!!!
 def login(request):
     args = create_args(request) # create new argument list
 #    args.update(csrf(request))      # encript data
-    args['heading'] = "Autorizēšanās sistēmā"
+    args['heading'] = "Autorizēšanās"
 
     if request.POST: # actions if login Form is submitted
         username = request.POST.get('username', '') # usermname <= get variable from Form (name="username"), if not leave blank
@@ -53,4 +52,20 @@ def logout(request):
     return redirect('/')
 
 
+# !!!!! CHANGE PASSWORD !!!!!
+def change_password(request):
+    args = create_args(request)
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
 
+    args['form'] = form
+    return render( request, 'change_password.html', args )

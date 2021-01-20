@@ -20,6 +20,9 @@ def smhouse_termo(request, slug=""):
     args['heading'] = "Temperatūras"
     args['title'] = 'Gudrā Māja | Svabwilla'
 
+   # enable zoom on mobile device
+    args["mobile_zoom"] = True
+
 # RESTRICT ACCESS
     if args['username'].get_username() == '': # NO USER
         return redirect('access_denied')

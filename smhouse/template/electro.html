@@ -3,18 +3,9 @@
 
 
 {% block content %}
-{% if mobile_browser %}
-<div class="col-xs-12 col-sm-12" id="jobs-menu">
- <div class="nav-side-menu">
-  <div style="height: 50px; width:100%;"></div>
-  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#jobs-content"></i>
-  <div class="jobs-list">
-   <ul id="jobs-content" class="menu-content collapse out">
-{% else %}
 <div class="container-fluid">
  <div class="navbar-collapse">
   <ul class="nav nav-tabs">
-{% endif %}
    <li class="active"><a data-toggle="tab" href="#readings">Rādījumi</a></li>
    <li><a data-toggle="tab" href="#graphs">Grafiki</a></li>
   </ul>

@@ -4,11 +4,10 @@ from django.shortcuts import render, redirect # response to template, redirect t
 from login.models import User_data # Access data
 
 from galery.models import Galery
-from galery.paginator import Paginator  # import paginator
-
 from galery.forms import GaleryAddForm
 
 from main.args import create_args
+from main.paginator import Paginator  # import paginator
 
 import math # for rounding up Page Counter
 
@@ -24,6 +23,9 @@ def galery_default(request):
     args = create_args(request)
     args['heading'] = "Galerija"
     args['title'] = "Galerija | Svabwilla"
+
+   # enable zoom on mobile device
+    args["mobile_zoom"] = True
 
    # IF USER
     if args['username'].get_username() != '':
@@ -78,10 +80,15 @@ def galery_main(request, pageid=1):
         end_img = images.count()
 
     args['images'] = images.order_by('-galery_date')[start_img:end_img] # -argument is for negative sort
-    args['paginator'] = Paginator( pagecount, pageid )
+    args['paginator'] = Paginator( pagecount, pageid, 8 )
+
+    if args['mobile_browser']:
+        response = render(request, 'galery_mobile.html', args)
+        response.set_cookie( key='page_loc', value='/gallery/' + str(pageid) + '/', path='/' )
+        return response
 
     response = render(request, 'galery.html', args)
-    response.set_cookie( key='page_loc', value='/galery/' + str(pageid) + '/', path='/' )
+    response.set_cookie( key='page_loc', value='/gallery/' + str(pageid) + '/', path='/' )
     return response
 
 
@@ -112,12 +119,17 @@ def galery_tags(request, tag, pageid=1):
         end_img = len(images)
 
     args['images'] = images[start_img:end_img]
-    args['paginator'] = Paginator( pagecount, pageid )
+    args['paginator'] = Paginator( pagecount, pageid, 8 )
 
     args['tag'] = tag
 
+    if args['mobile_browser']:
+        response = render(request, 'galery_mobile.html', args)
+        response.set_cookie( key='page_loc', value='/gallery/' + str(pageid) + '/', path='/' )
+        return response
+
     response = render(request, 'galery.html', args)
-    response.set_cookie( key='page_loc', value='/galery/tag=' + tag + '/' + str(pageid) + '/', path='/' )
+    response.set_cookie( key='page_loc', value='/gallery/tag=' + tag + '/' + str(pageid) + '/', path='/' )
     return response
 
 
