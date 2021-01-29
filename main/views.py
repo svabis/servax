@@ -19,25 +19,23 @@ from video.models import Camera_online
 from main.args import create_args
 
 
-# !!!!! DST !!!!!
-def dst(test_date):
-    import datetime
-    import calendar
-    test_day = test_date.date()
-    year = test_day.year
 
-    dst_start = max(week[-1] for week in calendar.monthcalendar(year, 10)) # last sunday of this years Oct
-    dst_end   = max(week[-1] for week in calendar.monthcalendar(year, 3))  # last sunday of this years Mar
 
-   # convert to date objects
-    date_dst_start = datetime.date(year, 10, dst_start)
-    date_dst_end = datetime.date(year, 3, dst_end)
+# SIMPLE VIDEO WEB
+def r_web(request):
+    args = create_args(request)
+    args['title'] = 'Simple Video WEB | Svabwilla'
 
-   # compare if in range (summer --> True)
-    if date_dst_end <= test_day <= date_dst_start:
-        return test_date + datetime.timedelta(hours=3)
-    else:
-        return test_date + datetime.timedelta(hours=2)
+    response = render(request, 'rudis_cam.html', args)
+    response.set_cookie( key='page_loc', value='/r_web/', path='/' )
+    return response
+
+
+def led_test(request):
+    args = create_args(request)
+    response = render(request, 'led_test.html', args)
+    return response
+
 
 # AI TESTI
 def ai(request):
@@ -59,6 +57,29 @@ def ai(request):
     response.set_cookie( key='page_loc', value='/ai/', path='/' )
     return response
 
+# ====================================================================================================================
+
+
+# !!!!! DST !!!!!
+def dst(test_date):
+    import datetime
+    import calendar
+    test_day = test_date.date()
+    year = test_day.year
+
+    dst_start = max(week[-1] for week in calendar.monthcalendar(year, 10)) # last sunday of this years Oct
+    dst_end   = max(week[-1] for week in calendar.monthcalendar(year, 3))  # last sunday of this years Mar
+
+   # convert to date objects
+    date_dst_start = datetime.date(year, 10, dst_start)
+    date_dst_end = datetime.date(year, 3, dst_end)
+
+   # compare if in range (summer --> True)
+    if date_dst_end <= test_day <= date_dst_start:
+        return test_date + datetime.timedelta(hours=3)
+    else:
+        return test_date + datetime.timedelta(hours=2)
+
 
 # ACCESS DENIED
 def denied(request):
@@ -75,15 +96,6 @@ def home(request):
 
     response = render(request, 'home.html', args)
     response.set_cookie( key='page_loc', value='/', path='/' )
-    return response
-
-# SIMPLE VIDEO WEB
-def r_web(request):
-    args = create_args(request)
-    args['title'] = 'Simple Video WEB | Svabwilla'
-
-    response = render(request, 'rudis_cam.html', args)
-    response.set_cookie( key='page_loc', value='/r_web/', path='/' )
     return response
 
 

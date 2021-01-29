@@ -21,6 +21,7 @@ function timerIncrement() {
 {% endblock %}
 
 
+
 {% block style %}
    iframe { float: left; border: 1px solid white; overflow: none; }
    div.framediv { width:642px; height:482px; position:relative; float: left; }
@@ -49,10 +50,12 @@ function timerIncrement() {
   <source src="{{ cam.cam_url_stream }}" type="application/x-mpegURL">
  </video>
 </div>
+
 {#{% else %}#}
 {# <div class="framediv">#}
 {#   <iframe src="{{ cam.cam_url }}" id="nr{{ forloop.counter }}" width="{{ cam.cam_width }}px;" height="{{ cam.cam_height }}px;" marginheight="0" marginwidth="0" scrolling="no"></iframe>#}
 {# </div>#}
+
 {% endif %}
 {% endfor %}
 
@@ -104,6 +107,5 @@ $("span.togglebutton").click(function () {
 </script>
 </div>
 
-<div class="row" style="margin-top: 30px;"></div>
 {% endblock %}
 

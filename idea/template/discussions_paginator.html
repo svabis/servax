@@ -28,7 +28,7 @@ jQuery(document).ready(function($) {
  $("#image_txt").click(function (){ $(this).parent().find("input").click(); });
 // $("#camera").click(function (){ $(this).parent().find("input").click(); });
 
-{% if garden_add %} $(".form_cover_text").hide(); $(".form_cover").hide(); {% endif %}
+{% if idea_add %} $(".form_cover_text").hide(); $(".form_cover").hide(); {% endif %}
 
 });
 </script>
@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 <div class="container-fluid">
  <div class="row">
   <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1"> 
-   <a href="/idea/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn garden_back">
+   <a href="/idea/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn idea_back">
     <span class="glyphicon glyphicon-backward" aria-hidden="true"> </span></button></a>
   </div>
   <div class="col-xs-11 col-sm-11 col-md-10 col-lg-10" style="padding-right: 0px;">
@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
    </div>
    <div class="row" style="border-top: solid #888 1px; margin-top: 10px;">
     <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-top: 17px;">
-     <a href="/idea/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn garden_back">
+     <a href="/idea/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn idea_back">
       <span class="glyphicon glyphicon-backward" aria-hidden="true"> </span></button></a>
     </div>
     <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="padding-right: 0px; margin-top:17px;">

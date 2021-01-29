@@ -75,12 +75,17 @@ function jobScrollControl() { setInterval(function(){ document.cookie = "jobs_sc
 
 
 {% block style %}
+
+{% for t in type %}
+   .type{{ t.order }} > td { background-color:{{ t.color }} !important;  }
+{% endfor %}
+
    textarea { resize: none; }
 
   .table td.fit, .table th.fit { width: 1%; text-align:center; }
 
-   #markingbtn { color: #222; border-color: #555; display: none; top: 70px; position: fixed; right: 30px; }
-   #unmarkingbtn { color: #222; border-color: #555; display: none; top: 70px; position: fixed; right: 30px; }
+   #markingbtn { color: #222; border-color: #555; display: none; top: 70px; position: fixed; right: 30px; min-width:145px; }
+   #unmarkingbtn { color: #222; border-color: #555; display: none; top: 70px; position: fixed; right: 30px; min-width:145px; }
 
    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th { background-color: #9b9da0; }
    .table.table > thead > tr > th { vertical-align:top }

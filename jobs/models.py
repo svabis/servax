@@ -8,39 +8,37 @@ from django.contrib.auth.models import User
 import datetime
 
 
-ZONE_CHOICES = (
-    ('maja', 'māja'),
-    ('IT', 'IT'),
-    ('lapene', 'lapene'),
-    ('skjunis', 'šķūnis'),
-    ('elektriba', 'elektrība'),
-    ('santehnika', 'santehnika'),
-    ('instrument', 'instrumenti'),
-    ('darzs', 'dārzs'),
-    ('zogs', 'žogs'),
-    ('grods', 'grods'),
-    ('koki', 'koki'),
-    ('cits', 'cits'),
-    ('KUVALDA', 'TrailCamPhoto'),
-    ('GRAVANI', 'IT-Projekti'),
-)
+# JOB ZONES
+class JobsZones(models.Model):
+    class Meta():
+        db_table = "jobs_zones"
+        verbose_name_plural = "Darbu zonas"
 
-URGENT_CHOICES = (
-    ('ATRAST', 'atrast'),
-    ('JADARA', 'jādara'),
-    ('PETIT', 'izpētīt apdomāt'),
-    ('JAPERK', 'jāpērk'),
-    ('VEST', 'transports'),
-    ('SVARIGI', 'svarīgi'),
-#    ('KUVALDA', 'TrailCamPhoto'),
-#    ('GRAVANI', 'IT-Projekti'),
-)
+    order = models.IntegerField( null=True, blank=True  )
+    title = models.CharField( max_length=20, default="" )
+    special = models.BooleanField( default=False )
 
+    def __str__(self):
+        return str(self.title)
+
+# JOB TYPES
+class JobsTypes(models.Model):
+    class Meta():
+        db_table = "jobs_types"
+        verbose_name_plural = "Darbu veidi"
+
+    order = models.IntegerField( null=True, blank=True  )
+    type = models.CharField( max_length=20, default="" )
+    color = models.CharField( max_length=10, default="#f5f5f5" )
+
+    def __str__(self):
+        return str(self.type)
 
 # JOBS
 class Jobs(models.Model):
     class Meta():
         db_table = "jobs"
+        verbose_name_plural = "Darbu saraksts"
 
     jobs_user = models.ForeignKey( User, blank=True, null=True, on_delete=models.CASCADE ) # User kurš pievienoja darbu
 
@@ -50,8 +48,8 @@ class Jobs(models.Model):
 
     jobs_descr = models.TextField( blank=False, verbose_name="Darba uzdevums" )
 
-    jobs_zone = models.CharField( max_length=10, choices=ZONE_CHOICES, default="IT", verbose_name="Darba zona" )
-    jobs_type = models.CharField( max_length=10, choices=URGENT_CHOICES, default="JADARA", verbose_name="Darba veids/svarīgums" )
+    jobs_zone = models.ForeignKey( JobsZones, null=False, blank=False, default=1, on_delete=models.CASCADE )
+    jobs_type = models.ForeignKey( JobsTypes, null=False, blank=False, default=1, on_delete=models.CASCADE )
 
     jobs_link = models.URLField( max_length=200, blank=True, null=True, verbose_name="Saite" )
 
@@ -82,7 +80,9 @@ class JobObj(models.Model):
     obj_descr = models.TextField( blank=True )
 
     obj_actual = models.BooleanField( default=False )
-    obj_zone = models.CharField( max_length=10, choices=ZONE_CHOICES, default="cits" )
+
+    obj_zone = models.ForeignKey( JobsZones, null=False, blank=False, default=1, on_delete=models.CASCADE )
+
     obj_url = models.URLField( max_length=200, blank=True, null=True )
     obj_nr = models.IntegerField( null=True, blank=True )
 

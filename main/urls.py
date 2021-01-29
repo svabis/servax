@@ -18,6 +18,7 @@ from django.conf.urls import url
 # import views
 from main.views import home, weather, location, denied, stats
 from main.views import ai, r_web
+from main.views import led_test
 #from login.views import login, logout
 
 from mapplot.views import plot
@@ -51,6 +52,9 @@ urlpatterns = [
     path('ai/', ai),
 # SIMPLE VIDEO WEB_SERVER
     path('r_web/', r_web),
+
+# LED TESTS
+    path('led_test/', led_test),
 
 # JOBS
     path('jobs/', include('jobs.urls')),

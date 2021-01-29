@@ -25,13 +25,13 @@ def main(request, pageid=1):
     if args['username'].get_username() == '': # NO USER
         return redirect('access_denied')
     else:
-        garden_access = User_data.objects.get(user_user = args['username']).idea
-    if garden_access != True:
+        idea_access = User_data.objects.get(user_user = args['username']).idea
+    if idea_access != True:
       # ACCESS DENIED
         return redirect('access_denied')
 
     try:
-        args['garden_add'] = User_data.objects.get(user_user = args['username']).idea_add
+        args['idea_add'] = User_data.objects.get(user_user = args['username']).idea_add
     except:
         pass
 
@@ -76,13 +76,13 @@ def super(request, s_id, pageid=1):
     if args['username'].get_username() == '': # NO USER
         return redirect('access_denied')
     else:
-        garden_access = User_data.objects.get(user_user = args['username']).idea
-    if garden_access != True:
+        idea_access = User_data.objects.get(user_user = args['username']).idea
+    if idea_access != True:
       # ACCESS DENIED
         return redirect('access_denied')
 
     try:
-        args['garden_add'] = User_data.objects.get(user_user = args['username']).idea_add
+        args['idea_add'] = User_data.objects.get(user_user = args['username']).idea_add
     except:
         pass
 

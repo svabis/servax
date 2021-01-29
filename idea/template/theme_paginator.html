@@ -25,10 +25,10 @@ function chk_one(el) {
  <div class="row">
 {#  <div class="col-lg-12 col-md-12 col-sm-12"> #}
 {% if parent %}
-  <a href="/idea/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn garden_back">
+  <a href="/idea/{{ s_id }}/{{ parent.slug }}/"><button type="button" class="btn idea_back">
    <span class="glyphicon glyphicon-backward" aria-hidden="true"> </span></button></a>
 {% else %}
-  <a href="/idea/{{ s_id }}/"><button type="button" class="btn garden_back">
+  <a href="/idea/{{ s_id }}/"><button type="button" class="btn idea_back">
    <span class="glyphicon glyphicon-backward" aria-hidden="true"> </span></button></a>
 {% endif %}
 {#  </div> #}
@@ -45,7 +45,7 @@ function chk_one(el) {
 {% if add_tema %}
 {#<div class="container">#}
  <center>
-  <h4>{% if garden_add %}<a href="#add_tema" id="add_tema" onclick="show_add_form()">Pievienot jaunu Mapi vai Idejas</a>{% else %}
+  <h4>{% if idea_add %}<a href="#add_tema" id="add_tema" onclick="show_add_form()">Pievienot jaunu Mapi vai Idejas</a>{% else %}
 {# <!--  Lai pievienotu Tēmu vai Diskusiju nepieciešams <a href="/auth/login/">Autorizēties</a> --> #}
   <b class="text-danger">Atvainojiet, jums nav tiesību pievienoties diskusijai!</b>{% endif %}</h4>
  </center>

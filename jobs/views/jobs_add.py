@@ -68,10 +68,6 @@ def add(request):
                             temp.marked_until = datetime.now() + timedelta(days=time)
                         except:
                             pass
-#                    elif temp.jobs_type == "KUVALDA" or temp.jobs_type == "GRAVANI":
-#                        temp.marked_until = datetime.now() + timedelta(days=7)
-#                    else:
-#                        temp.marked_until = datetime.now() + timedelta(days=3)
 
                 temp.save()
 #                args['message'] = "Darbs pievienots!"

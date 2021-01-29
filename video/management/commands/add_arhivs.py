@@ -18,7 +18,7 @@ class Command(BaseCommand):
         today = datetime.datetime.today() - datetime.timedelta(days = 1)
         today_str = str(today)[:10].replace('-', '')
 
-        cameras = Camera.objects.all()
+        cameras = Camera.objects.all().order_by("-cam_nr")
         for c in cameras:
             input = c.cam_user + "/" + today_str + "/"
 
@@ -27,5 +27,9 @@ class Command(BaseCommand):
 
             output = today_str + "_" + slugify(c.cam_name)[0] + ".mp4"
 
+#            print( c )
+#            print( c.cam_nr )
+
             new_task = Server_Task( task_object=c.cam_user, task_input=input, task_output=output )
             new_task.save()
+

@@ -19,8 +19,9 @@
    {% if job.jobs_type == 'JAPERK' %}<tr class="warning">{% elif job.jobs_type == 'SVARIGI' %}<tr class="danger">{% else %}<tr class="success">{% endif %}
     <td>{{ job.jobs_date_added|date:"d/m/Y" }}</td>
     <td>{% if job.jobs_date_start != None %}{{ job.jobs_date_start|date:"d/m/Y" }}{% endif %}</td>
-    <td>{{ job.jobs_descr|safe }}{% if job.jobs_link %}<br><a href="{{ job.jobs_link }}" target="_blank" class="text-danger">{{ job.jobs_link|truncatechars:50 }}</a>{% endif %}</td>
-    <td>{{ job.get_jobs_zone_display }}</td>
+    <td>{{ job.jobs_descr|safe }}{% if job.jobs_link %}<br>
+     <a href="{{ job.jobs_link }}" target="_blank" class="text-danger">{{ job.jobs_link|truncatechars:50 }}</a>{% endif %}</td>
+    <td>{{ job.jobs_zone }}</td>
     <td style="text-align:center;"><input type="checkbox" value=""></td>
    </tr>
   </tbody>{% endfor %}

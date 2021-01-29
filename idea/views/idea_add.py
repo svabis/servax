@@ -23,20 +23,20 @@ def add_tema(request):
     if args['username'].get_username() == '': # NO USER
         return redirect('access_denied')
     else:
-        garden_access = User_data.objects.get(user_user = args['username']).idea
-    if garden_access != True:
+        idea_access = User_data.objects.get(user_user = args['username']).idea
+    if idea_access != True:
       # ACCESS DENIED
         return redirect('access_denied')
 
     try:
-        garden_add = User_data.objects.get(user_user = args['username']).idea_add
+        idea_add = User_data.objects.get(user_user = args['username']).idea_add
     except:
-        garden_add = False
+        idea_add = False
 
     args['super'] = SuperTheme.objects.all().order_by('order')
     args['user'] = auth.get_user(request)
 
-    if request.POST and garden_add:
+    if request.POST and idea_add:
         form = ThemeForm( request.POST )
 
         location = str(request.COOKIES.get('page_loc')).split('/')

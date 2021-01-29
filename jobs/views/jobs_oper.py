@@ -76,10 +76,7 @@ def marking(request):
         for j in jobs:
             temp = Jobs.objects.get(id=int(j))
             temp.marked = True
-            if temp.jobs_type == "KUVALDA" or temp.jobs_type == "GRAVANI":
-                temp.marked_until = datetime.now() + timedelta(days=7)
-            else:
-                temp.marked_until = datetime.now() + timedelta(days=3)
+            temp.marked_until = datetime.now() + timedelta(days=3)
             temp.save()
 
     response = redirect('marked_job_list')

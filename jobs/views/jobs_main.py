@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, redirect
 
-from jobs.models import Jobs		# import aplication models
+from jobs.models import Jobs, JobsTypes
 
 from login.models import User_data
 
@@ -17,6 +17,9 @@ def default(request):
     args = create_args(request)
     args['title'] = 'Darbu saraksts | Svabwilla'
     args['heading'] = "Darbu saraksts"
+
+    args['type'] = JobsTypes.objects.all()
+
    # User Restrictions
     try:
         args['u_job_list'] = User_data.objects.get(user_user = args['username']).job_list
@@ -77,11 +80,9 @@ def marked(request):
     if args['u_job_list'] == False:
         return redirect('access_denied')
     elif args['username'].is_superuser:
-#        args['jobs'] = Jobs.objects.filter(marked=True).order_by('jobs_date_added')
         args['jobs'] = Jobs.objects.filter(marked=True).order_by('marked_id')
     else:
-#        args['jobs'] = Jobs.objects.filter(marked=True).exclude(jobs_type = "GRAVANI").exclude(jobs_type = "KUVALDA").order_by('jobs_date_added')
-        args['jobs'] = Jobs.objects.filter(marked=True).exclude(jobs_zone = "GRAVANI").exclude(jobs_zone = "KUVALDA").order_by('marked_id')
+        args['jobs'] = Jobs.objects.filter(marked=True, jobs_zone__special=False).order_by('marked_id')
 
     response = render( request, 'marked.html', args )
     response.set_cookie( key='page_loc', value='/jobs/marked/', path='/' )
@@ -108,7 +109,7 @@ def to_do(request, sort_id=0):
     elif args['username'].is_superuser:
         j = Jobs.objects.filter(jobs_done=False, jobs_cancel=False, marked=False)
     else:
-        j = Jobs.objects.filter(jobs_done=False, jobs_cancel=False, marked=False).exclude(jobs_type = "GRAVANI").exclude(jobs_type = "KUVALDA")
+        j = Jobs.objects.filter(jobs_done=False, jobs_cancel=False, marked=False, jobs_zone__special=False)
 
     args['jobs'] = sort_options[int(sort)](j)
 
@@ -139,7 +140,7 @@ def done(request, sort_id=10):
     elif args['username'].is_superuser:
         j = Jobs.objects.filter(jobs_done=True)
     else:
-        j = Jobs.objects.filter(jobs_done=True).exclude(jobs_type = "GRAVANI").exclude(jobs_type = "KUVALDA")
+        j = Jobs.objects.filter(jobs_done=True, jobs_zone__special=False)
 
     args['jobs'] = sort_options[int(sort)](j)
 
@@ -170,7 +171,7 @@ def canceled(request, sort_id=0):
     elif args['username'].is_superuser:
         j = Jobs.objects.filter(jobs_cancel=True)
     else:
-        j = Jobs.objects.filter(jobs_cancel=True).exclude(jobs_type = "GRAVANI").exclude(jobs_type = "KUVALDA")
+        j = Jobs.objects.filter(jobs_cancel=True, jobs_zone__special=False)
 
     args['jobs'] = sort_options[int(sort)](j)
 

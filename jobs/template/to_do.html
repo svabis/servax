@@ -3,24 +3,20 @@
 {% block jobs_todo %}
 <script>
 var markedArray = [];
+var markBtnTxt = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Izcelt darbu';
 
 function mb_click( el, thisValue ) {
   if ( markedArray.indexOf( thisValue ) === -1 ) {
-    markedArray.push( thisValue );
-    el.classList.add('btn-danger');
-    el.classList.remove('btn-warning');
-    el.childNodes[1].classList.add('glyphicon-remove');
-    el.childNodes[1].classList.remove('glyphicon-ok');
+    markedArray.push( thisValue ); el.classList.add('btn-danger'); el.classList.remove('btn-warning');
+    el.childNodes[1].classList.add('glyphicon-remove'); el.childNodes[1].classList.remove('glyphicon-ok');
   }
   else {
-    markedArray.remove( thisValue );
-    el.classList.add('btn-warning');
-    el.classList.remove('btn-danger');
-    el.childNodes[1].classList.add('glyphicon-ok');
-    el.childNodes[1].classList.remove('glyphicon-remove');
+    markedArray.remove( thisValue ); el.classList.add('btn-warning'); el.classList.remove('btn-danger');
+    el.childNodes[1].classList.add('glyphicon-ok'); el.childNodes[1].classList.remove('glyphicon-remove');
   }
-  console.log( markedArray );
-  if (markedArray.length > 0) { $("#markingbtn").show(); } else { $("#markingbtn").hide(); }
+  if (markedArray.length > 0) { $("#markingbtn").show();
+    if (markedArray.length == 1) { $("#markingbtn").html(markBtnTxt); } else { $("#markingbtn").html(markBtnTxt+"s"); }
+  } else { $("#markingbtn").hide(); }
 }
 
 window.onload = function () { $("#markingbtn").hide(); $("input.disabled_checkbox").attr("disabled", true); modals.init(); }
@@ -129,9 +125,16 @@ var modals = {
  <th style="text-align:center;"><a href="/jobs/to_do/3/"><span>Darbs sākts </span>{% if sort == 3 %}<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"/>{% endif %}{% if sort == 4 %}<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"/>{% endif %}</a></th>
  <th style="text-align:center;">Darbs pabeigts</th>
  <th style="text-align:center;">Atcelt darbu</th>
-</tr></thead>{% for job in jobs %}
-{% if first_date%}{% if first_date != job.jobs_date_added %}{% with job.jobs_date_added as first_date %}<tbody><tr style="background-color: rgba(210,130,240, 0.3) !important;"><td colspan="7"></td>{% endwith %}</tr></tbody>{% endif %}{% endif %}
-<tbody>{% if job.jobs_date_start != None %}<tr class="success">{% elif job.jobs_type == 'JAPERK' %}<tr class="warning">{% elif job.jobs_type == 'SVARIGI' %}<tr class="danger">{% else %}<tr>{% endif %}
+</tr></thead>
+
+{% for job in jobs %}
+{% if first_date %}{% if first_date != job.jobs_date_added %}
+{% with job.jobs_date_added as first_date %}<tbody><tr style="background-color: rgba(210,130,240, 0.3) !important;"><td colspan="7"></td>{% endwith %}</tr></tbody>{% endif %}{% endif %}
+
+<tbody>
+{% if job.jobs_date_start != None %}<tr class="success">
+{% else %}<tr class="active type{{ jobs.job_type.order }}" draggable="true">
+{% endif %}
  <td style="display: none;">{{ job.id }}</td>
  <td>
 {% if u_job_mark %}
@@ -142,8 +145,8 @@ var modals = {
  <td>{{ job.jobs_date_added|date:"d/m/Y" }}</td>
  <td>{% if job.jobs_date_start != None %}{{ job.jobs_date_start|date:"d/m/Y" }}{% endif %}</td>
  <td>{{ job.jobs_descr|safe }}{% if job.jobs_link %}<br><a href="{{ job.jobs_link }}" target="_blank" class="text-danger">{{ job.jobs_link|truncatechars:50 }}</a>{% endif %}</td>
- <td>{{ job.get_jobs_zone_display }}</td>
- <td>{{ job.get_jobs_type_display }}</td>
+ <td>{{ job.jobs_zone }}</td>
+ <td>{{ job.jobs_type }}</td>
  <td style="text-align:center;">{% if job.jobs_date_start == None %}
   <input type="checkbox" id="s"{% if u_job_start == False %} disabled{% endif %}>{% else %}<input type="checkbox" checked="checked" class="disabled_checkbox">{% endif %}</td>
  <td style="text-align:center;">
