@@ -39,6 +39,10 @@ urlpatterns = [
 # ADMIN
     path('adminlucy/', admin.site.urls),
 
+# COOKIES
+    path('cookies/', include('cookie_consent.urls')),
+
+
 # LOGIN
     path('login/', include('login.urls')),
 
@@ -52,9 +56,6 @@ urlpatterns = [
     path('ai/', ai),
 # SIMPLE VIDEO WEB_SERVER
     path('r_web/', r_web),
-
-# LED TESTS
-    path('led_test/', led_test),
 
 # JOBS
     path('jobs/', include('jobs.urls')),

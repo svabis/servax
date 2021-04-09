@@ -12,7 +12,9 @@
 
 <script>
 {# "Target's GPS coordinates." #}
-var lat = '56.9687926'; var lon = '24.6827413'; var map;
+var map;
+var xy = [[56.968901, 24.683116], [56.969026, 24.682507], [56.969223, 24.682413]];
+var lat = '56.9687926'; var lon = '24.6827413';
 
 {# "GET LOCATION FROM BUTTON CLICK" #}
 function getLocation() {
@@ -40,9 +42,18 @@ function showPosition() {
   var target = L.latLng( lat, lon);
  {# "Set map's center to target with zoom." #}
   map.setView(target, 15);
- {# "Place a marker on the same location." #}
+ {# "Place a marker on xy location." #}
+  var target = L.latLng( xy[0] );
   L.marker(target).addTo(map);
 
+  var target = L.latLng( xy[1] );
+  L.marker(target).addTo(map);
+
+  var target = L.latLng( xy[2] );
+  L.marker(target).addTo(map);
+
+  var latlng = [[56.968850, 24.683409], [56.968639, 24.683028], [56.968681, 24.682941], [56.968685, 24.682832], [56.969211, 24.681971], [56.969398, 24.682348]];
+  var polygon = L.polygon(latlng, {color:'blue'}).addTo(map);
 
 //  var myMarker = L.circleMarker(stuSplit, { title: 'unselected' }).addTo(map);
 //  var temp = L.circle( [ '{{d.lat}}' , '{{d.lon}}' ], {color:'{{ d.radio }}', fillColor:'{{ d.radio }}', fillOpacity:0.5, radius:3}).addTo(map);

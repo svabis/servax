@@ -25,11 +25,6 @@ class JobsForm(ModelForm):
             'marked': forms.CheckboxInput(attrs={'class': 'form-control', 'style':'margin-left:0px;'})
         }
 
-
-# !!!!!!!!!!!!!!!!!!!!!
-# !!!!! WORK HERE !!!!!
-# !!!!!!!!!!!!!!!!!!!!!
-
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', True)
         super(JobsForm, self).__init__(*args, **kwargs)

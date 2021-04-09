@@ -2,8 +2,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from jobs.models import Jobs		# import aplication models
-from jobs.forms import JobsForm 	# import FORM
+# import aplication models
+from jobs.models import Jobs
+# import FORM
+from jobs.forms import JobsForm
 
 from login.models import User_data
 
@@ -61,12 +63,12 @@ def marking(request):
         job_mark = User_data.objects.get(user_user = args['username']).job_mark
 
     if job_mark == False:
-# ACCESS RESTRICTED
+       # ACCESS RESTRICTED
         return redirect('main_job_list')
     else:
 
         sort_marked_jobs()
-# ACCESS GRANTED
+       # ACCESS GRANTED
         if request.POST:
             jobs = request.POST.get('mark_job_id', '')
             jobs = jobs.replace("[", "")
@@ -76,7 +78,13 @@ def marking(request):
         for j in jobs:
             temp = Jobs.objects.get(id=int(j))
             temp.marked = True
-            temp.marked_until = datetime.now() + timedelta(days=3)
+
+           # !!!!! SET DAYS ACCORDING TO TYPE !!!!!
+            if temp.jobs_type.marking_days is not None:
+                temp.marked_until = datetime.now() + timedelta(days=temp.jobs_type.marking_days)
+            else:
+                temp.marked_until = datetime.now() + timedelta(days=3)
+
             temp.save()
 
     response = redirect('marked_job_list')
@@ -93,10 +101,10 @@ def unmarking(request):
         job_mark = User_data.objects.get(user_user = args['username']).job_mark
 
     if job_mark == False:
-# ACCESS RESTRICTED
+       # ACCESS RESTRICTED
         return redirect('main_job_list')
     else:
-# ACCESS GRANTED
+       # ACCESS GRANTED
         if request.POST:
             jobs = request.POST.get('unmark_job_id', '')
             jobs = jobs.replace("[", "")
@@ -126,7 +134,7 @@ def job_start(request, job_id):
 
     if job_start:
         if args['username'].get_username() == '': # IF NO USER --> DEMO LIST
-# RESTRICT ACCESS
+           # RESTRICT ACCESS
             return redirect('/')
         else:
             job = Jobs.objects.get(id = int(job_id))
@@ -155,7 +163,7 @@ def job_finish(request, job_id):
 
     if job_fin:
         if args['username'].get_username() == '': # IF NO USER --> DEMO LIST
-# RESTRICT ACCESS
+           # RESTRICT ACCESS
             return redirect('/')
         else:
             job = Jobs.objects.get(id = int(job_id))
@@ -163,6 +171,7 @@ def job_finish(request, job_id):
             job.jobs_done = True
             job.marked = False
             job.marked_until = None
+            job.marked_id = None
             job.save()
 
     if 'page_loc' in request.COOKIES:
@@ -187,13 +196,14 @@ def job_cancel(request, job_id):
 
     if job_cancel:
         if args['username'].get_username() == '': # IF NO USER --> DEMO LIST
-# RESTRICT ACCESS
+           # RESTRICT ACCESS
             return redirect('/')
         else:
             job = Jobs.objects.get(id = int(job_id))
             job.jobs_cancel = True
             job.marked = False
             job.marked_until = None
+            job.marked_id = None
             job.save()
 
     if 'page_loc' in request.COOKIES:

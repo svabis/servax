@@ -132,9 +132,7 @@ var modals = {
 {% with job.jobs_date_added as first_date %}<tbody><tr style="background-color: rgba(210,130,240, 0.3) !important;"><td colspan="7"></td>{% endwith %}</tr></tbody>{% endif %}{% endif %}
 
 <tbody>
-{% if job.jobs_date_start != None %}<tr class="success">
-{% else %}<tr class="active type{{ jobs.job_type.order }}" draggable="true">
-{% endif %}
+<tr class="active type{{ job.jobs_type.order }}{% if job.jobs_date_start != None %}s{% endif %}" draggable="true">
  <td style="display: none;">{{ job.id }}</td>
  <td>
 {% if u_job_mark %}

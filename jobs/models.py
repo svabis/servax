@@ -29,7 +29,11 @@ class JobsTypes(models.Model):
 
     order = models.IntegerField( null=True, blank=True  )
     type = models.CharField( max_length=20, default="" )
+
+    marking_days = models.IntegerField( null=True, blank=True  )
+
     color = models.CharField( max_length=10, default="#f5f5f5" )
+    started_color = models.CharField( max_length=10, default="#f5f5f5" )
 
     def __str__(self):
         return str(self.type)
@@ -40,7 +44,7 @@ class Jobs(models.Model):
         db_table = "jobs"
         verbose_name_plural = "Darbu saraksts"
 
-    jobs_user = models.ForeignKey( User, blank=True, null=True, on_delete=models.CASCADE ) # User kurš pievienoja darbu
+    jobs_user = models.ForeignKey( User, blank=True, null=True, on_delete=models.CASCADE )
 
     jobs_date_added = models.DateField( default=datetime.datetime.now, verbose_name="Darbs pievienots" )
     jobs_date_done = models.DateField( null=True, blank=True )
@@ -48,8 +52,8 @@ class Jobs(models.Model):
 
     jobs_descr = models.TextField( blank=False, verbose_name="Darba uzdevums" )
 
-    jobs_zone = models.ForeignKey( JobsZones, null=False, blank=False, default=1, on_delete=models.CASCADE )
-    jobs_type = models.ForeignKey( JobsTypes, null=False, blank=False, default=1, on_delete=models.CASCADE )
+    jobs_zone = models.ForeignKey( JobsZones, blank=False, default=1, on_delete=models.CASCADE )
+    jobs_type = models.ForeignKey( JobsTypes, null=False, blank=False, default=2, on_delete=models.CASCADE )
 
     jobs_link = models.URLField( max_length=200, blank=True, null=True, verbose_name="Saite" )
 
@@ -65,6 +69,11 @@ class Jobs(models.Model):
         return truncatechars(self.jobs_descr, 60)
     jobs_descr_short.fget.short_description = u'Darba uzdevums saīsināts'
 
+    @property
+    def jobs_link_short(self):
+        return "" if self.jobs_link is None else truncatechars(self.jobs_link, 30)
+    jobs_link_short.fget.short_description = u'Darba saite saīsināts'
+
     def __str__(self):
         return str(self.jobs_date_added)
 
@@ -74,6 +83,7 @@ class Jobs(models.Model):
 class JobObj(models.Model):
     class Meta():
         db_table = "jobs_objects"
+        verbose_name_plural = "Lietu parametri"
 
     obj_added = models.DateField( default=datetime.datetime.now, verbose_name="Darbs pievienots" )
     obj_title = models.CharField( max_length=50, blank=False )
@@ -96,6 +106,7 @@ class JobObj(models.Model):
 class JobObj_image(models.Model):
     class Meta():
         db_table = "jobs_objects_images"
+        verbose_name_plural = "Lietu parametru attēli"
 
     job_obj = models.ForeignKey( JobObj, default=1, related_name='o_i', on_delete=models.CASCADE )
     obj_image_big = models.ImageField( blank = True, null=True, upload_to = "job_obj/big/" )
@@ -108,6 +119,7 @@ class JobObj_image(models.Model):
 class JobObj_file(models.Model):
     class Meta():
         db_table = "jobs_objects_files"
+        verbose_name_plural = "Lietu parametru faili"
 
     job_obj = models.ForeignKey( JobObj, default=1, related_name='o_f', on_delete=models.CASCADE )
     obj_file = models.FileField( blank = True, null=True, upload_to = "job_obj/file/" )

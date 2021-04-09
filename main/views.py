@@ -51,7 +51,10 @@ def ai(request):
     import threading
     from main.life_v3 import main_life
     life = threading.Thread(target=main_life, args=(), daemon=True)
+#    life = threading.Thread(target='/home/alex/skripti/LIFE/life_v2.py', args=(), daemon=True)
+    life.daemon = True
     life.start()
+
 
     response = render(request, 'ai.html', args)
     response.set_cookie( key='page_loc', value='/ai/', path='/' )

@@ -36,13 +36,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+# DJANGO COOKIE CONSENT
+    'cookie_consent',
+
 # APP LIST
     'video',
     'login',
     'jobs',
     'smhouse',
     'galery',
-
     'idea',
 
 # MAP PLOTTING APP
@@ -67,7 +70,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
 
-    'django_user_agents.middleware.UserAgentMiddleware'
+    'django_user_agents.middleware.UserAgentMiddleware',
+
+    'main.last_seen.SetLastVisitMiddleware'
+#    'main.last_seen.TestMiddleware'
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -83,6 +89,7 @@ TEMPLATES = [
 #                '/var/www/svabis.eu/template', '/var/www/svabis.eu/video/template', '/var/www/svabis.eu/login/template', '/var/www/svabis.eu/jobs/template',
 #                '/var/www/svabis.eu/smhouse/template', '/var/www/svabis.eu/idea/template', '/var/www/svabis.eu/galery/template',
 #		 '/var/www/svabis.eu/mapplot/template',
+
                 ],
         'APP_DIRS': True,
         'OPTIONS': {

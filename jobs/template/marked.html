@@ -134,9 +134,7 @@ var modals = {
 
 <tbody id="table">
 {% for job in jobs %}
-{% if job.jobs_date_start != None %}<tr class="success" draggable="true">
-{% else %}<tr class="active type{{ job.jobs_type.order }}" draggable="true">
-{% endif %}
+<tr class="active type{{ job.jobs_type.order }}{% if job.jobs_date_start != None %}s{% endif %}" draggable="true">
  <td style="display: none;">{{ job.id }}</td>
  <td>
 {% if u_job_mark %}

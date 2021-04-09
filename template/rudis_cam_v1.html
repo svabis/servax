@@ -10,7 +10,7 @@ a { color:#000; }
 {% block content %}
 <h1 style="margin-top: 0px;">Simple VIDEO webserver</h1>
 
-<p class="text-justify">&nbsp;&nbsp;&nbsp;Versija <b>2.0</b> sastāv no 3 failiem: .html (paraugs lapas apakšā), .py (jāstratē no crontab, ar biežumu atbilstoši jaunu video failu izveidei), .json (saraksts ar video failiem).</p>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Versija <b>1.0</b> sastāv no 3 failiem: .html (paraugs lapas apakšā), .py (jāstratē no crontab, ar biežumu atbilstoši jaunu video failu izveidei), .json (saraksts ar video failiem).</p>
 
 <p class="text-justify">&nbsp;&nbsp;&nbsp;<b>vid_collector.py</b> - atrašanās vieta var nebūt piesaistīta WEB serverim.</p>
 
@@ -28,10 +28,7 @@ a { color:#000; }
 <div class="well">16.	&#60;script type=&#34;text/javascript&#34; src=&#34;/static/vid.json&#34;&#62;&#60;/script&#62;</div>
 <p class="text-justify">&nbsp;&nbsp;&nbsp;src rakstam webserverim pieejamo vietu kur atrodās python skripta izveidotais fails ar sarakstu.</p>
 
-<p class="text-justify">&nbsp;&nbsp;&nbsp;Jaunākā versija - v2.</p>
-
-<a href="/static/R_VID_v1.tar.gz"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> R_VID_v1.tar.gz</a><br>
-<a href="/static/R_VID_v2.tar.gz"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> R_VID_v2.tar.gz</a>
+<a href="/static/R_VID_v1.tar.gz"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> R_VID_v1.tar.gz</a>
 
 <hr>
 
@@ -51,7 +48,6 @@ function playThis(val) {
   video.pause();
   player.src = vidData[val];
   video.load();
-  video.play();
 }
 
 var date = vidData[0].split("/")[ vidData[0].split("/").length-2 ]

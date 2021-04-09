@@ -127,15 +127,15 @@ def display():
 
 # CREATE LIFE
 def create_life():
-#    for i in range(1, lf+1):
-#        color = 0
-#        while color < 100:
-#            tempr = rnd(0, 254)
-#            tempg = rnd(0, 254)
-#            tempb = rnd(0, 254)
-#            color = tempr + tempg + tempb
+    for i in range(1, lf+1):
+        color = 0
+        while color < 100:
+            tempr = rnd(0, 254)
+            tempg = rnd(0, 254)
+            tempb = rnd(0, 254)
+            color = tempr + tempg + tempb
 
-#        s.append( (tempr, tempg, tempb) )
+        s.append( (tempr, tempg, tempb) )
 
     temp = []
     for n in range(width * height):
@@ -172,19 +172,14 @@ channels = 3
 ratio = 3
 
 # life form intensity
-r = 5000
+r = 8000
 
 # "life form" count
-#lf = rnd(10, 25)
-lf = 4
+lf = rnd(10, 25)
 
 # Array of colors for life forms
-#s = []
-#s = [        "green", "blue", "yellow", "red",]
-#s = [(0,0,0), (0,250,0), (50,50,200), (200,220,50), (240,15,15),]
-s = [(0,0,0), (50,50,200), (200,220,50), (240,15,15),]
+s = []
 
-# wtf ???
 ext = 5
 
 # Create an empty black image
@@ -198,15 +193,14 @@ height = int( height / ratio )
 img = np.zeros((height, width))
 
 display()
-#pauze(5)
+pauze(5)
 
 # CREATE LIFE
 create_life()
 
-print(len(s))
 draw_all()
 display()
-pauze(2)
+pauze(10)
 
 # LET's LIVE
 array = int(height * width / 20 * 16.15)
@@ -222,7 +216,7 @@ def live(sim):
 
         activity = False
 
-#        ex_c = 0
+        ex_c = 0
         while activity != True:
 
             temp = rnd(0, len(coord_array)-1)
@@ -233,10 +227,10 @@ def live(sim):
             activity = chk_coord( x, y )
 
            # escape if array is filled
-#            if activity != True:
-#                ex_c += 1
-#            if ex_c > 3000:
-#                activity = True
+            if activity != True:
+                ex_c += 1
+            if ex_c > 3000:
+                activity = True
 #                print( "X" )
 
 # program will wait for thread to finish
@@ -246,32 +240,31 @@ def live(sim):
 def main_life():
   l0 = threading.Thread(target=live, args=( 0, ), daemon=True)
   l0.start()
-  #l1 = threading.Thread(target=live, args=( rnd(1,lf) ,), daemon=True)
-  #l1.start()
+#  l1 = threading.Thread(target=live, args=( rnd(1,lf) ,), daemon=True)
+#  l1.start()
 
   lo = threading.Thread(target=live, args=( 1, ), daemon=True)
   lo.start()
-  #le = threading.Thread(target=live, args=( 2, ), daemon=True)
-  #le.start()
+  le = threading.Thread(target=live, args=( 2, ), daemon=True)
+  le.start()
 
 
-  def all():
+def all():
     for i in range(1, lf+1):
         l = threading.Thread(target=live, args=(i,), daemon=True)
         l.start()
-  #all()
+all()
 
-  end_simulation = datetime.now() + timedelta(minutes=5)
-  print( datetime.now() )
-  print( end_simulation )
+end_simulation = datetime.now() + timedelta(minutes=5)
+print( datetime.now() )
+print( end_simulation )
 
 
 # DISPLAY LOOP UNTIL END TIME
-  while datetime.now() < end_simulation:
-#      draw_all()
-      display()
-      pauze(1)
+while datetime.now() < end_simulation:
+    display()
+    pauze(1)
 
-  print( "--- EXITED ---" )
-  print( end_simulation )
-  print( datetime.now() )
+print( "--- EXITED ---" )
+print( end_simulation )
+print( datetime.now() )

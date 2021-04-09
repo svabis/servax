@@ -77,7 +77,8 @@ function jobScrollControl() { setInterval(function(){ document.cookie = "jobs_sc
 {% block style %}
 
 {% for t in type %}
-   .type{{ t.order }} > td { background-color:{{ t.color }} !important;  }
+   .type{{ t.order }}  > td { background-color:{{ t.color }} !important;  }
+   .type{{ t.order }}s > td { background-color:{{ t.started_color }} !important;  }
 {% endfor %}
 
    textarea { resize: none; }

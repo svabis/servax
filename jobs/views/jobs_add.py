@@ -2,8 +2,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from jobs.models import Jobs		# import aplication models
-from jobs.forms import JobsForm 	# import FORM
+# import aplication models
+from jobs.models import Jobs
+# import FORM
+from jobs.forms import JobsForm
 
 from login.models import User_data
 
@@ -34,7 +36,7 @@ def add(request):
         return redirect('/')
     else:
        # PASS User TO FORM
-        add_job_form = JobsForm( user = args['username'].is_superuser )
+        add_job_form = JobsForm( user = args['username'].is_superuser, initial={'jobs_zone':'2'} )
 
     if User_data.objects.get(user_user = args['username']).job_add: # allow jobs add
         job_add = True
@@ -63,14 +65,20 @@ def add(request):
                # INITIAL JOB MARK
                 if temp.marked == True:
                     if temp.marked == True:
+                       # if days are set...
                         try:
                             time = int(request.POST.get('time', ''))
                             temp.marked_until = datetime.now() + timedelta(days=time)
+                       # days are not specified
                         except:
-                            pass
+                           # SET DAYS ACCORDING TO TYPE
+                            if temp.jobs_type.marking_days is not None:
+                                d = temp.jobs_type.marking_days
+                            else:
+                                d = 1
+                            temp.marked_until = datetime.now() + timedelta(days = d)
 
                 temp.save()
-#                args['message'] = "Darbs pievienots!"
                 response = redirect( 'job_add' )
                 response.set_cookie( key='job_added', value='true', path='/', max_age=5 )
                 response.set_cookie( key='page_loc', value='/jobs/add/', path='/' )

@@ -10,15 +10,15 @@ class JobsZonesAdmin(admin.ModelAdmin):
     list_display = ['order', 'title', 'special']
 
 class JobsTypesAdmin(admin.ModelAdmin):
-    fields = ['order', 'type', 'color']
-    list_display = ['order', 'type', 'color']
+    fields = ['order', 'type', 'marking_days', 'color', 'started_color']
+    list_display = ['order', 'type', 'marking_days', 'color', 'started_color']
 
 
 
 class JobsAdmin(admin.ModelAdmin):
-    fields = ['jobs_date_added', 'jobs_date_start', 'jobs_date_done', 'jobs_descr',
-              'jobs_zone',
-              'jobs_type',
+    fields = ['jobs_date_added', 'jobs_date_start', 'jobs_date_done',
+              'jobs_descr',
+              'jobs_zone', 'jobs_type',
               'jobs_done', 'jobs_cancel',
               'jobs_user',
               'jobs_link',
@@ -32,9 +32,9 @@ class JobsAdmin(admin.ModelAdmin):
                    'jobs_user',
                   ]
 
-    list_display = ['jobs_date_added', 'jobs_descr_short', 'jobs_zone', #'jobs_type',
-#                    'jobs_date_start', #'jobs_date_done',
-                    'jobs_link',
+    list_display = ['jobs_date_added', 'jobs_descr_short', 'jobs_zone',
+#                    'jobs_type', 'jobs_date_start', #'jobs_date_done',
+                    'jobs_link_short',
 #                    'jobs_done', 'jobs_cancel', 'marked',
                     'marked_id', #'marked_until',
                     'jobs_user'

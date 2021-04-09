@@ -39,6 +39,15 @@
   <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
 
   <script>
+{# <!-- "Scroll to menu" --> #}
+{% if mobile_browser %}
+{% endif %}
+
+   $("#menu-content").on("bs.collapse", function(){
+     console.log("TEST");
+   });
+
+
 {% if mobile_browser == False %}
    $(document).ready(function(){ setTimeout( function(){ scrollControl(); }, 1000); })
    function scrollControl() {
@@ -117,8 +126,6 @@
 </head>
 <body>
 
-<div class="progress-container"><div class="progress-bar" id="myBar"></div></div>
-
 {# <!--GALERY CLOSE ICON START--> #}
 <div class="hider"><img src=""><br><h4></h4></div>
 <div id="galery_close">
@@ -135,8 +142,8 @@
 <nav class="navbar-xs navbar-inverse navbar-fixed-top" id="topNavbar">
  <div class="container-fluid">
   <div class="navbar-header">
-   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-content">
-    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="color:#fff; width:22px;"></span>
+   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-content" id="ham">
+    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true" style="color:#fff; width:22px;" id="hamburgerSpan"></span>
    </button>
    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
     <span class="glyphicon glyphicon-cog" aria-hidden="true" style="color:#fff; width:22px;"></span>
@@ -272,7 +279,7 @@
      <a href="/sm_house/termo/"><li><i></i>
       <span class="glyphicon glyphicon-cloud" aria-hidden="true"></span> &nbsp; Temperatūras</li></a>
      <a href="/sm_house/led/"><li><i></i>
-      &nbsp;<span class="fa fa-lightbulb-o" aria-hidden="true"></span> &nbsp;&nbsp; Apgaismojums</li></a>
+      &nbsp;<span class="fa fa-lightbulb-o" aria-hidden="true"></span> &nbsp;&nbsp; Apgaismojums &nbsp;<span class="badge">Jauns</span></li></a>
     </ul>
 
     <li id="jobsection_list" data-toggle="collapse" data-target="#jobsection" class="collapsed" onclick="saveNavs(this);">
@@ -286,27 +293,27 @@
     </ul>
 
 
-    <a href="/idea/"><li><i></i><i class="fa fa-cube" style="padding-left:2px;"></i> &nbsp; Ideju Lāde &nbsp;<span class="badge">Jauns</span></li></a>
+    <a href="/idea/"><li><i></i><i class="fa fa-cube" style="padding-left:2px;"></i> &nbsp; Ideju Lāde</li></a>
 
 
 {% if location %}
     <a href="/weather/"><li><i></i><img src="https://www.yr.no/assets/images/logo-yr-50.png" height="16px;" width="16px;"> &nbsp; Laika Prognoze</li></a>
     <a href="/location/"><li><i></i> <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> &nbsp; Atrašanās vieta</li></a>
 {% endif %}
-{# <!--{% if username.is_superuser %}--> #}
+
+{# <!-- "GRUPA stats" --> #}
 {% for g in username.groups.all %}
   {% ifequal g.name "stats" %}
 {#    <a target="_blank" href="/adminlucy/login/live_video/"><li><i></i> <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> &nbsp; Video statistika</li></a> #}
     <a href="/stats/"><li><i></i> <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> &nbsp; Statistika</li></a>
   {% endifequal %}
 {% endfor %}
-{# <!--{% endif %}--> #}
 
 {# <!-- "GRUPA misc" --> #}
 {% for g in username.groups.all %}
   {% ifequal g.name "misc" %}
     <li id="misc_list" data-toggle="collapse" data-target="#miscsection" class="collapsed" onclick="saveNavs(this);">
-     <i></i> <span class="glyphicon glyphicon-console" aria-hidden="true"></span> &nbsp; Dažādas muļķibas<span class="arrow"></span>
+     <i></i> <span class="glyphicon glyphicon-console" aria-hidden="true"></span> &nbsp; Testi<span class="arrow"></span>
     </li>
     <ul id="miscsection" class="sub-menu collapse">
      <a target="_blank" href="/mapplot/plot/"><li><i></i>
@@ -314,12 +321,8 @@
      <a href="/ai/"><li><i></i>
       <span class="fa fa-bug"></span> &nbsp; Life</li></a>
      <a href="/r_web/"><li><i></i>
-      <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; Simple VIDEO</li></a>
-     <a href="/led_test/"><li><i></i>
-      <span class="glyphicon glyphicon-console" aria-hidden="true"></span> &nbsp; LED test</li></a>
+      <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span> &nbsp; VIDEO v2 &nbsp;<span class="badge">Jauns</span></li></a>
     </ul>
-
-
   {% endifequal %}
 {% endfor %}
 
