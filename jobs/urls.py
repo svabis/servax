@@ -50,5 +50,5 @@ urlpatterns = [
 
 # ===========================================================
 # MAIN --> JOBS TO DO LIST
-    path('', views.jobs_main),
+    path('', views.jobs_main, name='menu_job'),
 ]

@@ -72,7 +72,8 @@ MIDDLEWARE = [
 
     'django_user_agents.middleware.UserAgentMiddleware',
 
-    'main.last_seen.SetLastVisitMiddleware'
+    'main.last_seen.SetLastVisitMiddleware',
+    'main.last_seen.TermoUpdateMiddleware',
 #    'main.last_seen.TestMiddleware'
 ]
 

@@ -34,6 +34,9 @@ class Camera(models.Model):
     cam_stream = models.BooleanField( default=False ) #  kameras reload ar Date palīdzību
 
     cam_user = models.CharField( max_length = 50, default = 'username' )  # FTP username ( /home/****/video/ )
+
+    cam_subfolder = models.CharField( max_length = 60, default = '' ) # cam_user/DATE/subfolder/*.jpg
+
     cam_url = models.URLField( max_length=200, default ='http://', blank = True, null=True )       # LIVE stream  ( http:// )
 
     cam_url_local = models.URLField( max_length=200, default ='http://', blank = True, null=True )
@@ -61,6 +64,8 @@ class Camera_online(models.Model):
     cam_02 = models.BooleanField( default=False )
     cam_03 = models.BooleanField( default=False )
     cam_04 = models.BooleanField( default=False )
+
+    cam_05 = models.BooleanField( default=False )
 
     def __str__(self):
         return str(self.date)

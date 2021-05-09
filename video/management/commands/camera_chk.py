@@ -28,5 +28,5 @@ class Command(BaseCommand):
       c.save()
 
 #    print( c )
-    new_online = Camera_online( cam_01 = temp[0], cam_02 = temp[1], cam_03 = temp[2], cam_04 = temp[3] )
+    new_online = Camera_online( cam_01 = temp[0], cam_02 = temp[1], cam_03 = temp[2], cam_04 = temp[3], cam_05 = temp[4] )
     new_online.save()

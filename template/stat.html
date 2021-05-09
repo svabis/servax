@@ -74,11 +74,12 @@ $("#weekVideoBtn").on("click", function() {
 <div class="table-responsive">
  <table class="table table-hover table-striped table-condensed">
   <thead>
-   <td><b>Laiks</b></td>
-   <td><b>CAM 1</b></td>
-   <td><b>CAM 2</b></td>
-   <td><b>CAM 3</b></td>
-   <td><b>CAM 4</b></td>
+   <td><b><br>Laiks</b></td>
+   <td><b>Vārti<br>(Yucheng)</b></td>
+   <td><b>Vārti<br>(A-Link)</b></td>
+   <td><b>Durvis<br>(Yucheng)</b></td>
+   <td><b><br>Šķūnis</b></td>
+   <td><b><br>Lapene</b></td>
   </thead>
   <tbody>
 {% for c in cam_online %}
@@ -88,6 +89,7 @@ $("#weekVideoBtn").on("click", function() {
     <td>{% if c.cam_02 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
     <td>{% if c.cam_03 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
     <td>{% if c.cam_04 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+    <td>{% if c.cam_05 %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
    </tr>
 {% endfor %}
   </tbody>

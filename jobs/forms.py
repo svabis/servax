@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 
-from jobs.models import Jobs, JobsZones
+from jobs.models import Jobs
+from jobs.models import JobsZones, JobsTypes
+
 from jobs.models import JobObj
 
 from django import forms
@@ -28,6 +30,14 @@ class JobsForm(ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', True)
         super(JobsForm, self).__init__(*args, **kwargs)
+
+       # Remove Empty Label: -------------
+        self.fields['jobs_zone'].empty_label = None
+
+       # Set Type initial
+#        temp = JobsTypes.objects.get( order = 2 )
+#        self.initial['jobs_type'] = temp
+
         if not self.user:
             self.fields['jobs_zone'].queryset = JobsZones.objects.filter( special=False ).order_by('order')
 

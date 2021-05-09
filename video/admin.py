@@ -7,15 +7,18 @@ class CameraAdmin(admin.ModelAdmin):
     prepopulated_fields = {'cam_slug': ('cam_name',),}
     fields = ['cam_name', 'cam_slug',
               'cam_visible', 'cam_nr',
-              'cam_user', 'cam_url', 'cam_url_local', 'cam_url_stream',
+              'cam_user', 'cam_subfolder',
+              'cam_url', 'cam_url_local', 'cam_url_stream',
               'cam_width', 'cam_height',
               'cam_img', 'cam_stream',
               'cam_icon', 'cam_color']
-    list_display = ['cam_name', 'cam_visible', 'cam_nr', 'cam_user', 'cam_url', 'cam_url_local', 'cam_url_stream', 'cam_width', 'cam_height', 'cam_img', 'cam_stream', 'cam_icon', 'cam_color']
+    list_display = ['cam_name', 'cam_visible', 'cam_nr', 'cam_user', 'cam_subfolder',
+                    'cam_url', 'cam_url_local', 'cam_url_stream',
+                    'cam_width', 'cam_height', 'cam_img', 'cam_stream', 'cam_icon', 'cam_color']
 
 class Camera_onlineAdmin(admin.ModelAdmin):
     list_filter = ['date']
-    list_display = ['date', 'cam_01', 'cam_02','cam_03','cam_04']
+    list_display = ['date', 'cam_01', 'cam_02', 'cam_03', 'cam_04', 'cam_05']
 
 class VideoAdmin(admin.ModelAdmin):
     list_filter = ['video_date', 'video_cam']

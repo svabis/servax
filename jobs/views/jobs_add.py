@@ -36,7 +36,7 @@ def add(request):
         return redirect('/')
     else:
        # PASS User TO FORM
-        add_job_form = JobsForm( user = args['username'].is_superuser, initial={'jobs_zone':'2'} )
+        add_job_form = JobsForm( user = args['username'].is_superuser, initial={'jobs_zone':'2', 'jobs_type':'3'} )
 
     if User_data.objects.get(user_user = args['username']).job_add: # allow jobs add
         job_add = True
@@ -79,7 +79,14 @@ def add(request):
                             temp.marked_until = datetime.now() + timedelta(days = d)
 
                 temp.save()
-                response = redirect( 'job_add' )
+               # read REDIRECT
+                red = str(request.POST.get('red', ''))
+
+                response = None
+                if red != "-":
+                    response = redirect( 'menu_job' )
+                else:
+                    response = redirect( 'job_add' )
                 response.set_cookie( key='job_added', value='true', path='/', max_age=5 )
                 response.set_cookie( key='page_loc', value='/jobs/add/', path='/' )
                 return response

@@ -60,14 +60,6 @@ def smhouse_termo(request, slug=""):
 
     args['data'] = TermoPlace.objects.filter( where = a ).order_by('order')
 
-   # latest data
-#    l_data = []
-#    for p in args['data']:
-#        temp = TermoReading.objects.filter( place=p, date__range=[datetime.now() - timedelta(hours=24), datetime.now()] ).order_by('-date')[0]
-#        l_data.append( [p, temp] )
-#    args['l_data'] = l_data
-
-
    # TermoPlaces
     args['data_ambient'] = TermoPlace.objects.filter( where = a, ambient = True )
     args['data_data'] = TermoPlace.objects.filter( where = a, ambient = False )

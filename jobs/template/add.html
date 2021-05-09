@@ -121,8 +121,18 @@ $("#id_marked").click(function() {
     {{ form.jobs_type }}
  </div>
 
+ <input id="red" type="hidden" name="red" value="-">
+ <script>
+function subAndExit(){
+  $("#red").val("+");
+  sub = true;
+  $("form").submit();
+}
+ </script>
+
  <div class="form-group">
-  <center><input class="btn btn-primary" type="submit" value="Pievienot darbu" onclick="sub = true;"></center>
+  <center><input class="btn btn-primary" type="button" value="Pievienot un atgriesties" onclick="subAndExit();">
+  <input class="btn btn-primary" type="submit" value="Pievienot un turpināt" onclick="sub = true;"></center>
  </div>
 </div>
 </form>

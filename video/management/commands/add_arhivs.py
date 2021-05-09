@@ -20,10 +20,11 @@ class Command(BaseCommand):
 
         cameras = Camera.objects.all().order_by("-cam_nr")
         for c in cameras:
-            input = c.cam_user + "/" + today_str + "/"
+            input = c.cam_user + "/" + today_str + "/" + c.cam_subfolder
 
-            if c.cam_nr == 3 or c.cam_nr == 4:
-                input = input + "images/"
+# OLD
+#            if c.cam_nr == 5 or c.cam_nr == 4:
+#                input = input + "images/"
 
             output = today_str + "_" + slugify(c.cam_name)[0] + ".mp4"
 
