@@ -44,7 +44,8 @@ class Command(BaseCommand):
 #          print( v.video_file.size, t_output )
 
          # Create New Task
-          new_task = Server_Task( task_type="rescale", task_object=t_obj, task_input=v.video_file, task_output=t_output )
+#          new_task = Server_Task( task_type="rescale", task_object=t_obj, task_input=v.video_file, task_output=t_output )
+          new_task = Server_Task( task_type="rescale", task_input=v.video_file, task_output=t_output )
           new_task.save()
      except:
        print( str(v) + " file missing" )

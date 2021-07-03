@@ -54,5 +54,16 @@ def create_args(request):
     else:
         args['favicon'] = "images/favicon4.png"
 
+   # DEVICE
+    args['device'] = ""
+    temp = request.user_agent.device
+    if temp.family is not None:
+        args['device'] += str(temp.family) + " "
+    if temp.brand is not None:
+        args['device'] += str(temp.brand) + " "
+    if temp.model is not None:
+        args['device'] += str(temp.model)
+    args['device'] = args['device'].rstrip()
+
 
     return args

@@ -2,22 +2,17 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.core.files import File
 
-#from django.core import serializers
-#from django.forms.models import model_to_dict
+from django.utils import timezone
 
 from video.models import Camera, Video # import models
 from login.models import Server_Task
 
 from datetime import datetime, date
-#from time import sleep
 import os
-import json
-
-#import unicodedata
+#import json
 
 
 media = "/var/www/svabis.eu/media/"
-#home_folder = "/home/"
 task_folder = "/home/alex/skripti/video/tasks/"
 
 # SET True for console output
@@ -29,12 +24,10 @@ if DEBUG:
   console_out = " > /dev/null 2>&1 || true"
 
 
-
-
 # JSON SERIALIZER datetime NO ERROR
-def default(o):
-    if isinstance(o, (date, datetime)):
-        return o.isoformat()
+#def default(o):
+#    if isinstance(o, (date, datetime)):
+#        return o.isoformat()
 
 
 # COMAND BEGIN
@@ -71,24 +64,35 @@ class Command(BaseCommand):
         pass
 
       if os.path.exists( task_folder + t.task_output ):
-       # If file already exists
-#        try:
-          temp = Video.objects.get(video_name = t.task_object)
+          temp = Video.objects.get(video_name = t.task_output)
           os.system("cp " + task_folder + t.task_output + " " + media + str(temp.video_file))
 
          # CLEANUP RECIEVED FILE
-          os.remove(task_folder + t.task_output)
-          os.remove(task_folder + "input.mp4")
+          try:
+              os.remove(task_folder + t.task_output)
+          except:
+              pass
+          try:
+              os.remove(task_folder + "input.mp4")
+          except:
+              pass
 
           t.task_wait = False
-          t.task_status = True
+          t.task_done = True
+          t.task_done_time = timezone.now()
           t.save()
 
-#        except:
-#          if DEBUG:
-#            print( "!!!!! SOMETHING WENT WRONG CREATING VIDEO FILE !!!!!" )
-
       else:
-        t.task_wait = False
-        t.task_status = False
-        t.save()
+         # CLEANUP RECIEVED FILE
+          try:
+              os.remove(task_folder + t.task_output)
+          except:
+              pass
+          try:
+              os.remove(task_folder + "input.mp4")
+          except:
+              pass
+
+          t.task_wait = False
+          t.task_done = False
+          t.save()

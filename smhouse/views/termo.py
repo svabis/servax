@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#from django.http import HttpResponse # Response for Ajax POST
+from django.http import HttpResponse # Response for Ajax POST
 from django.shortcuts import render, redirect # response to template, redirect to another view
 
 from login.models import User_data # Access data
@@ -74,10 +74,6 @@ def smhouse_termo(request, slug=""):
     d3 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", None ), daemon=True)
     d3.start()
 
-#    draw_termo(a.slug, 24, 24, "%H", 1, "day", True)
-#    draw_termo(a.slug, 24, 24, "%H", 1, "day", False)
-#    draw_termo(a.slug, 24, 24, "%H", 1, "day", None)
-
    # rand for image cache reload
     import random
     args['cache'] = "?=" + str(random.randint(20,99))
@@ -86,3 +82,30 @@ def smhouse_termo(request, slug=""):
     response.set_cookie( key='page_loc', value='/sm_house/termo/', path='/' )
 #    response.set_cookie( key='show_termo_graph', value='true', path='/', max_age=20 )
     return response
+
+
+# ==========================================================================================
+def smhouse_termo_update(request, slug=""):
+    args = create_args(request)
+# RESTRICT ACCESS
+    if args['username'].get_username() == '': # NO USER
+        return HttpResponse('fail')
+    else:
+        termo_access = User_data.objects.get(user_user = args['username']).sm_termo
+    if termo_access != True:
+        return HttpResponse('fail')
+
+# ACCESS GRANTED
+    a = Location.objects.get( slug = slug )
+
+   # Draw Termo day
+    import threading
+    d1 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", True ), daemon=True)
+    d1.start()
+    d2 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", False ), daemon=True)
+    d2.start()
+    d3 = threading.Thread(target=draw_termo, args=( a.slug, 24, 24, "%H", 1, "day", None ), daemon=True)
+    d3.start()
+
+    return HttpResponse('done')
+

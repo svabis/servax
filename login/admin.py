@@ -24,16 +24,18 @@ class User_dataAdmin(admin.ModelAdmin):
 
 
 class Live_videoAdmin(admin.ModelAdmin):
-    fields = ['user', 'mobile', 'tablet', 'visit', 'leave', 'time', 'cookie_uuid']
+    fields = ['user', 'mobile', 'tablet', 'device', 'visit', 'leave', 'time', 'cookie_uuid']
     list_filter = ['visit', 'user', 'mobile', 'tablet']
-    list_display = ['user', 'mobile', 'tablet', 'visit', 'leave', 'time', 'cookie_uuid']
+    list_display = ['user', 'mobile', 'tablet', 'device', 'visit', 'leave', 'time', 'cookie_uuid']
 
 
 
 class Server_TaskAdmin(admin.ModelAdmin):
-    fields = ['task_type', 'task_object', 'task_time', 'task_input', 'task_output', 'task_status', 'task_wait']
-    list_filter = ['task_type', 'task_time', 'task_status', 'task_wait']
-    list_display = ['task_type', 'task_object', 'task_time', 'task_input', 'task_output', 'task_status', 'task_wait']
+    fields = ['task_type', 'task_object', 'task_time', 'task_wait', 'task_input', 'task_output', 'task_done_time', 'task_done']
+    list_filter = ['task_type', 'task_wait', 'task_time', 'task_done', 'task_done_time']
+    list_display = ['task_type', 'task_wait', 'task_time',
+                    'task_done', 'task_done_time',
+                    'task_object', 'task_input', 'task_output' ]
 
 
 admin.site.register(User_data, User_dataAdmin)

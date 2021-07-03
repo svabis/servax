@@ -22,12 +22,20 @@ class SetLastVisitMiddleware(object):
             for u in user:
                 user_visit = getattr(u, 'user_last_visit')
 
-               # CHECK IF user_last_visit is older than ??? (10 min)
-                time_now = datetime.datetime.now().replace(tzinfo=pytz.timezone('EET'))
-                timeDiff = ( time_now - user_visit ).total_seconds()
+               # if user has visited
+                if user_visit is not None:
 
-                if timeDiff > 600:
-                   # Update last visit time while request is being processed
+                   # CHECK IF user_last_visit is older than ??? (10 min)
+                    time_now = datetime.datetime.now().replace(tzinfo=pytz.timezone('EET'))
+                    timeDiff = ( time_now - user_visit ).total_seconds()
+
+                    if timeDiff > 600:
+                       # Update last visit time while request is being processed
+                        u.user_last_visit = now()
+                        u.save()
+
+               # user's first visit
+                else:
                     u.user_last_visit = now()
                     u.save()
 
@@ -43,11 +51,11 @@ def redrawTermoDay():
     from time import sleep
 
     for _ in range(0,10):
-        sleep(60)
         for a in Location.objects.all():
             draw_termo( a.slug, 24, 24, "%H", 1, "day", True )
             draw_termo( a.slug, 24, 24, "%H", 1, "day", False )
             draw_termo( a.slug, 24, 24, "%H", 1, "day", None )
+        sleep(60)
 
 
 class TermoUpdateMiddleware(object):
@@ -63,12 +71,8 @@ class TermoUpdateMiddleware(object):
                 t = threading.Thread(target=redrawTermoDay, args=(), daemon=True)
                 t.start()
 
-
-
         response = self.get_response(request)
         return response
-
-
 
 
 # ========================================================================================

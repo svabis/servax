@@ -43,7 +43,7 @@ def live(request):
 
        # new "Live_Video" session detected: creation DB entry
         else:
-             Live_video.objects.create( user = args['username'], mobile = args['mobile_browser'], tablet=args['tablet_browser'], cookie_uuid=c_value )
+             Live_video.objects.create( user = args['username'], mobile = args['mobile_browser'], tablet=args['tablet_browser'], device=args['device'], cookie_uuid=c_value )
 
         response.set_cookie( key='video_live', value=c_value, max_age=900 )
         return response
@@ -80,7 +80,7 @@ def stream(request):
 
        # new "Live_Video" session detected: creation DB entry
         else:
-            Live_video.objects.create( user = args['username'], mobile = args['mobile_browser'], tablet=args['tablet_browser'], cookie_uuid=c_value )
+            Live_video.objects.create( user = args['username'], mobile = args['mobile_browser'], tablet=args['tablet_browser'], device=args['device'], cookie_uuid=c_value )
 
         response.set_cookie( key='video_live', value=c_value, max_age=900 )
         return response

@@ -7,12 +7,12 @@ class CameraAdmin(admin.ModelAdmin):
     prepopulated_fields = {'cam_slug': ('cam_name',),}
     fields = ['cam_name', 'cam_slug',
               'cam_visible', 'cam_nr',
-              'cam_user', 'cam_subfolder',
+              'cam_user', 'cam_subfolder', 'cam_prefix',
               'cam_url', 'cam_url_local', 'cam_url_stream',
               'cam_width', 'cam_height',
               'cam_img', 'cam_stream',
               'cam_icon', 'cam_color']
-    list_display = ['cam_name', 'cam_visible', 'cam_nr', 'cam_user', 'cam_subfolder',
+    list_display = ['cam_name', 'cam_visible', 'cam_nr', 'cam_user', 'cam_subfolder', 'cam_prefix',
                     'cam_url', 'cam_url_local', 'cam_url_stream',
                     'cam_width', 'cam_height', 'cam_img', 'cam_stream', 'cam_icon', 'cam_color']
 

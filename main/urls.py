@@ -11,29 +11,30 @@ from django.conf.urls.static import static
 from django.conf.urls import url
 # --------------
 
-# -- ??? --
-#from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-# -- ??? --
-
 # import views
 from main.views import home, weather, location, denied, stats
 from main.views import ai, r_web
-from main.views import led_test
-#from login.views import login, logout
-
+# MAPPLOT
 from mapplot.views import plot
 
 # import django admin, access admin only loged in users
 from django.contrib.auth.decorators import login_required # LOGIN
 from django.contrib import admin
 
+
 admin.autodiscover()
 admin.site.login = login_required(admin.site.login)
 
 
+# LOACK MEDIA FILES FOR NOT AUTHENTICATED USERS
+@login_required(login_url="/login/login/")
+def protected_serve(request, path, document_root=None, show_indexes=False):
+    return serve(request, path, document_root, show_indexes)
+
 urlpatterns = [
 # STATIC AND MEDIA
-    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
+#    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
+    url(r'^media/(?P<path>.*)$', protected_serve, {'document_root': settings.MEDIA_ROOT,}),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT,}),
 
 # ADMIN

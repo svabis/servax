@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
     tasks = Server_Task.objects.all().order_by("-id")
     for t in tasks:
-      if t.task_status == True and t.task_type == "imgtovid":
+      if t.task_done == True and t.task_type == "imgtovid":
         try:
           temp = folder + t.task_input.split("/")[0] + "/" + t.task_input.split("/")[1]
           shutil.rmtree( temp )

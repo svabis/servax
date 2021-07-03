@@ -16,6 +16,9 @@ urlpatterns = [
     path('led/', smhouse_led, name='sm_led'),
 
 # TERMO
+   # REDRAW GRAPH ON DEMAND
+    path('update_termo/<str:slug>/', smhouse_termo_update),
+   # STANDART GRAPH VIEW
     path('termo/<str:slug>/', smhouse_termo),
     path('termo/', smhouse_termo),
 ]

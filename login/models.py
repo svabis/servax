@@ -61,6 +61,8 @@ class Live_video(models.Model):
     mobile = models.BooleanField( default=False )
     tablet = models.BooleanField( default=False )
 
+    device = models.CharField( max_length=200, blank=True, null=True )
+
     visit = models.DateTimeField( default=timezone.now )
     leave = models.DateTimeField( default=timezone.now )
 
@@ -85,15 +87,17 @@ class Server_Task(models.Model):
         db_table = "login_server_tasks"
 
     task_type = models.CharField( max_length=30, choices=TASK_TYPES, default="imgtovid")
-    task_object = models.CharField( max_length=50 )
+    task_object = models.CharField( max_length=50, null=True, blank=True )
 
     task_time = models.DateTimeField( null=True, blank=True )
+    task_wait = models.BooleanField( default=True )
+
+    task_done_time = models.DateTimeField( null=True, blank=True )
+    task_done = models.BooleanField( default=False )
 
     task_input = models.CharField( max_length=50 )
     task_output = models.CharField( max_length=50 )
 
-    task_status = models.BooleanField( default=False )
-    task_wait = models.BooleanField( default=True )
 
     def __str__(self):
         return self.task_type

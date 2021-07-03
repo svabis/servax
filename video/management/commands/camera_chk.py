@@ -14,6 +14,8 @@ class Command(BaseCommand):
 
     cameras = Camera.objects.all().order_by('cam_nr')
     for c in cameras:
+      print( "=========================================================" )
+      print( c.cam_name )
       response = os.system("ping -c 1 " + c.cam_url_local.split("/")[2])
       if response == 0:
         c.cam_visible = True
@@ -26,6 +28,7 @@ class Command(BaseCommand):
 #        print( c.cam_visible )
         temp.append(False)
       c.save()
+      print( "" )
 
 #    print( c )
     new_online = Camera_online( cam_01 = temp[0], cam_02 = temp[1], cam_03 = temp[2], cam_04 = temp[3], cam_05 = temp[4] )

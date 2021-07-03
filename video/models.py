@@ -35,7 +35,8 @@ class Camera(models.Model):
 
     cam_user = models.CharField( max_length = 50, default = 'username' )  # FTP username ( /home/****/video/ )
 
-    cam_subfolder = models.CharField( max_length = 60, default = '' ) # cam_user/DATE/subfolder/*.jpg
+    cam_subfolder = models.CharField( max_length = 60, default = '', blank = True, null=True ) # cam_user/DATE/subfolder/*.jpg
+    cam_prefix = models.CharField( max_length = 3, default = '' ) # MEDIA/YYWW/DATE_prefix.mp4
 
     cam_url = models.URLField( max_length=200, default ='http://', blank = True, null=True )       # LIVE stream  ( http:// )
 
@@ -79,7 +80,7 @@ class Video(models.Model):
 
     video_cam  = models.ForeignKey( Camera, on_delete=models.CASCADE )
     video_name = models.CharField( max_length = 50 )
-#    video_date = models.DateTimeField( default = timezone.now )
+
     video_date = models.DateField( default = timezone.now )
     video_file = models.FileField(upload_to = get_file_path, max_length=200, default ='' )
 
@@ -95,7 +96,7 @@ class VideoDayComment(models.Model):
 
     date = models.DateField( default = timezone.now )
 
-    time = models.DateTimeField( null=True, blank=True )
+    time = models.TimeField( null=True, blank=True )
 
     comment = models.CharField( max_length = 250 )
 

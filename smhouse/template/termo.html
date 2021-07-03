@@ -22,6 +22,15 @@
   <button class="btn legend" style="background-color:{{ img.color }}; min-width:218px; margin-top:4px;" id="btn_data_{{ img.order }}">{{ img.place }}</button><br>
 {% endfor %}
  </div>
+{# <!-- Close Legend on idle --> #}
+<script>
+var idleTime = 0;
+$(document).ready(function () { 
+  var idleInterval = setInterval(timerIncrement, 20000); 
+  $(this).mousemove(function (e) { idleTime = 0; }); $(this).keypress(function (e) { idleTime = 0; });
+});
+function timerIncrement() { idleTime = idleTime + 1; if (idleTime > 1) { if (!h) { openNav();} }}
+</script>
 {# <!-- "Legend END" --> #}
 
     <h4>
@@ -31,7 +40,7 @@
 
 <div class="row" id="data_day_row">
 {# <!-- LOADING --> #}
-<div id="load_gif" style="display:none;"><center><div id="load_gif_top"></div><img src="{% static 'images/graf_loading.gif' %}"></center></div>
+<table id="load_gif"><tr><td><img src="{% static 'images/graf_loading.gif' %}"></td></tr></table>
 <div class="container-fluid">
 {# <!-- "DAY OUTSIDE" --> #}
  <div class="termo_parent data_termo_ta" id="data_a_day_p">
@@ -61,17 +70,23 @@
 
 <script>
 function load_day(){
+  $("#load_gif").fadeIn();
   var timestamp = new Date().getTime();
   $("#data_a_day").attr("src", "/media/smhouse/termo/{{ slug }}_day_back_True.png?" + timestamp);
   $("#data_d_day").attr("src", "/media/smhouse/termo/{{ slug }}_day_back_False.png?" + timestamp);
   $("#data_h_day").attr("src", "/media/smhouse/termo/{{ slug }}_day_back_None.png?" + timestamp);
 {% for img in data_ambient %}  $("#data_day_temp_{{ img.order }}").attr("src", "/media/smhouse/termo/{{ slug }}_day_temp_{{ img.order }}.png?" + timestamp);{% endfor %}
-{% for img in data_data %}  $("#data_day_temp_{{ img.order }}").attr("src", "/media/smhouse/termo/{{ slug }}_day_temp_{{ img.order }}.png?" + timestamp);{% endfor %}
-{% for img in data_humy %}  $("#data_day_humy_{{ img.order }}").attr("src", "/media/smhouse/termo/{{ slug }}_day_temp_{{ img.order }}.png?" + timestamp);{% endfor %}
+{% for img in data_data %}     $("#data_day_temp_{{ img.order }}").attr("src", "/media/smhouse/termo/{{ slug }}_day_temp_{{ img.order }}.png?" + timestamp);{% endfor %}
+{% for img in data_humy %}     $("#data_day_humy_{{ img.order }}").attr("src", "/media/smhouse/termo/{{ slug }}_day_humy_{{ img.order }}.png?" + timestamp);{% endfor %}
   $("#load_gif").fadeOut();
+{# <!-- "REDRAW GRAPH" --> #}
+  $.ajax({ url:"../update_termo/{{ slug }}/", type: "GET",
+    data: {date: new Date()}, success:function(response){}, complete:function(){},
+    error:function (xhr, textStatus, thrownError){ console.log("error doing something"); }
+  });
 }
 $(document).ready(function(){
- setTimeout( function(){ $("#load_gif").fadeIn(); }, 1000);
+ setTimeout( function(){ $("#load_gif").fadeIn(); }, 2000);
  setTimeout( function(){ load_day(); }, 12000);
  setInterval( function(){ load_day(); }, 30000);
 });
@@ -204,7 +219,7 @@ function resizeImages() {
   $("#data_a_month_p").height( h + 15 ); $("#data_d_month_p").height( h + 15 ); $("#data_h_month_p").height( h + 15 );
   $("#data_a_rand_p").height( h + 15 ); $("#data_d_rand_p").height( h + 15 ); $("#data_h_rand_p").height( h + 15 );
 {# <!-- set LOADING gif on day ambient data layer --> #}
-  $("#load_gif").height( h + 15 ); $("#load_gif_top").height( (h+15)/2.5 ); $(".termo_layer").height( h + 15 );
+  $("#load_gif").height( h+15 ); $(".termo_layer").height( h + 15 );
 {# <!-- hide data temperatures & humidity --> #}
   $(".data_termo_td").toggle(); $(".data_termo_h").toggle();
   scrollControl();

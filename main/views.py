@@ -15,7 +15,7 @@ def handler500(request, *args, **argv):
 
 # ========================== VIEWS ==========================
 from login.models import User_data, Live_video
-from video.models import Camera_online
+from video.models import Camera_online, Camera
 from main.args import create_args
 
 
@@ -28,12 +28,6 @@ def r_web(request):
 
     response = render(request, 'rudis_cam.html', args)
     response.set_cookie( key='page_loc', value='/r_web/', path='/' )
-    return response
-
-
-def led_test(request):
-    args = create_args(request)
-    response = render(request, 'led_test.html', args)
     return response
 
 
@@ -181,8 +175,9 @@ def stats(request):
     args['video'] = vid
 
    # Cam_online
+    args['cameras'] = Camera.objects.all().order_by('cam_nr')
+
     temp = Camera_online.objects.all().order_by('-date')[:5]
-#    args['cam_online'] = reversed( temp )
     args['cam_online'] = temp
 
     response = render(request, 'stat.html', args)

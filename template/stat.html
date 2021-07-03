@@ -10,7 +10,7 @@
  <table class="table table-hover table-striped table-condensed">
   <thead>
 {% for d in df_head %}
-   <td><b>{{ d }}</b></td>
+   <th><b>{{ d }}</b></th>
 {% endfor %}
   </thead>
   <tbody>
@@ -31,13 +31,16 @@
 <div class="table-responsive">
  <table class="table table-hover{# table-striped#} table-condensed">
   <thead>
-   <td><b>Lietotājs</b><br></td>
-   <td><b>Dators</b><br></td>
-   <td><b>Mobīlais</b><br></td>
-   <td><b>Planšete</b><br></td>
-   <td><b>Sākums</b><br></td>
-   <td><b>Beigas</b><br></td>
-   <td><b>Skatīšanās laiks<br>(stundas:minūtes)</b></td>
+   <th><b>Lietotājs</b><br></th>
+   <th><b>Dators</b><br></th>
+   <th><b>Mobīlais</b><br></th>
+   <th><b>Planšete</b><br></th>
+{% if username.is_superuser %}
+   <th><b>Ierīces ID</b></th>
+{% endif %}
+   <th><b>Sākums</b><br></th>
+   <th><b>Beigas</b><br></th>
+   <th><b>Skatīšanās laiks<br>(stundas:minūtes)</b></th>
   </thead>
   <tbody>
 {% for row in video %}
@@ -46,6 +49,9 @@
     <td>{% if row.2.mobile == False and row.2.tablet == False %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
     <td>{% if row.2.mobile %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
     <td>{% if row.2.tablet %}<img src="/static/admin/img/icon-yes.svg">{% else %}<img src="/static/admin/img/icon-no.svg">{% endif %}</td>
+{% if username.is_superuser %}
+    <td>{% if row.2.device != None %}{{ row.2.device }}{% endif %}</td>
+{% endif %}
     <td>{{ row.2.visit|date:"d/m/Y H:i" }}</td>
     <td>{{ row.2.leave|date:"d/m/Y H:i" }}</td>
     <td>{{ row.2.time|time:"H:i" }}</td>
@@ -74,12 +80,10 @@ $("#weekVideoBtn").on("click", function() {
 <div class="table-responsive">
  <table class="table table-hover table-striped table-condensed">
   <thead>
-   <td><b><br>Laiks</b></td>
-   <td><b>Vārti<br>(Yucheng)</b></td>
-   <td><b>Vārti<br>(A-Link)</b></td>
-   <td><b>Durvis<br>(Yucheng)</b></td>
-   <td><b><br>Šķūnis</b></td>
-   <td><b><br>Lapene</b></td>
+   <th><b><br>Laiks</b></th>
+{% for c in cameras %}
+   <th><b>{{ c.cam_name }}</b></th>
+{% endfor %}
   </thead>
   <tbody>
 {% for c in cam_online %}
